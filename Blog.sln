@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Infrastructure", "Blog
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Application", "Blog.Application\Blog.Application.csproj", "{AAB5A6F5-E828-4F31-9634-25097B8FB9EC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Umbraco", "Blog.Umbraco\Blog.Umbraco.csproj", "{CAABB1EA-06F1-4321-BDE8-2A1C4B5CC72E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Web", "Blog.Web\Blog.Web.csproj", "{CAABB1EA-06F1-4321-BDE8-2A1C4B5CC72E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Blog.Application.Models", "Blog.Application.Models\Blog.Application.Models.csproj", "{424C0A57-577A-4BE5-87A4-1C54F9DB0D84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Blog.Application.Models", "Blog.Application.Models\Blog.Application.Models.csproj", "{424C0A57-577A-4BE5-87A4-1C54F9DB0D84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
