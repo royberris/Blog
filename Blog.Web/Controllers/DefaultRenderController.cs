@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Umbraco.Cms.Core.Models.PublishedContent;
 using Umbraco.Cms.Web.Common.Controllers;
 
-namespace Blog.Umbraco.Controllers;
+namespace Blog.Web.Controllers;
 
 public class DefaultRenderController : Controller, IRenderController
 {
@@ -22,7 +22,7 @@ public class DefaultRenderController : Controller, IRenderController
     {
         var wrapper = _contentResolver.GetContent(content);
 
-        //return Ok(wrapper);
-        return View(wrapper.Template, wrapper.Content);
+        return Ok(wrapper);
+        //return View(wrapper.Template, wrapper.Content);
     }
 }

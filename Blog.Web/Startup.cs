@@ -3,7 +3,7 @@
 // </copyright>
 
 using Blog.Application;
-using Blog.Umbraco.Controllers;
+using Blog.Web.Controllers;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -13,7 +13,7 @@ using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Web.Website.Controllers;
 using Umbraco.Extensions;
 
-namespace Blog.Umbraco;
+namespace Blog.Web;
 
 public class Startup
 {

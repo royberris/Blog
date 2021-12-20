@@ -5,7 +5,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Blog.Umbraco;
+namespace Blog.Web;
 
 public class Program
 {

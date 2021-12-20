@@ -3,18 +3,20 @@
 // </copyright>
 
 using Blog.Application.Models;
+using Blog.Application.Models.PageModels;
 
 namespace Blog.Application.Common.Content;
 
 internal class ContentWrapper : IContentWrapper
 {
-    public ContentWrapper(Guid key, string url, string template, string type, object content)
+    public ContentWrapper(Guid key, string url, string template, string type, object content, WebsiteSettings websiteSettings)
     {
         Key = key;
         Url = url;
         Template = template;
         Type = type;
         Content = content;
+        Settings = websiteSettings;
     }
 
     public Guid Key { get; init; }
@@ -26,4 +28,6 @@ internal class ContentWrapper : IContentWrapper
     public string Type { get; init; }
 
     public object Content { get; init; }
+
+    public WebsiteSettings Settings { get; init; }
 }

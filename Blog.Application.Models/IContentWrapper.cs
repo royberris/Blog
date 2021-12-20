@@ -3,6 +3,7 @@
 // </copyright>
 
 using System;
+using Blog.Application.Models.PageModels;
 
 namespace Blog.Application.Models;
 
@@ -17,4 +18,6 @@ public interface IContentWrapper
     public string Template { get; init; }
 
     public object Content { get; init; }
+
+    public WebsiteSettings Settings { get; init; }
 }
