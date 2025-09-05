@@ -7,9 +7,8 @@ import { Suspense } from "react"
 import "./globals.css"
 
 export const metadata: Metadata = {
-  title: "Blog Website - .NET and Umbraco Development",
-  description: "Personal blog about .NET, Umbraco, and web development best practices",
-  generator: "v0.app",
+  title: "Blogs - Roy Berris",
+  description: "Insights and experiences from architecting scalable .NET solutions and building robust software systems.",
 }
 
 export default function RootLayout({
