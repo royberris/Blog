@@ -38,26 +38,16 @@ function getParsedPosts(): BlogPost[] {
     return allPostsData.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 
-let blogPosts: BlogPost[];
-
-function getPosts(): BlogPost[] {
-    if(!blogPosts) {
-        blogPosts = getParsedPosts();
-    }
-    return blogPosts;
-}
-
-
 export function getAllBlogs(): BlogPost[] {
-  return getPosts()
+  return getParsedPosts()
 }
 
 export function getBlogBySlug(slug: string): BlogPost | null {
-  return getPosts().find((blog) => blog.slug === slug) || null
+  return getParsedPosts().find((blog) => blog.slug === slug) || null
 }
 
 export function getAllBlogSlugs(): string[] {
-  return getPosts().map((blog) => blog.slug)
+  return getParsedPosts().map((blog) => blog.slug)
 }
 
 export function formatDate(dateString: string): string {

@@ -14,9 +14,6 @@ export default function BlogsPage() {
       <main className="max-w-4xl mx-auto px-6 py-12 md:px-12">
         <div className="flex items-center justify-between mb-8">
           <p className="text-muted-foreground">{blogs.length} blogs</p>
-          <Link href="#subscribe" className="text-foreground/80 hover:text-foreground transition-colors font-medium">
-            Subscribe →
-          </Link>
         </div>
 
         <div className="space-y-12">

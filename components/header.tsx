@@ -8,7 +8,7 @@ interface HeaderProps {
 
 export function Header({
   title = "Blogs",
-  subtitle = "Check out my .NET and Umbraco related blogs.",
+  subtitle = "Insights and experiences from architecting scalable .NET solutions and building robust software systems.",
   showNavigation = true,
 }: HeaderProps) {
   return (
@@ -32,13 +32,6 @@ export function Header({
             <div className="flex items-center space-x-8">
               <Link href="/" className="font-medium transition-colors hover:opacity-80" style={{ color: "#ffffff" }}>
                 Home
-              </Link>
-              <Link
-                href="/blogs"
-                className="font-medium transition-colors hover:opacity-80"
-                style={{ color: "#ffffff" }}
-              >
-                Blogs
               </Link>
             </div>
           </nav>
