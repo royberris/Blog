@@ -2,7 +2,7 @@
 title: "Standardizing API conventions"
 date: "2025-09-05"
 excerpt: "How our team transformed inconsistent API design through systematic decision documentation and cross-functional collaboration, leveraging Architecture Decision Records to create lasting organizational alignment."
-tags: ["API", "Architecture", "ADR", "Team Collaboration"]
+tags: ["API", "Software Architecture", "ADR", "Team Collaboration"]
 author: "Roy Berris"
 ---
 

@@ -1,0 +1,42 @@
+{
+  "ADR": {
+    "fullName": "Architecture Decision Records",
+    "description": "A structured framework for documenting architectural decisions, capturing context, alternatives considered, and rationale behind chosen approaches."
+  },
+  "AI": {
+    "fullName": "Artificial Intelligence",
+    "description": "Technology and methodologies for creating intelligent machines and automated systems that can perform tasks typically requiring human intelligence."
+  },
+  "AI Agents": {
+    "fullName": "AI Agents",
+    "description": "Autonomous software entities that can perceive their environment, make decisions, and take actions to achieve specific goals through API interactions."
+  },
+  "API": {
+    "fullName": "Application Programming Interface",
+    "description": "Set of protocols, routines, and tools for building software applications, defining how software components should interact."
+  },
+  "API Design": {
+    "fullName": "API Design",
+    "description": "The practice of creating well-structured, intuitive, and maintainable interfaces for software applications and services."
+  },
+  "Blogging": {
+    "fullName": "Technical Blogging",
+    "description": "The practice of writing and publishing technical content to share knowledge, insights, and experiences with the developer community."
+  },
+  "Design Patterns": {
+    "fullName": "Software Design Patterns",
+    "description": "Reusable solutions to commonly occurring problems in software design and architecture."
+  },
+  "Software Architecture": {
+    "fullName": "Software Architecture",
+    "description": "The fundamental organization of a software system, including its components, relationships, and design principles."
+  },
+  "Team Collaboration": {
+    "fullName": "Team Collaboration",
+    "description": "Practices and methodologies for effective teamwork in software development, including communication, decision-making, and knowledge sharing."
+  },
+  "Technical Writing": {
+    "fullName": "Technical Writing",
+    "description": "Specialized form of communication that conveys complex technical information clearly and effectively to specific audiences."
+  }
+}

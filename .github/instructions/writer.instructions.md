@@ -64,6 +64,35 @@ Required fields:
 - **tags**: Array of relevant technical tags for categorization and searchability
 - **author**: Must be "Roy Berris"
 
+## Tag Selection Guidelines
+
+**CRITICAL**: Always use existing tags from `/data/tags.json` before creating new ones. The blog system validates all tags against this centralized configuration file and will issue warnings for undefined tags.
+
+### Tag Selection Process
+
+1. **First**: Review existing tags in `/data/tags.json` to find appropriate matches
+2. **Consider**: Whether your content aligns with existing tag definitions
+3. **Reuse**: Existing tags even if they're not perfect matches (better than creating duplicates)
+4. **Request**: New tag additions only when no existing tag adequately represents the content
+5. **Validate**: Ensure all selected tags exist in the tags configuration
+
+### New Tag Creation
+
+When existing tags are insufficient:
+
+1. **Justify**: Explain why existing tags don't adequately categorize the content
+2. **Define**: Provide a clear, concise description for the new tag
+3. **Update**: Add the new tag to `/data/tags.json` with proper fullName and description
+4. **Consistency**: Ensure the new tag doesn't overlap with existing categories
+
+### Tag Quality Standards
+
+- Use 2-4 tags per blog post for optimal categorization
+- Select tags that accurately represent the primary topics discussed
+- Avoid overly specific tags that may only apply to a single post
+- Prefer broader, reusable tags that can categorize multiple future posts
+- Maintain consistency with established tag naming conventions
+
 ## Formatting Standards
 
 - Implement descriptive, hierarchical headings (H2/H3 levels as appropriate).
@@ -102,6 +131,7 @@ Required fields:
 - Present both successful outcomes and lessons learned from failures.
 - Provide citations for factual claims and technical references.
 - Utilize structured formatting to enhance readability.
+- **Use only validated tags from `/data/tags.json` in blog post frontmatter.**
 
 **Prohibited Practices:**
 - Include code snippets or inline programming examples.
@@ -109,6 +139,7 @@ Required fields:
 - Overstate personal expertise or make unsupported authority claims.
 - Construct lengthy, unstructured paragraph blocks.
 - Adopt promotional or sales-oriented language.
+- **Create new tags without first checking existing options and updating the tags configuration file.**
 
 ## Content Planning Template
 
@@ -130,6 +161,8 @@ Required fields:
 - Article structure facilitates information scanning and retrieval.
 - Technical terminology maintains accuracy and consistency.
 - Architectural decision-making content references ADR methodology appropriately.
+- **All tags used in frontmatter exist in `/data/tags.json` configuration.**
+- **Tag selection follows established guidelines and reuses existing categories when appropriate.**
 
 ## Documentation Maintenance
 
