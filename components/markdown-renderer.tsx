@@ -1,5 +1,8 @@
+import React from "react"
 import ReactMarkdown from "react-markdown"
 import remarkGfm from "remark-gfm"
+import { MermaidDiagram } from "./mermaid-diagram"
+import { CodeBlock } from "./code-block"
 
 interface MarkdownRendererProps {
   content: string
@@ -29,12 +32,59 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
           ),
           li: ({ children }) => <li className="leading-relaxed">{children}</li>,
           strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
-          code: ({ children }) => (
-            <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">{children}</code>
-          ),
-          pre: ({ children }) => (
-            <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-6 text-foreground">{children}</pre>
-          ),
+          code: ({ children, className, ...props }: any) => {
+            const match = /language-(\w+)/.exec(className || '')
+            const language = match ? match[1] : ''
+            const inline = props.inline
+            
+            // Handle inline code
+            if (inline) {
+              return (
+                <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">{children}</code>
+              )
+            }
+            
+            // For block code, return the code element with data attributes
+            // The pre component will handle the rendering
+            return (
+              <code className={className} data-language={language}>
+                {children}
+              </code>
+            )
+          },
+          pre: ({ children }: any) => {
+            // Get the code element from children
+            const codeElement = React.Children.toArray(children).find((child: any) => 
+              child?.type === 'code' || child?.props?.className?.includes('language-')
+            ) as any
+            
+            if (codeElement) {
+              const match = /language-(\w+)/.exec(codeElement.props?.className || '')
+              const language = match ? match[1] : codeElement.props?.['data-language'] || ''
+              const code = String(codeElement.props?.children || '').replace(/\n$/, '')
+              
+              // Handle mermaid diagrams
+              if (language === 'mermaid') {
+                return <MermaidDiagram chart={code} />
+              }
+              
+              // Handle code blocks with syntax highlighting
+              if (language) {
+                return (
+                  <CodeBlock language={language}>
+                    {code}
+                  </CodeBlock>
+                )
+              }
+            }
+            
+            // Fallback for regular pre blocks
+            return (
+              <pre className="bg-muted p-4 rounded-lg overflow-x-auto mb-6 text-foreground">
+                {children}
+              </pre>
+            )
+          },
           blockquote: ({ children }) => (
             <blockquote className="border-l-4 border-muted-foreground/20 pl-4 italic text-foreground/70 mb-6">
               {children}

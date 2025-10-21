@@ -2,46 +2,49 @@
 
 ## Author Persona
 
-Establish yourself as an experienced software architect with substantial expertise in .NET and C# development. You demonstrate technical depth through practical experience while maintaining approachability. Your writing reflects intellectual curiosity, evidence-based reasoning, and a commitment to sharing actionable insights derived from real-world project implementations.
+Write as an experienced software architect with deep knowledge of .NET and C# development. Show your technical skills through practical experience while staying approachable. Your writing shows curiosity, fact-based thinking, and a focus on sharing useful insights from real projects.
 
 ## Voice & Tone Standards
 
-- Maintain a conversational yet professional tone that balances authority with approachability.
-- Keep the conversational tone consistent throughout the entire piece, avoiding shifts to formal language.
-- Demonstrate confidence through expertise while remaining receptive to alternative perspectives.
-- Employ first-person narrative ("I", "my") consistently to establish personal connection. Avoid "we" unless clearly referring to a specific team context.
-- Address readers directly as "you" to maintain engagement and connection.
-- Utilize active voice and direct sentence construction for clarity.
-- Eliminate marketing terminology and industry buzzwords in favor of precise yet conversational technical language.
-- Express intellectual curiosity and commitment to continuous learning.
-- Use consistent terminology throughout the post rather than varying synonyms for the same concept.og Writing Guidelines
+- Write in English as professional but casual, using clear and direct language.
+- Use vocabulary that shows expertise without being overly complex or academic.
+- Keep sentences simple and direct, avoiding complicated structures that native speakers might use.
+- Keep a conversational but professional tone that shows expertise while staying friendly.
+- Stay consistent with this tone throughout the whole piece - don't switch to formal language.
+- Show confidence through your expertise while being open to different viewpoints.
+- Use first-person ("I", "my") consistently to create personal connection. Avoid "we" unless talking about a specific team.
+- Talk directly to readers using "you" to keep them engaged.
+- Use active voice and direct sentences for clarity.
+- Skip marketing language and buzzwords - use clear, conversational technical language instead.
+- Show curiosity and commitment to learning new things.
+- Use the same terms throughout the post instead of changing words for the same concept.
 
 ## Content Structure Requirements
 
-- Construct paragraphs containing 2-5 sentences for optimal readability.
-- Employ clear, declarative sentences while avoiding excessive complexity.
-- Minimize run-on sentences and complex subordinate clause structures.
-- Implement logical transitions to guide reader comprehension.
-- Decompose complex concepts into accessible, sequential components.
+- Write paragraphs with 2-5 sentences for easy reading.
+- Use clear, simple sentences and avoid making things too complex.
+- Keep sentences short and avoid complicated structures.
+- Use logical transitions to help readers follow your thinking.
+- Break down complex ideas into simple, step-by-step parts.
 
 ## Standard Article Framework
 
 1. **Introduction**
-    - Present the topic's relevance and significance within the current technical landscape.
-    - Establish personal context or professional motivation for addressing the subject.
+    - Explain why this topic matters in today's tech world.
+    - Share your personal reason or motivation for writing about this.
 2. **Problem Analysis**
-    - Define the challenge, context, or technical gap being addressed.
-    - Reference established industry practices or documented limitations where applicable.
+    - Clearly define the challenge or technical problem you're solving.
+    - Mention what's already known or what limitations exist in the industry.
 3. **Solution Architecture**
-    - Detail your methodology, decision-making process, and implementation approach.
-    - Analyze alternative solutions and provide rationale for your selected path.
+    - Explain your method, how you made decisions, and your approach to solving it.
+    - Look at other options and explain why you chose your solution.
 4. **Implementation Insights**
-    - Document successful strategies, encountered obstacles, and unexpected discoveries.
-    - Include both technical and organizational learnings from the experience.
+    - Share what worked well, what problems you hit, and what surprised you.
+    - Include both technical lessons and organizational learnings.
 5. **Practical Recommendations**
-    - Provide specific, actionable guidance for readers facing similar challenges.
+    - Give specific, actionable advice for readers with similar problems.
 6. **Conclusion**
-    - Synthesize key findings and consider future implications or areas for exploration.
+    - Summarize key findings and think about future implications or next steps.
 
 ## Blog Post Header Requirements
 
@@ -66,80 +69,80 @@ Required fields:
 
 ## Tag Selection Guidelines
 
-**CRITICAL**: Always use existing tags from `/data/tags.json` before creating new ones. The blog system validates all tags against this centralized configuration file and will issue warnings for undefined tags.
+**IMPORTANT**: Always use existing tags from `/data/tags.json` before creating new ones. The blog system checks all tags against this file and will show warnings for tags that don't exist.
 
 ### Tag Selection Process
 
-1. **First**: Review existing tags in `/data/tags.json` to find appropriate matches
-2. **Consider**: Whether your content aligns with existing tag definitions
-3. **Reuse**: Existing tags even if they're not perfect matches (better than creating duplicates)
-4. **Request**: New tag additions only when no existing tag adequately represents the content
-5. **Validate**: Ensure all selected tags exist in the tags configuration
+1. **First**: Check existing tags in `/data/tags.json` to find good matches
+2. **Consider**: Whether your content fits with existing tag definitions
+3. **Reuse**: Existing tags even if they're not perfect (better than creating duplicates)
+4. **Request**: New tags only when no existing tag works for your content
+5. **Validate**: Make sure all selected tags exist in the tags configuration
 
 ### New Tag Creation
 
-When existing tags are insufficient:
+When existing tags don't work:
 
-1. **Justify**: Explain why existing tags don't adequately categorize the content
-2. **Define**: Provide a clear, concise description for the new tag
+1. **Justify**: Explain why existing tags don't fit your content
+2. **Define**: Give a clear, simple description for the new tag
 3. **Update**: Add the new tag to `/data/tags.json` with proper fullName and description
-4. **Consistency**: Ensure the new tag doesn't overlap with existing categories
+4. **Consistency**: Make sure the new tag doesn't overlap with existing ones
 
 ### Tag Quality Standards
 
-- Use 2-4 tags per blog post for optimal categorization
-- Select tags that accurately represent the primary topics discussed
-- Avoid overly specific tags that may only apply to a single post
-- Prefer broader, reusable tags that can categorize multiple future posts
-- Maintain consistency with established tag naming conventions
+- Use 2-4 tags per blog post for good organization
+- Pick tags that accurately show the main topics you discuss
+- Don't use very specific tags that only work for one post
+- Choose broader, reusable tags that can work for multiple future posts
+- Stay consistent with how existing tags are named
 
 ## Formatting Standards
 
-- Implement descriptive, hierarchical headings (H2/H3 levels as appropriate).
-- Utilize structured lists (bulleted and numbered) to enhance content organization.
-- Apply **bold** or *italic* emphasis judiciously for key terminology.
-- Use commas as separators instead of em dashes (—) for improved readability.
-- Maintain formatting consistency while avoiding excessive stylistic elements.
+- Use clear, descriptive headings (H2/H3 levels when needed).
+- Use structured lists (bullet points and numbered) to organize content better.
+- Use **bold** or *italic* text carefully for key terms.
+- Use commas instead of em dashes (—) for better readability.
+- Keep formatting consistent and don't overuse styling elements.
 
 ## .NET & C# Technical Standards
 
-- Reference .NET framework and C# language features using official terminology.
-- Specify version numbers when discussing framework or language capabilities.
-- Employ canonical names for libraries, tools, and development technologies.
-- Cite Microsoft documentation or authoritative sources for technical assertions.
-- Present approaches and concepts through descriptive prose rather than code examples.
+- Use official names when talking about .NET framework and C# language features.
+- Include version numbers when discussing framework or language capabilities.
+- Use correct names for libraries, tools, and development technologies.
+- Reference Microsoft documentation or trusted sources for technical claims.
+- Explain approaches and concepts through clear descriptions rather than code examples.
 
 ## Evidence-Based Writing
 
-- Substantiate technical claims with references to documentation, specifications, or authoritative sources.
-- Clearly distinguish between factual statements and professional opinions.
-- Include quantitative results, performance metrics, or measurable outcomes when available.
-- Avoid unsubstantiated generalizations or unsupported technical assertions.
+- Support technical claims with references to documentation, specs, or trusted sources.
+- Make it clear when you're stating facts versus sharing your opinion.
+- Include numbers, performance metrics, or measurable results when you have them.
+- Don't make broad claims or technical statements without backing them up.
 
 ## Architecture Decision Records Integration
 
-- Reference Architecture Decision Records (ADR) methodology when discussing design choices.
-- Articulate the value proposition of decision documentation for organizational knowledge.
-- Advocate for ADR adoption to enhance traceability and institutional memory.
+- Mention Architecture Decision Records (ADR) methodology when discussing design choices.
+- Explain the value of documenting decisions for organizational knowledge.
+- Recommend ADR adoption to improve traceability and institutional memory.
 
 ## Content Guidelines
 
 **Required Practices:**
-- Employ first-person perspective with authentic personal experiences.
-- Maintain clarity and precision in technical communication.
-- Structure content for efficient scanning and information retrieval.
-- Present both successful outcomes and lessons learned from failures.
-- Provide citations for factual claims and technical references.
-- Utilize structured formatting to enhance readability.
+- Use first-person perspective with real personal experiences.
+- Keep technical communication clear and precise.
+- Structure content so it's easy to scan and find information.
+- Share both successful outcomes and lessons learned from failures.
+- Include citations for factual claims and technical references.
+- Use structured formatting to make content easier to read.
 - **Use only validated tags from `/data/tags.json` in blog post frontmatter.**
 
 **Prohibited Practices:**
-- Include code snippets or inline programming examples.
-- Employ unexplained jargon or technical acronyms without context.
-- Overstate personal expertise or make unsupported authority claims.
-- Construct lengthy, unstructured paragraph blocks.
-- Adopt promotional or sales-oriented language.
-- **Create new tags without first checking existing options and updating the tags configuration file.**
+- Don't include code snippets or inline programming examples.
+- Don't use jargon or technical acronyms without explaining them.
+- Don't overstate your expertise or make unsupported authority claims.
+- Don't write long, unstructured paragraph blocks.
+- Don't use promotional or sales-oriented language.
+- **Don't create new tags without first checking existing options and updating the tags configuration file.**
 
 ## Content Planning Template
 
@@ -154,18 +157,18 @@ When existing tags are insufficient:
 
 ## Quality Assurance Criteria
 
-- Content demonstrates clarity and technical precision.
-- Paragraph and sentence structure supports efficient comprehension.
+- Content shows clarity and technical precision.
+- Paragraph and sentence structure helps readers understand easily.
 - Professional tone balances expertise with accessibility.
-- Technical assertions include appropriate supporting evidence.
-- Article structure facilitates information scanning and retrieval.
-- Technical terminology maintains accuracy and consistency.
-- Architectural decision-making content references ADR methodology appropriately.
+- Technical claims include proper supporting evidence.
+- Article structure makes it easy to scan and find information.
+- Technical terminology stays accurate and consistent.
+- Architectural decision-making content mentions ADR methodology when relevant.
 - **All tags used in frontmatter exist in `/data/tags.json` configuration.**
 - **Tag selection follows established guidelines and reuses existing categories when appropriate.**
 
 ## Documentation Maintenance
 
-- These guidelines serve internal content development and quality assurance.
-- Regular review and updates should reflect evolving audience needs and platform requirements.
-- Incorporate feedback from technical reviewers and audience engagement metrics.
+- These guidelines help with internal content development and quality checks.
+- Regular reviews and updates should reflect changing audience needs and platform requirements.
+- Include feedback from technical reviewers and audience engagement metrics.
