@@ -1,7 +1,7 @@
 {
   "Roy Berris": {
     "role": "Software Architect",
-    "bio": "I'm a software architect at New Orange in the Netherlands, working on software architecture, API design and .NET and Umbraco solutions. On Berris.dev I write about the decisions behind that work, from API conventions and ADRs to designing APIs that AI agents can use.",
+    "bio": "I'm a software architect at New Orange in the Netherlands. I translate between what the business means and what the software does, with solution architecture, Domain-Driven Design and hands-on work in .NET and Next.js. On Berris.dev I write about the decisions behind that work, from API conventions and ADRs to designing APIs that AI agents can use.",
     "avatar": "/author.png",
     "github": "https://github.com/royberris"
   }
