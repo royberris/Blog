@@ -14,7 +14,7 @@ export const AUTHOR = {
   sameAs: [
     "https://github.com/royberris",
     "https://www.linkedin.com/in/roy-berris/",
-    "https://sessionize.com/s/roy-berris/",
+    "https://sessionize.com/roy-berris",
     "https://www.youtube.com/channel/UCGWLWa8GcCznhLxpfC8hbWQ",
   ],
 }
