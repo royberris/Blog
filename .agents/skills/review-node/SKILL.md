@@ -27,7 +27,9 @@ Check a node against the Berris.dev voice and format, then fix it or report what
 
 **Substance**
 - [ ] Real experience: concrete projects, decisions, failures and surprises, not generic advice.
-- [ ] Facts have a named, linked source. Opinions are marked as opinions.
+- [ ] Facts have a named, linked source, linking to the primary source (report, spec, official docs). Numbers match the source exactly. Opinions are marked as opinions.
+- [ ] Examples are specific and first-hand, not generic.
+- [ ] `related` lists the nodes this one really builds on, and inline links to other nodes use `/nodes/<slug>/`.
 - [ ] Claims of improvement have a number or a concrete example. No bare "significantly".
 - [ ] Honest about scope and limits. No overstated authority.
 - [ ] Acronyms explained on first use.
@@ -37,9 +39,15 @@ Check a node against the Berris.dev voice and format, then fix it or report what
 
 **Format**
 - [ ] Front matter complete: title, date, excerpt, tags, author (plus `related` if it builds on other nodes).
+- [ ] Title under about 60 characters, main keyword near the start.
+- [ ] Excerpt 140 to 160 characters, written as a search snippet (main keyword plus what the reader learns).
+- [ ] `updated: "YYYY-MM-DD"` set when you revise a published node in a meaningful way. `date` stays the original.
 - [ ] 2 to 4 tags, all in `data/tags.json`. `related` slugs exist.
 - [ ] Excerpt is plain and specific, in the same voice.
 - [ ] Body starts with an H1 matching the title. Descriptive H2/H3 headings.
+- [ ] A 2 to 3 sentence `**TL;DR:**` directly under the H1 that answers the core question on its own.
+- [ ] A few headings phrased as reader questions, where that reads naturally.
+- [ ] A short `## FAQ` at the end (3 or 4 Q&As) that only restates what the post says.
 - [ ] No application code walkthroughs. Any schema or config snippet is introduced and explained.
 - [ ] Mermaid `style` overrides use dark fills with explicit light text colour.
 - [ ] `npm run validate-tags` passes.

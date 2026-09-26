@@ -27,21 +27,24 @@ If the user gave notes, emails, diagrams or other material, work from that. If i
 
 ## Structure
 
-Use this framework as a default, and adapt the headings to the topic (descriptive headings, not the framework labels):
+Use this framework as a default, and adapt the headings to the topic (descriptive headings, not the framework labels). Where it reads naturally, phrase a few headings as the question a reader would search for.
 
+0. **TL;DR.** Directly under the H1: 2 to 3 sentences that answer the core question on their own, with the key facts.
 1. **Introduction.** An honest hook: a personal admission, a concrete moment, or a surprising fact. Why this matters now, and why the author cares.
 2. **The problem.** What exactly is the challenge? What is already known, and where do current approaches fall short?
 3. **The approach.** What the author did and how they decided. Which alternatives they looked at and why they didn't pick them.
 4. **What happened in practice.** What worked, what broke, what surprised them. Technical and team or organisational lessons.
 5. **Recommendations.** Specific, actionable advice for a reader facing the same problem. Speak to "you".
 6. **Conclusion.** Short summary, what's next, and one plain closing sentence that sticks.
+7. **FAQ.** 3 or 4 short questions and answers, grounded only in what the post already says.
 
 Aim for roughly 900 to 1,800 words unless the user asks otherwise.
 
 ## Write
 
 - Follow `references/voice.md` closely: first person, direct, short sentences, active voice, no corporate words, no em dashes.
-- Separate facts (with a named source, linked inline) from opinion ("In my experience...", "I think...").
+- Separate facts (with a named source, linked inline) from opinion ("In my experience...", "I think..."). Link to the primary source (the report, spec or official docs), not to an article about it.
+- Prefer specific, first-hand examples over general advice. They are what search engines and AI assistants quote.
 - Explain every acronym the first time.
 - Keep one term per concept for the whole post.
 - Follow the code and Mermaid rules in `references/format.md`.
@@ -49,7 +52,7 @@ Aim for roughly 900 to 1,800 words unless the user asks otherwise.
 ## Save
 
 1. Pick a slug (see `references/format.md`) and write the file to `nodes/<slug>.md`.
-2. Fill in the front matter. Use today's date unless told otherwise, and `"Roy Berris"` as author unless told otherwise.
+2. Fill in the front matter. Use today's date unless told otherwise, and `"Roy Berris"` as author unless told otherwise. Keep the title under about 60 characters with the main keyword near the start, and write the excerpt as a 140 to 160 character search snippet (see `references/format.md`).
 3. Pick 2 to 4 existing clusters. Only propose a new one when nothing fits, and explain why before adding it to `data/tags.json`.
 4. Add `related` only for nodes this one really builds on.
 5. If the author wants it, end with the short italic transparency note used in `nodes/ai-assisted-blogging.md`, stating that AI helped with structure and readability while the insights are the author's own.

@@ -19,13 +19,37 @@
     "fullName": "API Design",
     "description": "The practice of creating well-structured, intuitive, and maintainable interfaces for software applications and services."
   },
+  "Best Practices": {
+    "fullName": "Development Best Practices",
+    "description": "Practical habits and conventions that keep code maintainable, consistent and efficient across a team and over the lifetime of a project."
+  },
   "Blogging": {
     "fullName": "Technical Blogging",
     "description": "The practice of writing and publishing technical content to share knowledge, insights, and experiences with the developer community."
   },
+  "C#": {
+    "fullName": "C# Programming Language",
+    "description": "Microsoft's statically typed, object-oriented programming language for .NET, covering language features, idioms and compiler behavior."
+  },
   "Design Patterns": {
     "fullName": "Software Design Patterns",
     "description": "Reusable solutions to commonly occurring problems in software design and architecture."
+  },
+  "Events": {
+    "fullName": "Conferences and Talks",
+    "description": "Write-ups of conferences, meetups and community events, including talks given as a speaker and the slides that go with them."
+  },
+  "Hosting": {
+    "fullName": "Web Hosting and Deployment",
+    "description": "Choices and trade-offs in where and how websites and applications run, from servers and static hosting to deployment pipelines and costs."
+  },
+  ".NET": {
+    "fullName": ".NET",
+    "description": "Microsoft's open-source developer platform and runtime for building web, cloud, desktop and mobile applications, including ASP.NET Core."
+  },
+  "Security": {
+    "fullName": "Web Application Security",
+    "description": "Techniques and configuration for protecting web applications and their users, such as security headers, policies and threat mitigation."
   },
   "Software Architecture": {
     "fullName": "Software Architecture",
@@ -38,5 +62,9 @@
   "Technical Writing": {
     "fullName": "Technical Writing",
     "description": "Specialized form of communication that conveys complex technical information clearly and effectively to specific audiences."
+  },
+  "Umbraco": {
+    "fullName": "Umbraco CMS",
+    "description": "The open-source .NET content management system, covering implementation, editor experience, hosting and the Umbraco community."
   }
 }

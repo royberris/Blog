@@ -1,21 +1,26 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
-import { ArrowUpRight, Crosshair, Search, X } from "lucide-react"
+import { ArrowUpRight, Clock, Crosshair, Search, X } from "lucide-react"
 import { NodeGraph } from "@/components/graph/node-graph"
 import { SEARCH_OPEN_EVENT } from "@/components/search-palette"
+import { Slider } from "@/components/ui/slider"
+import { DEFAULT_WINDOW_YEARS, isWithinYears } from "@/lib/node-age"
 import { clusterId, nodeId, type GraphData, type GraphNode, type NodeSummary } from "@/lib/graph-types"
 import { cn } from "@/lib/utils"
 
 interface GraphExplorerProps {
-  graph: GraphData
+  graphs: Record<number, GraphData> // one pre-laid-out graph per "last N years" step
   nodes: NodeSummary[]
+  now: string // build time; the window is relative to it
+  maxYears: number // the step that covers every node
+  bottomSlot?: ReactNode // rendered under the cluster filter
 }
 
 const MAX_RESULTS = 5
 
-export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
+export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears, bottomSlot }: GraphExplorerProps) {
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState("")
@@ -23,6 +28,18 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
   const [focused, setFocused] = useState(false)
   const [activeCluster, setActiveCluster] = useState<string | null>(null)
   const [resetKey, setResetKey] = useState(0)
+  const [years, setYears] = useState(Math.min(DEFAULT_WINDOW_YEARS, maxYears))
+
+  const graph = graphs[years]
+  const nodes = useMemo(() => allNodes.filter((n) => isWithinYears(n.date, years, new Date(now))), [allNodes, years, now])
+  const allTime = years >= maxYears
+  const rangeLabel = allTime ? "All time" : `Last ${years} ${years === 1 ? "year" : "years"}`
+  const rangeShort = allTime ? "all" : `${years}y`
+
+  // A cluster can vanish when the window shrinks
+  useEffect(() => {
+    if (activeCluster && !graph.nodes.some((n) => n.id === activeCluster)) setActiveCluster(null)
+  }, [graph, activeCluster])
 
   const clusters = useMemo(
     () => graph.nodes.filter((n) => n.kind === "cluster").sort((a, b) => b.weight - a.weight || a.label.localeCompare(b.label)),
@@ -37,6 +54,16 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
       return terms.every((t) => haystack.includes(t))
     })
   }, [nodes, query]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Matches outside the window, so search can offer to widen it
+  const olderMatches = useMemo(() => {
+    if (!terms.length || allTime) return 0
+    return allNodes.filter((n) => {
+      if (nodes.includes(n)) return false
+      const haystack = `${n.code} ${n.title} ${n.excerpt} ${n.tags.join(" ")} ${n.author ?? ""}`.toLowerCase()
+      return terms.every((t) => haystack.includes(t))
+    }).length
+  }, [allNodes, nodes, query, allTime]) // eslint-disable-line react-hooks/exhaustive-deps
 
   // Light up hits and their clusters on the map while typing
   const matchIds = useMemo(() => {
@@ -98,7 +125,7 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
   return (
     <div className="relative h-full w-full">
       <NodeGraph
-        key={resetKey}
+        key={`${resetKey}-${years}`}
         data={graph}
         activeCluster={activeCluster}
         matchIds={matchIds}
@@ -108,7 +135,7 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
       {/* Search: the primary way into the database */}
       <div className="absolute inset-x-0 top-0 px-4 pt-4 md:pt-8">
         <div className="mx-auto max-w-xl">
-          <h1 className="sr-only">Berris.dev node map</h1>
+          <h2 className="sr-only">Berris.dev node map</h2>
           <div className="relative z-10">
             <div
               className={cn(
@@ -146,7 +173,7 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
 
             {showResults && (
               <ul id="search-results" role="listbox" className="hud-panel absolute inset-x-0 top-full mt-2 overflow-hidden bg-popover/95 p-1.5">
-                {results.length === 0 && <li className="hud-label px-3 py-4 text-center">No signal found</li>}
+                {results.length === 0 && olderMatches === 0 && <li className="hud-label px-3 py-4 text-center">No signal found</li>}
                 {results.slice(0, MAX_RESULTS).map((n, i) => (
                   <li key={n.slug} role="option" aria-selected={i === cursor}>
                     <button
@@ -169,21 +196,50 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
                     </button>
                   </li>
                 ))}
+                {olderMatches > 0 && (
+                  <li>
+                    <button
+                      type="button"
+                      onMouseDown={(e) => e.preventDefault()}
+                      onClick={() => setYears(maxYears)}
+                      className="hud-label flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2.5 text-cyan hover:bg-neon/15"
+                    >
+                      <Clock className="size-3" />
+                      {olderMatches} older {olderMatches === 1 ? "match" : "matches"} · search all time
+                    </button>
+                  </li>
+                )}
               </ul>
             )}
           </div>
 
           <div className="mt-3 flex items-center justify-between gap-3">
-            <p className="hud-label">
+            <p className="hud-label min-w-0 truncate">
               {terms.length
-                ? `${results.length} of ${nodes.length} nodes match`
-                : `${nodes.length} nodes · ${clusters.length} clusters · ${graph.links.length} links`}
+                ? `${results.length} of ${nodes.length} nodes match${olderMatches ? ` · ${olderMatches} older` : ""}`
+                : <>{nodes.length} nodes · {clusters.length} clusters<span className="hidden sm:inline"> · {graph.links.length} links</span></>}
             </p>
+            <div className="flex items-center gap-3">
+            {/* Deliberately quiet: the window is a minor control, the map is the point */}
+            <div className="group flex items-center gap-2 opacity-60 transition-opacity focus-within:opacity-100 hover:opacity-100">
+              <Clock className="size-3 shrink-0 text-muted-foreground group-hover:text-cyan group-focus-within:text-cyan" />
+              <span className="hud-label w-6 whitespace-nowrap normal-case" aria-hidden="true">{rangeShort}</span>
+              <Slider
+                min={1}
+                max={maxYears}
+                step={1}
+                value={[years]}
+                onValueChange={([value]) => setYears(value)}
+                aria-label={`Time range: ${rangeLabel}`}
+                className="w-16 sm:w-20 [&_[data-slot=slider-track]]:h-0.5 [&_[data-slot=slider-range]]:bg-muted-foreground group-hover:[&_[data-slot=slider-range]]:bg-cyan group-focus-within:[&_[data-slot=slider-range]]:bg-cyan [&_[data-slot=slider-thumb]]:size-2.5 [&_[data-slot=slider-thumb]]:border-muted-foreground group-hover:[&_[data-slot=slider-thumb]]:border-cyan group-focus-within:[&_[data-slot=slider-thumb]]:border-cyan"
+              />
+            </div>
             <button
               type="button"
               onClick={() => {
                 setActiveCluster(null)
                 setQuery("")
+                setYears(Math.min(DEFAULT_WINDOW_YEARS, maxYears))
                 setResetKey((k) => k + 1)
               }}
               className="hud-chip bg-card/90 px-2.5 py-1"
@@ -192,13 +248,14 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
               <Crosshair className="size-3.5" />
               <span className="hidden sm:inline">Recenter</span>
             </button>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Thumb-zone cluster filter */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <div className="bg-gradient-to-t from-background via-background/80 to-transparent pt-10">
+        <div className="bg-gradient-to-t from-background via-background/95 to-transparent pt-10 lg:via-background/80">
           <p className="hud-label mb-2 px-4 md:px-8">Clusters</p>
           <div className="no-scrollbar pointer-events-auto flex gap-2 overflow-x-auto px-4 md:px-8" role="toolbar" aria-label="Filter by cluster">
             <button
@@ -222,6 +279,7 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
               </button>
             ))}
           </div>
+          {bottomSlot}
         </div>
       </div>
     </div>

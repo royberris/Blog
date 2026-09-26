@@ -5,6 +5,7 @@ export interface NodeSummary {
   code: string // what3words-style, e.g. amber.orbit.falcon
   title: string
   date: string
+  updated: string | null // optional "updated" frontmatter, ISO date
   excerpt: string
   tags: string[]
   readingTime: number

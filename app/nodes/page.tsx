@@ -6,7 +6,9 @@ import { getNodeSummaries } from "@/lib/nodes"
 
 export const metadata: Metadata = {
   title: "Index",
-  description: "Every node in the database, filterable by cluster.",
+  description:
+    "Index of every Berris.dev article on software architecture, API design, AI agents and .NET, filterable by cluster and sortable by date or depth.",
+  alternates: { canonical: "/nodes/" },
 }
 
 export default function NodesIndexPage() {

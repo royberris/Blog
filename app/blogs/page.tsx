@@ -1,12 +1,9 @@
-import { LegacyRedirect } from "@/components/legacy-redirect"
+import type { Metadata } from "next"
+import { LegacyRedirect, legacyRedirectMetadata } from "@/components/legacy-redirect"
 
-// The old list page now points at the node map
-export const metadata = {
-  title: "Moved",
-  robots: { index: false },
-  alternates: { canonical: "/" },
-}
+// The old /blogs/ list page now points at the node index
+export const metadata: Metadata = legacyRedirectMetadata("/nodes/")
 
 export default function LegacyBlogsPage() {
-  return <LegacyRedirect to="/" />
+  return <LegacyRedirect to="/nodes/" />
 }

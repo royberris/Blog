@@ -1,94 +1,60 @@
-# LLMs.txt Generation
+# Machine-readable content: llms.txt, llms-full.txt and Markdown exports
 
-This project automatically generates an `/llms.txt` file during build time, similar to how NVIDIA's website provides a structured glossary for AI consumption.
+Berris.dev publishes three plain-text views of its content so AI assistants (ChatGPT, Claude, Perplexity and others) and other tools can read and cite nodes without parsing the interactive map.
 
-## How it works
+| URL | Source | What it contains |
+|---|---|---|
+| `/llms.txt` | `app/llms.txt/route.ts` | Index of the site in the [llmstxt.org](https://llmstxt.org/) format |
+| `/llms-full.txt` | `app/llms-full.txt/route.ts` | The full Markdown body of every node in one file, newest first |
+| `/nodes/<slug>.md` | `scripts/export-markdown.js` | The raw Markdown of one node, with a small front matter header |
 
-1. **Tag-Based Extraction**: The system uses only the actual tags from your blog post frontmatter
-2. **Centralized Definitions**: Tag descriptions are managed in `/data/tags.json`
-3. **Clean Output**: No complex pattern matching - just the tags you explicitly use
-4. **Build Integration**: Automatically runs during `npm run build`
+All three are generated at build time. Nothing needs to be edited by hand when a node is added: they read `nodes/*.md` through `lib/nodes.ts` (or `gray-matter` in the script), and use `lib/site.ts` for the site URL, name, description and author.
 
-## Generated Content Structure
+## /llms.txt
 
-The `/llms.txt` file includes:
+Follows the llmstxt.org structure:
 
-- **Technical Glossary**: Terms based on your actual blog tags with managed descriptions
-- **All Nodes**: Complete list of all posts (nodes) with excerpts, linking to `/nodes/<slug>`
-- **Tags**: Categorized view of content by tags
+1. `# Berris.dev` (H1 with the site name).
+2. A blockquote with `SITE_DESCRIPTION`.
+3. A short paragraph about the author with links to `/about/`, GitHub and LinkedIn, plus a note on the `.md` variants and `/llms-full.txt`.
+4. One H2 section per cluster (tag), biggest cluster first. Each section has the cluster description from `data/tags.json`, a link to the cluster page (`/clusters/<cluster-slug>/`) and a list of nodes: `- [Title](https://berris.dev/nodes/<slug>/): excerpt ([Markdown](https://berris.dev/nodes/<slug>.md))`. A node with several clusters appears in each of them.
+5. An `## Optional` section with the about page, the node index, `/llms-full.txt` and the sitemap.
 
-## Managing Tags
+Because the excerpt is shown next to every link, write it as a 140 to 160 character summary (see `.agents/skills/write-node/references/format.md`).
 
-### Adding New Tag Descriptions
+## /llms-full.txt
 
-Edit `/data/tags.json` to add or update tag definitions:
+One Markdown document: a short header (site, author, link back to `/llms.txt`), then every node separated by `---`. Each node starts with its title as H1, followed by its URL, Markdown URL, author, published date, updated date (when set), clusters, the excerpt as a blockquote and the full body.
 
-```json
-{
-  "Your Tag": {
-    "fullName": "Full Display Name",
-    "description": "Detailed description of what this tag represents"
-  }
-}
+## /nodes/<slug>.md
+
+`next build` renders each node to `out/nodes/<slug>/index.html` (with `trailingSlash: true`). After the build, `scripts/export-markdown.js` writes the source Markdown next to it as `out/nodes/<slug>.md`, so the two never clash. The file starts with a front matter header:
+
+```yaml
+---
+title: "Node title"
+canonical: "https://berris.dev/nodes/<slug>/"
+author: "Roy Berris"
+date: "YYYY-MM-DD"
+updated: "YYYY-MM-DD"
+excerpt: "..."
+tags: ["..."]
+---
 ```
 
-### Tag Structure
+The `canonical` field points to the HTML page, which is the version that should be cited and indexed.
 
-Each tag entry should have:
-- **fullName**: How the tag appears in the glossary (can be different from the tag key)
-- **description**: Detailed explanation for the glossary entry
+The script runs as part of `pnpm build` (`next build && node scripts/export-markdown.js`). To run it on its own after a build: `pnpm export-markdown`. It exits with an error if `out/nodes` doesn't exist.
 
-If a tag isn't defined in `tags.json`, it will fall back to using the blog excerpt as the description.
+## Local testing
 
-## Usage
+- `pnpm dev`, then open `http://localhost:3000/llms.txt` or `/llms-full.txt`. The `.md` exports only exist after `pnpm build`.
+- After `pnpm build`, check `out/llms.txt`, `out/llms-full.txt` and `out/nodes/*.md`.
 
-### Production Build
-```bash
-npm run build
-```
+## Environment variables
 
-### Development
-```bash
-npm run dev
-```
-Then visit `http://localhost:3000/llms.txt`
+- `NEXT_PUBLIC_BASE_URL`: base URL for absolute links. Defaults to `https://berris.dev`. Used by `lib/site.ts` and `scripts/export-markdown.js`.
 
-## File Structure
+## Clusters
 
-```
-data/
-└── tags.json                # Tag definitions and descriptions
-
-app/
-└── llms.txt/
-    └── route.ts              # Route handler that generates llms.txt
-
-out/                          # Generated during build
-└── llms.txt                 # Static output file
-```
-
-## Current Tags
-
-Based on your blog posts, these tags are currently in use:
-
-- **ADR** (Architecture Decision Records)
-- **AI** (Artificial Intelligence) 
-- **AI Agents**
-- **API** (Application Programming Interface)
-- **API Design**
-- **Architecture** (Software Architecture)
-- **Blogging** (Technical Blogging)
-- **Design Patterns** (Software Design Patterns)
-- **Software Architecture**
-- **Team Collaboration**
-- **Technical Writing**
-
-## Environment Variables
-
-- `NEXT_PUBLIC_BASE_URL`: Base URL for generating absolute links (defaults to "https://royberris.com")
-
-## API Access
-
-The generated file is accessible at:
-- Static file: `/llms.txt` (during static export)
-- Route: `/llms.txt` (with proper headers and caching)
+Cluster names and descriptions come from `data/tags.json`. Add or change a cluster there, and it shows up in `/llms.txt` on the next build. Only tags listed in `data/tags.json` are included; run `pnpm validate-tags` to check.

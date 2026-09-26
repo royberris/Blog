@@ -1,29 +1,32 @@
 ---
-title: "Designing APIs for AI Agents: Building Better Interfaces for AI Use"
+title: "Designing APIs for AI Agents: Schemas, Security and MCP"
 date: "2025-10-21"
-excerpt: "How AI agents as main API consumers need big changes to our design patterns. Looking at ways to build reliable machine-to-machine communication through clear interfaces."
+updated: "2026-09-26"
+excerpt: "AI agents now call our APIs, but few of us design for them. How I use schemas, consistent patterns, security and MCP ideas to serve developers and agents."
 tags: ["API Design", "AI Agents", "Software Architecture", "Design Patterns"]
 author: "Roy Berris"
 related: ["standardizing-api-conventions"]
 ---
 
-# Designing APIs for AI Agents: Building Better Interfaces for Machine Use
+# Designing APIs for AI Agents: Schemas, Security and MCP
 
-The API development world changed a lot in 2024, and it caught many of us by surprise. While we were busy making APIs better for human developers, a new consumer appeared that works very fast: AI agents. Postman's latest State of the API report shows clearly that 89% of developers now use AI tools every day, but only 24% design APIs with AI agents in mind. This gap shows a big problem that needs new design patterns.
+**TL;DR:** [Postman's 2025 State of the API report](https://www.postman.com/state-of-api/2025/) shows that 89% of developers use AI in their daily work, but only 24% design APIs with AI agents in mind. My answer is to design for humans and AI agents at the same time: treat the schema as the shared language, put business context in it, keep every pattern consistent, rethink security for automated consumers and design endpoints as tools with clear contracts.
 
-## The Big Challenge: Designing for AI consumption
+The API development world changed a lot in 2024, and it caught many of us by surprise. While we were busy making APIs better for human developers, a new consumer appeared that works very fast: AI agents. [Postman's 2025 State of the API report](https://www.postman.com/state-of-api/2025/) shows clearly that 89% of developers now use AI tools every day, but only 24% design APIs with AI agents in mind. This gap shows a big problem that needs new design patterns.
+
+## Why Do AI Agents Need Different API Design?
 
 When I design APIs today, I still think about the developer who will read my docs, understand my endpoint patterns, and write code to connect with it. But here's what Postman's research showed that really changed how I think about building APIs: AI agents are already using APIs at huge scale with a 40% increase from last year.
 
 The disconnect is there. While 89% of developers use AI tools for making code and solving problems, most of us keep designing APIs using patterns made for human use. Only 13% design equally for humans and AI agents, while just 7% mainly design for AI agents. This mismatch creates basic problems when AI agents meet APIs that don't have clear schemas, typed errors, and clear behavioral rules.
 
-## Design Patterns for Human and Machine Use
+## How Do You Design an API for Both Humans and AI Agents?
 
 The key thing I've learned is that AI agents are trained on human language, which means we shouldn't design only for machines. Instead, we need to design for both humans and machines at the same time through consistent, well-documented interfaces that show intent and purpose.
 
 ### Schema as the Shared Language
 
-I think of the API schema as the shared language between humans and machines. The schema is not just a technical contract—it's a complete way to communicate that shows intent, purpose, and business context in ways both developers and AI agents can understand.
+I think of the API schema as the shared language between humans and machines. The schema is not just a technical contract. It's a complete way to communicate that shows intent, purpose, and business context in ways both developers and AI agents can understand.
 
 **Semantic Metadata: Intent and Purpose**
 
@@ -31,7 +34,7 @@ The schema should tell a story about what the API does and why it exists. This m
 
 **Functional Documentation: Business Context**
 
-Traditional OpenAPI specs focus on technical contracts, but AI agents need business context to make smart decisions. I learned this the hard way when building APIs that agents couldn't use effectively. Now I put functional context directly into schema definitions through custom properties that give semantic meaning, links that connect technical operations to business outcomes, and workflow descriptions that show how endpoints work together to solve real problems.
+Traditional [OpenAPI](https://spec.openapis.org/oas/latest.html) specs focus on technical contracts, but AI agents need business context to make smart decisions. I learned this the hard way when building APIs that agents couldn't use effectively. Now I put functional context directly into schema definitions through custom properties ([OpenAPI specification extensions](https://spec.openapis.org/oas/latest.html#specification-extensions), the `x-` fields) that give semantic meaning, links that connect technical operations to business outcomes, and workflow descriptions that show how endpoints work together to solve real problems.
 
 This approach changes the schema from a purely technical thing into a complete communication tool. Instead of keeping separate technical and functional documentation, the schema becomes one source of truth that shows both implementation details and business intent.
 
@@ -153,7 +156,7 @@ graph TB
     style Discovery fill:#4a2e0e,stroke:#fb923c,color:#ffedd5
 ```
 
-## Security Architecture for AI Consumers
+## How Should API Security Change for AI Agents?
 
 The security implications of AI agents as API consumers present a big challenge, but one that can be addressed with thoughtful design patterns. Postman's research shows that 51% of developers now cite unauthorized agent access as their top security concern, highlighting the need for better security approaches.
 
@@ -165,9 +168,9 @@ The unpredictable behavior of AI agents makes it hard to tell legitimate automat
 
 This approach needs dynamic rate limiting based on behavioral patterns, better monitoring for suspicious activity, and shorter-lived credentials with automatic rotation. The key is building systems that can tell the difference between legitimate automation and potential attacks through behavior rather than static rules.
 
-## The Model Context Protocol: New Standards Coming
+## What Does the Model Context Protocol (MCP) Change?
 
-The emergence of the Model Context Protocol represents an interesting development in API architecture for AI use. While 70% of developers know about MCP according to Postman's research, only 10% use it regularly. This points to growing interest but limited readiness in the ecosystem.
+The emergence of the [Model Context Protocol](https://modelcontextprotocol.io/) represents an interesting development in API architecture for AI use. While 70% of developers know about MCP according to Postman's research, only 10% use it regularly. This points to growing interest but limited readiness in the ecosystem.
 
 MCP introduces new patterns for structured interfaces between AI models and real-world systems. It addresses critical problems like unified agent access, standard security models, and structured tool definitions that agents can reliably understand. The protocol defines clear boundaries between what AI agents can discover, understand, and invoke.
 
@@ -252,7 +255,7 @@ This approach means designing APIs as tool catalogs rather than simple data inte
 
 ## Key Design Priorities for the Future
 
-Based on what I've seen in recent projects and the trends Postman identified, there are big changes coming in API architecture. The shift from human-focused to machine-focused design needs new patterns, different security models, and better documentation strategies. Four design priorities emerge as critical for systems that need to support both human developers and AI agents well.
+Based on what I've seen in recent projects and the trends Postman identified, there are big changes coming in API architecture. The shift from human-focused to machine-focused design needs new patterns, different security models, and better documentation strategies. Three design priorities emerge as critical for systems that need to support both human developers and AI agents well.
 
 ### Machine-First Interface Design
 
@@ -270,8 +273,26 @@ API architecture must shift from simple data interfaces to structured tool catal
 
 The API landscape stands at a turning point where we must design for both human understanding and machine use at the same time. The key insight is that AI agents are trained on human language patterns, which creates an opportunity to build unified architectures that serve both audiences well.
 
-My experience shows that the practices needed for effective human-machine API use—consistent patterns, schema-driven functional documentation, and discoverable use case context—create better APIs overall. These aren't competing design goals but approaches that work together and strengthen each other.
+My experience shows that the practices needed for effective human-machine API use (consistent patterns, schema-driven functional documentation, and discoverable use case context) create better APIs overall. These aren't competing design goals but approaches that work together and strengthen each other.
 
 The future belongs to APIs that work as complete communication systems, where schemas serve as natural language interfaces and functional documentation is discoverable through the same mechanisms that AI agents use for technical discovery. The design patterns we implement today will determine whether our systems can communicate effectively with both human developers and AI agents.
 
 The time to start building these unified communication architectures is now.
+
+## FAQ
+
+### How many developers design APIs for AI agents?
+
+According to [Postman's 2025 State of the API report](https://www.postman.com/state-of-api/2025/), 24% of developers design APIs with AI agents in mind. Only 13% design equally for humans and AI agents, and 7% mainly design for AI agents. At the same time, 89% of developers use AI in their daily work.
+
+### What should an API schema include for AI agents?
+
+Clear field names that match business concepts, useful error codes, and the business context behind each operation. I add that context with custom `x-` extensions such as `x-business-context` and `x-semantic-purpose`, including the workflow an endpoint belongs to and which operations relate to it.
+
+### Do I need MCP to make my API ready for AI agents?
+
+No. MCP adoption is still low, but its principles already help: explicit capability declarations, typed tool definitions, standard security models and discovery. In my projects, applying those principles improves the API even without full MCP adoption.
+
+### How do AI agents change API security?
+
+AI agents work at high speed with persistent automated access, so a single compromised API key can open the door to large-scale data extraction. My team is exploring behavioral analysis, dynamic rate limiting and shorter-lived credentials with automatic rotation instead of static rules. I haven't needed these patterns at scale yet.

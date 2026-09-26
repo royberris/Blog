@@ -1,0 +1,18 @@
+{
+  "codegarden-2023": "/about/",
+  "df23-a-fun-day": "/about/",
+  "df23-fun-day": "/about/",
+  "going-headless-with-": "/nodes/going-headless-with-mvc/",
+  "going-headless-with-mvc": "/nodes/going-headless-with-mvc/",
+  "implementing-a-configurable-csp-in-aspnet-core": "/nodes/implementing-a-configurable-csp-in-aspnet-core/",
+  "looking-at-partial-methods": "/clusters/dotnet/",
+  "maximize-umbraco-for-your-content-editors": "/clusters/umbraco/",
+  "start-using-a-cancellation-token": "/clusters/dotnet/",
+  "start-using-roslyn-code-analyzers": "/nodes/start-using-roslyn-code-analyzers/",
+  "statically-generated-umbraco-website": "/nodes/the-statically-generated-umbraco-website/",
+  "taking-a-look-at-net-7-regex-generator": "/clusters/dotnet/",
+  "the-statically-generated-umbraco-website": "/nodes/the-statically-generated-umbraco-website/",
+  "umbraco-community-day-2023": "/about/",
+  "using-tag-helpers-to-render-attributes-conditionally": "/clusters/dotnet/",
+  "using-value-objects-in-net": "/nodes/using-value-objects-in-net/"
+}

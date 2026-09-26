@@ -54,6 +54,7 @@ function getParsedNodes(): NodePost[] {
         code: nodeCodeFor(slug),
         title: data.title,
         date: data.date,
+        updated: data.updated ?? null,
         excerpt: data.excerpt,
         // The page header already renders the title, so drop a leading H1 from the body
         content: content.replace(/^\s*#\s+[^\n]*\n/, ""),
@@ -94,16 +95,16 @@ export function getAllNodeSlugs(): string[] {
   return getParsedNodes().map((node) => node.slug)
 }
 
-export function toSummary({ slug, code, title, date, excerpt, tags, readingTime, author }: NodePost): NodeSummary {
-  return { slug, code, title, date, excerpt, tags, readingTime, author }
+export function toSummary({ slug, code, title, date, updated, excerpt, tags, readingTime, author }: NodePost): NodeSummary {
+  return { slug, code, title, date, updated, excerpt, tags, readingTime, author }
 }
 
 export function getNodeSummaries(): NodeSummary[] {
   return getParsedNodes().map(toSummary)
 }
 
-function buildGraph(): GraphData {
-  const posts = getParsedNodes()
+function buildGraph(include: (node: NodePost) => boolean = () => true): GraphData {
+  const posts = getParsedNodes().filter(include)
   const slugs = new Set(posts.map((p) => p.slug))
   const clusterCounts = new Map<string, number>()
   const links: GraphLink[] = []
@@ -139,8 +140,8 @@ function buildGraph(): GraphData {
   }
 }
 
-export function getGraph(): GraphData {
-  return withLayout(buildGraph())
+export function getGraph(include?: (node: NodePost) => boolean): GraphData {
+  return withLayout(buildGraph(include))
 }
 
 // Subgraph of one node, its clusters and every node sharing a cluster or a related link

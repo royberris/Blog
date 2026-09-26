@@ -1,3 +1,4 @@
+import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
 import { ArrowLeft, ArrowRight, Waypoints } from "lucide-react"
@@ -7,6 +8,8 @@ import { MarkdownRenderer } from "@/components/markdown-renderer"
 import { AuthorSection } from "@/components/author-section"
 import { ReadingProgress } from "@/components/reading-progress"
 import { ConnectedGraph } from "@/components/graph/connected-graph"
+import { JsonLd } from "@/components/json-ld"
+import { AUTHOR, SITE_NAME, SITE_URL, absoluteUrl, clusterSlug } from "@/lib/site"
 
 interface NodeDetailPageProps {
   params: Promise<{ slug: string }>
@@ -16,18 +19,51 @@ export async function generateStaticParams() {
   return getAllNodeSlugs().map((slug) => ({ slug }))
 }
 
-export async function generateMetadata({ params }: NodeDetailPageProps) {
+export async function generateMetadata({ params }: NodeDetailPageProps): Promise<Metadata> {
   const { slug } = await params
   const node = getNodeBySlug(slug)
 
   if (!node) {
-    return { title: "Node Not Found" }
+    return { title: "Node not found", robots: { index: false } }
   }
+
+  const url = `/nodes/${slug}/`
+  const image = { url: `/nodes/${slug}/og.png`, width: 1200, height: 630, alt: node.title }
+  const author = node.author ?? AUTHOR.name
 
   return {
     title: node.title,
     description: node.excerpt,
+    keywords: node.tags,
+    authors: [{ name: author, url: AUTHOR.url }],
+    alternates: {
+      canonical: url,
+      types: { "text/markdown": `/nodes/${slug}.md` },
+    },
+    openGraph: {
+      type: "article",
+      url,
+      siteName: SITE_NAME,
+      locale: "en_US",
+      title: node.title,
+      description: node.excerpt,
+      publishedTime: toIso(node.date),
+      modifiedTime: toIso(node.updated ?? node.date),
+      authors: [AUTHOR.url],
+      tags: node.tags,
+      images: [image],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: node.title,
+      description: node.excerpt,
+      images: [image.url],
+    },
   }
+}
+
+function toIso(date: string): string {
+  return new Date(date).toISOString()
 }
 
 export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
@@ -44,9 +80,44 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
   const newer = all[index - 1]
   const older = all[index + 1]
   const neighborhood = getNeighborhood(slug)
+  const pageUrl = absoluteUrl(`/nodes/${slug}/`)
+  const showUpdated = Boolean(node.updated) && toIso(node.updated!) !== toIso(node.date)
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BlogPosting",
+        "@id": `${pageUrl}#article`,
+        headline: node.title,
+        description: node.excerpt,
+        datePublished: toIso(node.date),
+        dateModified: toIso(node.updated ?? node.date),
+        author: { "@id": `${SITE_URL}/#person` },
+        publisher: { "@id": `${SITE_URL}/#person` },
+        isPartOf: { "@id": `${SITE_URL}/#website` },
+        mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+        url: pageUrl,
+        image: absoluteUrl(`/nodes/${slug}/og.png`),
+        keywords: node.tags.join(", "),
+        articleSection: node.tags[0],
+        wordCount: node.content.trim().split(/\s+/).length,
+        inLanguage: "en",
+      },
+      {
+        "@type": "BreadcrumbList",
+        itemListElement: [
+          { "@type": "ListItem", position: 1, name: "Home", item: absoluteUrl("/") },
+          { "@type": "ListItem", position: 2, name: "Index", item: absoluteUrl("/nodes/") },
+          { "@type": "ListItem", position: 3, name: node.title, item: pageUrl },
+        ],
+      },
+    ],
+  }
 
   return (
     <>
+      <JsonLd data={jsonLd} />
       <ReadingProgress />
       <main className="min-h-screen pt-14">
         <header className="hud-grid border-b border-border/60">
@@ -60,6 +131,14 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
               <span className="hud-label normal-case text-cyan">///{node.code}</span>
               <span className="hud-label">·</span>
               <time dateTime={node.date} className="hud-label">{formatDate(node.date)}</time>
+              {showUpdated && (
+                <>
+                  <span className="hud-label">·</span>
+                  <span className="hud-label">
+                    Updated <time dateTime={node.updated!}>{formatDate(node.updated!)}</time>
+                  </span>
+                </>
+              )}
               <span className="hud-label">·</span>
               <span className="hud-label">{node.readingTime} min read</span>
               {node.author && (
@@ -78,7 +157,7 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
             {node.tags.length > 0 && (
               <div className="mt-6 flex flex-wrap gap-2">
                 {node.tags.map((tag) => (
-                  <Link key={tag} href={`/nodes?cluster=${encodeURIComponent(tag)}`} className="hud-chip hover:border-cyan hover:text-cyan">
+                  <Link key={tag} href={`/clusters/${clusterSlug(tag)}/`} className="hud-chip hover:border-cyan hover:text-cyan">
                     {tag}
                   </Link>
                 ))}
@@ -107,13 +186,13 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
 
           <nav aria-label="More nodes" className="mt-4 grid gap-3 sm:grid-cols-2">
             {older ? (
-              <Link href={`/nodes/${older.slug}`} className="hud-panel group p-4 transition-colors hover:border-neon/60">
+              <Link href={`/nodes/${older.slug}/`} className="hud-panel group p-4 transition-colors hover:border-neon/60">
                 <span className="hud-label flex items-center gap-1.5"><ArrowLeft className="size-3" /> Older</span>
                 <span className="mt-1 block font-medium text-balance">{older.title}</span>
               </Link>
             ) : <span className="hidden sm:block" />}
             {newer && (
-              <Link href={`/nodes/${newer.slug}`} className="hud-panel group p-4 text-right transition-colors hover:border-neon/60">
+              <Link href={`/nodes/${newer.slug}/`} className="hud-panel group p-4 text-right transition-colors hover:border-neon/60">
                 <span className="hud-label flex items-center justify-end gap-1.5">Newer <ArrowRight className="size-3" /></span>
                 <span className="mt-1 block font-medium text-balance">{newer.title}</span>
               </Link>

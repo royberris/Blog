@@ -12,9 +12,10 @@ On Berris.dev, blog posts are called **nodes** and tags are called **clusters**.
 
 ```yaml
 ---
-title: "Designing APIs for AI Agents: Building Better Interfaces for AI Use"
+title: "Designing APIs for AI Agents: Schemas, Security and MCP"
 date: "YYYY-MM-DD"
-excerpt: "One or two sentences on what the reader gets out of this node, in the same voice as the post."
+updated: "YYYY-MM-DD"
+excerpt: "140 to 160 characters on what the reader gets out of this node, written like a search snippet, in the same voice as the post."
 tags: ["Tag1", "Tag2", "Tag3"]
 author: "Roy Berris"
 related: ["other-node-slug"]
@@ -23,21 +24,34 @@ related: ["other-node-slug"]
 
 Required:
 
-- **title**: Clear about the topic. A "Topic: angle" subtitle works well.
+- **title**: Clear about the topic, under about 60 characters, with the main keyword near the start (the phrase a reader would search for). A "Topic: angle" subtitle works well.
 - **date**: Publication date, `YYYY-MM-DD`, quoted.
-- **excerpt**: Plain and specific, no marketing words. Shown on cards, in search and in `/llms.txt`.
+- **excerpt**: 140 to 160 characters, plain and specific, no marketing words. Write it as the search result snippet: the main keyword plus what the reader learns. Shown on cards, as the meta description, in search results and in `/llms.txt`.
 - **tags**: 2 to 4 clusters, all present as keys in `data/tags.json`.
 - **author**: Must match a key in `data/authors.json` exactly. Add a new author there (role, bio, avatar, github) before using a new name.
 
 Optional:
 
 - **related**: Slugs (file name without `.md`) of nodes this one really builds on. Each one draws a direct line on the map. Don't add links just to connect things.
+- **updated**: `YYYY-MM-DD`, quoted. Set it whenever you revise a published node in a meaningful way (new sections, corrected facts, a TL;DR or FAQ). Leave `date` as the original publication date. Typo fixes don't count.
 
 ## Body
 
 - Start the body with an H1 that repeats the title. The site strips it (the page header already shows the title), but it keeps the Markdown readable on its own.
-- Use H2 for main sections and H3 for sub-sections. Descriptive headings, not "Section 1".
+- Directly under the H1, add a 2 to 3 sentence **TL;DR** (`**TL;DR:** ...`) that answers the core question of the node on its own, with the key facts and numbers.
+- Use H2 for main sections and H3 for sub-sections. Descriptive headings, not "Section 1". Where it reads naturally, phrase a few headings as the question a reader would ask ("How should API security change for AI agents?").
+- End with a short `## FAQ` section (before the optional transparency note): 3 or 4 questions as H3s, each answered in 2 to 4 sentences. Answers only restate what the post already says, never new claims.
 - Lists, **bold** and *italic* are fine. Don't overdo them.
+
+## Search and AI citability
+
+Nodes are read by search engines and by AI assistants (ChatGPT, Claude, Perplexity) through the pages, `/llms.txt`, `/llms-full.txt` and the raw `/nodes/<slug>.md` files. These rules make a node easy to find and to quote correctly:
+
+- **Answer first.** The TL;DR and the first paragraph of each section state the answer, then explain it. Each section should make sense when quoted on its own.
+- **Cite primary sources.** Every external fact or statistic links inline to the original source (the report, spec or official docs), not to an article about it. Name the source and year in the sentence ("[Postman's 2025 State of the API report](https://www.postman.com/state-of-api/2025/) shows...").
+- **Be specific and first-hand.** Concrete projects, decisions, numbers and trade-offs from the author's own work beat general advice. Never invent them.
+- **Keep facts exact.** Quote numbers as the source states them. Don't round, merge or reinterpret.
+- **Link between nodes.** Link to related nodes inline with `/nodes/<slug>/` (trailing slash) and list them in `related` when this node really builds on them.
 
 ## Clusters (tags)
 
