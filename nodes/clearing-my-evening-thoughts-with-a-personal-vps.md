@@ -55,7 +55,7 @@ flowchart TD
 The entire system runs on a cheap cloud node consuming under 450 MB of resident RAM, leaving abundant headroom.
 
 ### 1. Transport Layer: Matrix via Continuwuity
-Rather than building a bot on Telegram or Discord—which exposes metadata to third parties and lacks native decentralized E2EE—I deployed **Continuwuity** (a lightweight Matrix homeserver) in Docker, binding locally to port `6167`. 
+Rather than building a bot on Telegram or Discord—which exposes metadata to third parties and lacks native decentralized E2EE—I deployed **Continuwuity** (a lightweight Matrix homeserver) in Docker. 
 
 Using Element on my phone and laptop gives me an instant chat interface with push notifications, voice note recording, and full message persistence.
 
@@ -75,7 +75,7 @@ agent:
   default_inbox: "inbox/daily-dumps.md"
   sync_strategy: "append-with-timestamp"
 matrix:
-  homeserver_url: "http://127.0.0.1:6167"
+  homeserver_url: "http://127.0.0.1"
   listen_room: "!internal-ops:matrix.local"
 ```
 
