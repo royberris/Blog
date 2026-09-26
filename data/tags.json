@@ -11,6 +11,18 @@
     "fullName": "AI Agents",
     "description": "Autonomous software entities that can perceive their environment, make decisions, and take actions to achieve specific goals through API interactions."
   },
+  "AI": {
+    "fullName": "AI",
+    "description": "Artificial Intelligence and machine learning technologies."
+  },
+  "Technology": {
+    "fullName": "Technology",
+    "description": "General technology, software engineering, and industry perspectives."
+  },
+  "Philosophy": {
+    "fullName": "Philosophy",
+    "description": "Epistemology, ethics, and human reasoning in the digital age."
+  },
   "API": {
     "fullName": "Application Programming Interface",
     "description": "Set of protocols, routines, and tools for building software applications, defining how software components should interact."
