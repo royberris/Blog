@@ -33,6 +33,7 @@ export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears }: GraphE
   const nodes = useMemo(() => allNodes.filter((n) => isWithinYears(n.date, years, new Date(now))), [allNodes, years, now])
   const allTime = years >= maxYears
   const rangeLabel = allTime ? "All time" : `Last ${years} ${years === 1 ? "year" : "years"}`
+  const rangeShort = allTime ? "all" : `${years}y`
 
   // A cluster can vanish when the window shrinks
   useEffect(() => {
@@ -212,11 +213,26 @@ export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears }: GraphE
           </div>
 
           <div className="mt-3 flex items-center justify-between gap-3">
-            <p className="hud-label">
+            <p className="hud-label min-w-0 truncate">
               {terms.length
                 ? `${results.length} of ${nodes.length} nodes match${olderMatches ? ` · ${olderMatches} older` : ""}`
-                : `${nodes.length} nodes · ${clusters.length} clusters · ${graph.links.length} links`}
+                : <>{nodes.length} nodes · {clusters.length} clusters<span className="hidden sm:inline"> · {graph.links.length} links</span></>}
             </p>
+            <div className="flex items-center gap-3">
+            {/* Deliberately quiet: the window is a minor control, the map is the point */}
+            <div className="group flex items-center gap-2 opacity-60 transition-opacity focus-within:opacity-100 hover:opacity-100">
+              <Clock className="size-3 shrink-0 text-muted-foreground group-hover:text-cyan group-focus-within:text-cyan" />
+              <span className="hud-label w-6 whitespace-nowrap normal-case" aria-hidden="true">{rangeShort}</span>
+              <Slider
+                min={1}
+                max={maxYears}
+                step={1}
+                value={[years]}
+                onValueChange={([value]) => setYears(value)}
+                aria-label={`Time range: ${rangeLabel}`}
+                className="w-16 sm:w-20 [&_[data-slot=slider-track]]:h-0.5 [&_[data-slot=slider-range]]:bg-muted-foreground group-hover:[&_[data-slot=slider-range]]:bg-cyan group-focus-within:[&_[data-slot=slider-range]]:bg-cyan [&_[data-slot=slider-thumb]]:size-2.5 [&_[data-slot=slider-thumb]]:border-muted-foreground group-hover:[&_[data-slot=slider-thumb]]:border-cyan group-focus-within:[&_[data-slot=slider-thumb]]:border-cyan"
+              />
+            </div>
             <button
               type="button"
               onClick={() => {
@@ -231,20 +247,7 @@ export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears }: GraphE
               <Crosshair className="size-3.5" />
               <span className="hidden sm:inline">Recenter</span>
             </button>
-          </div>
-
-          <div className="mt-3 flex items-center gap-3 rounded-xl border border-border/60 bg-card/80 px-3 py-2">
-            <Clock className="size-3.5 shrink-0 text-cyan" />
-            <span id="range-label" className="hud-label w-28 shrink-0 text-foreground" aria-live="polite">{rangeLabel}</span>
-            <Slider
-              min={1}
-              max={maxYears}
-              step={1}
-              value={[years]}
-              onValueChange={([value]) => setYears(value)}
-              aria-labelledby="range-label"
-              className="flex-1 [&_[data-slot=slider-range]]:bg-cyan [&_[data-slot=slider-thumb]]:border-cyan [&_[data-slot=slider-thumb]]:shadow-[0_0_12px_-2px_var(--cyan)]"
-            />
+            </div>
           </div>
         </div>
       </div>
