@@ -31,6 +31,17 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <ol className="list-decimal list-inside text-foreground/80 mb-6 space-y-2 ml-4">{children}</ol>
           ),
           li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+          a: ({ href, children }) => {
+            const external = !!href && /^(https?:)?\/\//.test(href)
+            return (
+              <a
+                href={href}
+                {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+              >
+                {children}
+              </a>
+            )
+          },
           strong: ({ children }) => <strong className="font-semibold text-foreground">{children}</strong>,
           code: ({ children, className, ...props }: any) => {
             const match = /language-(\w+)/.exec(className || '')
