@@ -109,6 +109,7 @@ When existing tags don't work:
 - Use **bold** or *italic* text carefully for key terms.
 - Use commas instead of em dashes (—) for better readability.
 - Keep formatting consistent and don't overuse styling elements.
+- The site uses a dark theme with light text. In Mermaid diagrams, only use `style` overrides with dark fills and set `color` explicitly (for example `style Node fill:#0e3a4a,stroke:#67e8f9,color:#e0f7ff`). Light fills like `#e1f5fe` make the text unreadable.
 
 ## .NET & C# Technical Standards
 

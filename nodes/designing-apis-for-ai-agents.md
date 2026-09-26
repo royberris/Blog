@@ -147,10 +147,10 @@ graph TB
     Agent --> LLM
     Agent --> AutoTools
     
-    style Schema fill:#e1f5fe
-    style Patterns fill:#f3e5f5
-    style Context fill:#e8f5e8
-    style Discovery fill:#fff3e0
+    style Schema fill:#0e3a4a,stroke:#67e8f9,color:#e0f7ff
+    style Patterns fill:#3b1f5c,stroke:#c084fc,color:#f3e8ff
+    style Context fill:#14432a,stroke:#4ade80,color:#dcfce7
+    style Discovery fill:#4a2e0e,stroke:#fb923c,color:#ffedd5
 ```
 
 ## Security Architecture for AI Consumers
