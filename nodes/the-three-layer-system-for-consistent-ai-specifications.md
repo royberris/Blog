@@ -213,4 +213,4 @@ You update the approved business rules in Layer 1 and recompile downstream layer
 
 ---
 
-*This blog post was created using the AI-assisted approach described in [AI-Assisted Blogging](/nodes/ai-assisted-blogging/). All technical insights, architecture decisions and recommendations reflect our direct experience as software architects at New Orange, while AI helped refine the structure and readability.*
+*This blog post was created using the AI-assisted approach described in [AI-Assisted Blogging](/nodes/ai-assisted-blogging/). All technical insights, architecture decisions and recommendations reflect our direct experience as software architects, while AI helped refine the structure and readability.*
