@@ -127,7 +127,7 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
                 onFocus={() => setFocused(true)}
                 onBlur={() => setTimeout(() => setFocused(false), 120)}
                 onKeyDown={onKeyDown}
-                placeholder="Search the node database…"
+                placeholder="Search the knowledge database…"
                 aria-label="Search nodes"
                 aria-controls="search-results"
                 aria-expanded={showResults}

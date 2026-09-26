@@ -16,7 +16,7 @@ export function HudBar() {
           </span>
           <span className="flex flex-col leading-none">
             <span className="text-sm font-semibold tracking-tight">Berris<span className="text-cyan">.dev</span></span>
-            <span className="hud-label text-[9px]">Node database</span>
+            <span className="hud-label text-[9px]">Knowledge database</span>
           </span>
         </Link>
 
