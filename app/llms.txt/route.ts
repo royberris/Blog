@@ -1,108 +1,59 @@
-import { NextResponse } from 'next/server'
-import { getAllNodes } from '@/lib/nodes'
-import tagsConfig from '@/data/tags.json'
-import { getAllAuthors } from '@/lib/authors'
+import { getAllNodes, getTagConfig, type NodePost } from "@/lib/nodes"
+import { AUTHOR, SITE_NAME, SITE_DESCRIPTION, absoluteUrl, clusterSlug } from "@/lib/site"
 
 // Required for static export
-export const dynamic = 'force-static'
+export const dynamic = "force-static"
 
-interface TagConfig {
-  fullName: string
-  description: string
+const nodeUrl = (slug: string) => absoluteUrl(`/nodes/${slug}/`)
+const markdownUrl = (slug: string) => absoluteUrl(`/nodes/${slug}.md`)
+const linkedIn = AUTHOR.sameAs.find((u) => u.includes("linkedin.com"))
+const gitHub = AUTHOR.sameAs.find((u) => u.includes("github.com"))
+
+function nodeLine(node: NodePost): string {
+  return `- [${node.title}](${nodeUrl(node.slug)}): ${node.excerpt} ([Markdown](${markdownUrl(node.slug)}))`
 }
 
-function generateLlmsTxtContent(blogs: any[]): string {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://berris.dev"
-  
-  let content = `# Berris.dev - Technical Knowledge Base
-
-Berris.dev is a mapped database of posts ("nodes") on software architecture, API design and AI, grouped into topic clusters.
-
-## Authors
-${getAllAuthors().map(a => `- **${a.name}** (${a.role}): ${a.bio}`).join('\n')}
-
-## Expertise Areas & Related Content
-
-`
-
-  // Group blogs by tag and show all blogs per topic
-  const tagGroups = new Map<string, any[]>()
-  
-  blogs.forEach(blog => {
-    if (blog.tags) {
-      blog.tags.forEach((tag: string) => {
-        const tagConfig = (tagsConfig as Record<string, TagConfig>)[tag]
-        const displayName = tagConfig?.fullName || tag
-        
-        if (!tagGroups.has(displayName)) {
-          tagGroups.set(displayName, [])
-        }
-        tagGroups.get(displayName)!.push(blog)
-      })
-    }
-  })
-  
-  // Sort tags alphabetically and output each with all related blogs
-  Array.from(tagGroups.entries())
-    .sort(([a], [b]) => a.localeCompare(b))
-    .forEach(([tagName, relatedBlogs]) => {
-      const tagConfig = Object.values(tagsConfig).find(config => config.fullName === tagName)
-      
-      content += `### ${tagName}\n`
-      if (tagConfig) {
-        content += `${tagConfig.description}\n\n`
-      }
-      
-      content += `**Related Posts:**\n`
-      relatedBlogs.forEach(blog => {
-        content += `- [${blog.title}](${baseUrl}/nodes/${blog.slug}) (${blog.date})\n`
-        content += `  ${blog.excerpt}\n\n`
-      })
+function generateLlmsTxt(nodes: NodePost[]): string {
+  const clusters = new Map<string, NodePost[]>()
+  nodes.forEach((node) => {
+    node.tags.forEach((tag) => {
+      if (!clusters.has(tag)) clusters.set(tag, [])
+      clusters.get(tag)!.push(node)
     })
-  
-  content += `## All Nodes (Chronological)
-
-`
-  
-  blogs.forEach(blog => {
-    const tagsList = blog.tags ? blog.tags.join(', ') : 'No tags'
-    content += `### [${blog.title}](${baseUrl}/nodes/${blog.slug})
-**Published:** ${blog.date}  
-**Author:** ${blog.author || 'Unknown'}  
-**Topics:** ${tagsList}  
-**Summary:** ${blog.excerpt}
-
-`
   })
-  
-  content += `## Content Statistics
-- **Total Nodes:** ${blogs.length}
-- **Topics Covered:** ${tagGroups.size}
-- **Latest Post:** ${blogs[0]?.date || 'N/A'}
-- **Content Focus:** Software Architecture, API Design, Development Practices
 
-## How to Use This Content
-Berris.dev focuses on practical software architecture insights, real-world implementation experiences, and team collaboration strategies. Each post includes specific examples and actionable recommendations based on the authors' professional experience.`
+  // Biggest clusters first, then alphabetical
+  const sections = Array.from(clusters.entries())
+    .sort(([a, x], [b, y]) => y.length - x.length || a.localeCompare(b))
+    .map(([tag, posts]) => {
+      const config = getTagConfig(tag)
+      const heading = config && config.fullName !== tag ? `${config.fullName} (${tag})` : tag
+      const clusterLink = `[All ${tag} nodes](${absoluteUrl(`/clusters/${clusterSlug(tag)}/`)})`
+      const intro = `${config ? `${config.description} ` : ""}${clusterLink}\n\n`
+      return `## ${heading}\n\n${intro}${posts.map(nodeLine).join("\n")}`
+    })
 
-  return content
+  return `# ${SITE_NAME}
+
+> ${SITE_DESCRIPTION}
+
+${SITE_NAME} is written by ${AUTHOR.name}, ${AUTHOR.jobTitle} at ${AUTHOR.worksFor.name} in the Netherlands. Posts are called "nodes" and are grouped into topic clusters on an interactive map. Every node is written from first-hand experience; AI helps with structure and readability, and the author owns every technical claim. More about the author: [About](${absoluteUrl("/about/")}), [GitHub](${gitHub}), [LinkedIn](${linkedIn}).
+
+Each node is available as a web page at \`${absoluteUrl("/nodes/<slug>/")}\` and as raw Markdown at \`${absoluteUrl("/nodes/<slug>.md")}\`. The full text of every node is in [llms-full.txt](${absoluteUrl("/llms-full.txt")}).
+
+${sections.join("\n\n")}
+
+## Optional
+
+- [About ${AUTHOR.name}](${absoluteUrl("/about/")}): Who writes ${SITE_NAME}, background and speaking.
+- [Node index](${absoluteUrl("/nodes/")}): Every node, filterable by cluster.
+- [Full text](${absoluteUrl("/llms-full.txt")}): All nodes as one Markdown document, newest first.
+- [Sitemap](${absoluteUrl("/sitemap.xml")}): Machine-readable list of every page.
+`
 }
 
-export async function GET() {
-  try {
-    const blogs = getAllNodes()
-    
-    // Generate the llms.txt content
-    const llmsTxtContent = generateLlmsTxtContent(blogs)
-    
-    return new NextResponse(llmsTxtContent, {
-      status: 200,
-      headers: {
-        'Content-Type': 'text/plain; charset=utf-8',
-        'Cache-Control': 'public, max-age=3600',
-      },
-    })
-  } catch (error) {
-    console.error('Error generating llms.txt:', error)
-    return new NextResponse('Error generating llms.txt', { status: 500 })
-  }
+export function GET() {
+  return new Response(generateLlmsTxt(getAllNodes()), {
+    headers: { "Content-Type": "text/plain; charset=utf-8" },
+  })
 }

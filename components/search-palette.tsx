@@ -11,6 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { clusterSlug } from "@/lib/site"
 import type { NodeSummary } from "@/lib/graph-types"
 
 export const SEARCH_OPEN_EVENT = "berris:search-open"
@@ -74,7 +75,7 @@ export function SearchPalette({ nodes }: { nodes: NodeSummary[] }) {
               <CommandItem
                 key={n.slug}
                 value={`${n.code} ${n.title} ${n.excerpt} ${n.tags.join(" ")}`}
-                onSelect={() => go(`/nodes/${n.slug}`)}
+                onSelect={() => go(`/nodes/${n.slug}/`)}
                 className="flex flex-col items-start gap-1"
               >
                 <span className="hud-label text-cyan"><span className="normal-case">///{n.code}</span> · {n.readingTime} min</span>
@@ -84,7 +85,7 @@ export function SearchPalette({ nodes }: { nodes: NodeSummary[] }) {
           </CommandGroup>
           <CommandGroup heading="Clusters">
             {clusters.map((tag) => (
-              <CommandItem key={tag} value={`cluster ${tag}`} onSelect={() => go(`/nodes?cluster=${encodeURIComponent(tag)}`)}>
+              <CommandItem key={tag} value={`cluster ${tag}`} onSelect={() => go(`/clusters/${clusterSlug(tag)}/`)}>
                 <Hexagon className="text-neon" />
                 <span className="font-mono text-xs uppercase tracking-wider">{tag}</span>
               </CommandItem>

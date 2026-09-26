@@ -1,7 +1,8 @@
 ---
 title: "AI-Assisted Blogging: When Technology Meets Technical Writing"
 date: "2025-09-29"
-excerpt: "How I leverage AI collaboration to transform technical insights into polished blog content while maintaining authenticity and technical accuracy in my writing process."
+updated: "2026-09-26"
+excerpt: "How I blog with AI as a writing partner, not a ghostwriter: I bring the insights and own every technical claim, AI helps with structure and readability."
 tags: ["AI", "Blogging", "Technical Writing"]
 author: "Roy Berris"
 related: ["designing-apis-for-ai-agents"]
@@ -9,13 +10,15 @@ related: ["designing-apis-for-ai-agents"]
 
 # AI-Assisted Blogging: When Technology Meets Technical Writing
 
-I'll be honest with you—I'm fundamentally lazy when it comes to certain aspects of writing. Not the thinking part, mind you. I love diving deep into technical problems, architecting solutions, and sharing insights from real-world implementations. But when it comes to polishing my thoughts into coherent, well-structured prose that doesn't make readers want to close their browsers immediately? Well, let's just say I'd rather delegate that task to someone (or something) more capable. Enter AI-assisted blogging: my new favorite productivity hack.
+**TL;DR:** I use AI as a writing partner, not a ghostwriter. I give it my outline, rough notes and project material, it writes a structured first draft, and then I rewrite section by section until every technical detail is accurate and it sounds like me. The ideas and technical claims are always mine; AI helps with structure and readability.
+
+I'll be honest with you, I'm fundamentally lazy when it comes to certain aspects of writing. Not the thinking part, mind you. I love diving deep into technical problems, architecting solutions, and sharing insights from real-world implementations. But when it comes to polishing my thoughts into coherent, well-structured prose that doesn't make readers want to close their browsers immediately? Well, let's just say I'd rather delegate that task to someone (or something) more capable. Enter AI-assisted blogging: my new favorite productivity hack.
 
 ## The Problem: Technical Expertise vs. Communication Skills
 
 As software architects, we face a persistent gap between having valuable technical insights and presenting them effectively. My experience spans numerous .NET implementations and architectural decisions, but transforming these into compelling blog content requires different skills entirely. Traditional technical writing takes a lot of time for structuring, refinement, and making things readable. This overhead makes blogging feel impossible when you're already managing demanding project schedules.
 
-## My AI Collaboration Approach
+## How Do I Use AI Without Losing My Voice?
 
 I think of AI as my writing partner rather than my ghostwriter. I dump my technical insights, experiences, and half-formed ideas into rough outlines or brain dumps. Sometimes it's just bullet points about a particularly gnarly architecture decision I made, or notes about why a certain implementation approach worked better than expected.
 
@@ -23,15 +26,15 @@ AI takes this raw material and helps me structure it into something readable. It
 
 I maintain complete editorial control throughout the process. Every technical insight gets my stamp of approval, and if AI suggests something that doesn't align with my actual experience or opinion, it gets scrapped. The goal is amplifying my voice, not replacing it with some generic technical writing template.
 
-## My Workflow in Practice
+## What Does My AI Blogging Workflow Look Like?
 
-Here's how this actually works in practice. I start by outlining the subject and identifying the key points I want to cover. Then I gather all my supporting materials, emails from project discussions, PDF documentation, Lucid diagrams I've created, LikeC4 architectural models, meeting notes, whatever artifacts capture the real story behind the technical decisions.
+Here's how this actually works in practice. I start by outlining the subject and identifying the key points I want to cover. Then I gather all my supporting materials, emails from project discussions, PDF documentation, [Lucid](https://lucid.co/) diagrams I've created, [LikeC4](https://likec4.dev/) architectural models, meeting notes, whatever artifacts capture the real story behind the technical decisions.
 
 I dump all of this into AI along with my outline and let it write the first draft of the blog post. This gives me a structured starting point rather than staring at a blank page. But here's where I become the orchestrator, I go through section by section, moving content around, rewriting entire paragraphs, adding my own examples, and making sure the technical details are accurate and reflect my actual experience.
 
 I'm the final editor of every post, even with AI as my writing partner. AI might suggest a flow or help with transitions, but I'm the one deciding what stays, what goes, and what needs to be completely rewritten to sound like me rather than a polished corporate blog written by ChatGPT.
 
-## Key Benefits and Lessons Learned
+## What Have I Learned from Blogging with AI?
 
 This collaboration has some benefits beyond just saving time. Working with AI has actually improved my own writing skills because I see how it structures sentences and organizes ideas. I've also learned that the more specific I am about who's reading the blog and how technical to get, the better the AI's output becomes.
 
@@ -48,6 +51,24 @@ Think of AI as something that multiplies your communication abilities without re
 AI-assisted blogging offers a practical solution if you have valuable technical insights but struggle with communication barriers. By establishing clear boundaries, I provide the technical expertise, AI enhances the communication, and together we can create content while maintaining authenticity and technical depth.
 
 The result is more frequent, higher-quality content that amplifies rather than replaces your professional voice.
+
+## FAQ
+
+### Does AI write the posts on Berris.dev?
+
+AI writes the first draft from my outline and material, but it doesn't generate the ideas or make the technical claims. I go through every section, rewrite paragraphs, add my own examples and scrap anything that doesn't match my actual experience or opinion.
+
+### What do I give the AI before it writes a draft?
+
+An outline with the key points, plus the material that captures the real story: emails from project discussions, PDF documentation, Lucid diagrams, LikeC4 architectural models and meeting notes.
+
+### How do I keep AI-assisted posts technically accurate?
+
+I keep complete control over technical accuracy and my professional opinions. I'm the final editor of every post, and every technical insight needs my approval before it stays in.
+
+### How do I get better output from AI when writing?
+
+Be specific about who's reading the blog and how technical to get. In my experience, the more specific I am about that, the better the output becomes.
 
 ---
 

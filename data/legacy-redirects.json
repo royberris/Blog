@@ -1,0 +1,18 @@
+{
+  "codegarden-2023": "/nodes/codegarden-2023/",
+  "df23-a-fun-day": "/nodes/df23-a-fun-day/",
+  "df23-fun-day": "/nodes/df23-a-fun-day/",
+  "going-headless-with-": "/nodes/going-headless-with-mvc/",
+  "going-headless-with-mvc": "/nodes/going-headless-with-mvc/",
+  "implementing-a-configurable-csp-in-aspnet-core": "/nodes/implementing-a-configurable-csp-in-aspnet-core/",
+  "looking-at-partial-methods": "/nodes/looking-at-partial-methods/",
+  "maximize-umbraco-for-your-content-editors": "/nodes/maximize-umbraco-for-your-content-editors/",
+  "start-using-a-cancellation-token": "/nodes/start-using-a-cancellation-token/",
+  "start-using-roslyn-code-analyzers": "/nodes/start-using-roslyn-code-analyzers/",
+  "statically-generated-umbraco-website": "/nodes/the-statically-generated-umbraco-website/",
+  "taking-a-look-at-net-7-regex-generator": "/nodes/taking-a-look-at-net-7-regex-generator/",
+  "the-statically-generated-umbraco-website": "/nodes/the-statically-generated-umbraco-website/",
+  "umbraco-community-day-2023": "/nodes/umbraco-community-day-2023/",
+  "using-tag-helpers-to-render-attributes-conditionally": "/nodes/using-tag-helpers-to-render-attributes-conditionally/",
+  "using-value-objects-in-net": "/nodes/using-value-objects-in-net/"
+}

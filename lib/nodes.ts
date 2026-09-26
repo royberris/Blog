@@ -54,6 +54,7 @@ function getParsedNodes(): NodePost[] {
         code: nodeCodeFor(slug),
         title: data.title,
         date: data.date,
+        updated: data.updated ?? null,
         excerpt: data.excerpt,
         // The page header already renders the title, so drop a leading H1 from the body
         content: content.replace(/^\s*#\s+[^\n]*\n/, ""),
@@ -94,8 +95,8 @@ export function getAllNodeSlugs(): string[] {
   return getParsedNodes().map((node) => node.slug)
 }
 
-export function toSummary({ slug, code, title, date, excerpt, tags, readingTime, author }: NodePost): NodeSummary {
-  return { slug, code, title, date, excerpt, tags, readingTime, author }
+export function toSummary({ slug, code, title, date, updated, excerpt, tags, readingTime, author }: NodePost): NodeSummary {
+  return { slug, code, title, date, updated, excerpt, tags, readingTime, author }
 }
 
 export function getNodeSummaries(): NodeSummary[] {

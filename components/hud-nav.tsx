@@ -2,12 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutGrid, Waypoints } from "lucide-react"
+import { LayoutGrid, UserRound, Waypoints } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const views = [
   { href: "/", label: "Map", icon: Waypoints, match: (p: string) => p === "/" },
-  { href: "/nodes", label: "Index", icon: LayoutGrid, match: (p: string) => p.startsWith("/nodes") },
+  { href: "/nodes/", label: "Index", icon: LayoutGrid, match: (p: string) => p.startsWith("/nodes") },
+  { href: "/about/", label: "About", icon: UserRound, match: (p: string) => p.startsWith("/about") },
 ]
 
 export function HudNav() {
@@ -28,7 +29,7 @@ export function HudNav() {
             )}
           >
             <Icon className="size-3.5" />
-            <span>{label}</span>
+            <span className="sr-only sm:not-sr-only">{label}</span>
           </Link>
         )
       })}

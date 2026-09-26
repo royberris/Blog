@@ -108,7 +108,7 @@ export function GraphExplorer({ graph, nodes }: GraphExplorerProps) {
       {/* Search: the primary way into the database */}
       <div className="absolute inset-x-0 top-0 px-4 pt-4 md:pt-8">
         <div className="mx-auto max-w-xl">
-          <h1 className="sr-only">Berris.dev node map</h1>
+          <h2 className="sr-only">Berris.dev node map</h2>
           <div className="relative z-10">
             <div
               className={cn(

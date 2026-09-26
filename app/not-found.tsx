@@ -1,26 +1,35 @@
+import type { Metadata } from "next"
 import Link from "next/link"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, List } from "lucide-react"
+
+export const metadata: Metadata = {
+  title: "Page not found",
+  robots: { index: false, follow: true },
+}
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="text-center space-y-6">
+    <main className="hud-grid flex min-h-screen items-center justify-center px-4 pt-14">
+      <div className="space-y-6 text-center">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold text-foreground">404</h1>
-          <h2 className="text-xl text-muted-foreground">Blog post not found</h2>
-          <p className="text-muted-foreground max-w-md">
-            The blog post you're looking for doesn't exist or may have been moved.
+          <p className="hud-label text-cyan">// 404</p>
+          <h1 className="text-4xl font-semibold tracking-tight neon-text">Page not found</h1>
+          <p className="mx-auto max-w-md text-muted-foreground">
+            The page you're looking for doesn't exist or may have been moved.
           </p>
         </div>
 
-        <Link
-          href="/blogs"
-          className="inline-flex items-center gap-2 text-foreground/80 hover:text-foreground transition-colors"
-        >
-          <ArrowLeft className="w-4 h-4" />
-          Back to blogs
-        </Link>
+        <div className="flex flex-wrap items-center justify-center gap-4">
+          <Link href="/" className="hud-label inline-flex items-center gap-2 hover:text-foreground">
+            <ArrowLeft className="size-3.5" />
+            Back to map
+          </Link>
+          <Link href="/nodes/" className="hud-label inline-flex items-center gap-2 hover:text-foreground">
+            <List className="size-3.5" />
+            Browse the index
+          </Link>
+        </div>
       </div>
-    </div>
+    </main>
   )
 }

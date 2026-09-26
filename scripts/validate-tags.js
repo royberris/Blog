@@ -28,14 +28,27 @@ try {
     }
   });
 
+  // Legacy /blogs/<slug>/ redirects must point at a node that exists (or a list page)
+  const legacyPath = path.join(root, 'data', 'legacy-redirects.json');
+  const legacy = fs.existsSync(legacyPath) ? JSON.parse(fs.readFileSync(legacyPath, 'utf8')) : {};
+  const brokenLegacy = Object.entries(legacy).filter(([, target]) => {
+    const node = /^\/nodes\/([^/]+)\/$/.exec(target);
+    if (node) return !slugs.has(node[1]);
+    return !/^\/(nodes|clusters)\/([^/]+\/)?$/.test(target);
+  });
+  if (brokenLegacy.length) {
+    issues.push({ node: 'data/legacy-redirects.json', invalidTags: [], brokenRelated: [], brokenLegacy });
+  }
+
   if (issues.length === 0) {
-    console.log('✅ All node tags and related links are valid!');
+    console.log('✅ All node tags, related links and legacy redirects are valid!');
   } else {
     console.log('❌ Found issues:');
     issues.forEach((issue) => {
       console.log(`  📄 ${issue.node}:`);
       issue.invalidTags.forEach((tag) => console.log(`    - tag "${tag}" (invalid)`));
       issue.brokenRelated.forEach((slug) => console.log(`    - related "${slug}" (no such node)`));
+      (issue.brokenLegacy || []).forEach(([from, to]) => console.log(`    - /blogs/${from}/ → ${to} (no such page)`));
     });
     process.exitCode = 1;
   }
