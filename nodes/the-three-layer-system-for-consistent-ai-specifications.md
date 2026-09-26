@@ -14,7 +14,7 @@ related: ["designing-apis-for-ai-agents"]
 
 When we first asked an AI model to generate a functional specification directly from rough requirements, the result looked convincing on the surface. But when we inspected the logic, the problems jumped out. The model quietly dropped business validation rules, invented defaults out of thin air, and hallucinated system behavior. Trying to fix all of that by stuffing more instructions into one giant prompt just confused the model and made the output drift even further.
 
-People often assume specification generation is just about producing API definitions or code stubs. At New Orange, we look at it differently. A specification is the functional design of your system, and it is the single source of truth for user intent and business rules. Today's language models cannot bridge human intent and rigid technical contracts in one jump. To solve this, we treat functional design like a compiler chain: three distinct, strictly one-way layers that compile human truth down into a verifiable contract.
+People often assume specification generation is just about producing API definitions or code stubs. In our team, we look at it differently. A specification is the functional design of your system, and it is the single source of truth for user intent and business rules. Today's language models cannot bridge human intent and rigid technical contracts in one jump. To solve this, we treat functional design like a compiler chain: three distinct, strictly one-way layers that compile human truth down into a verifiable contract.
 
 ## Why Does Single-Shot Specification Lead to Drift?
 
@@ -42,7 +42,7 @@ flowchart TD
 
 The system organizes requirements into three distinct stages:
 
-- **Layer 1 (Human and Business Truth):** Written in native business prose to capture stakeholder rules directly. In our projects at New Orange in the Netherlands, capturing policies in Dutch prevents premature translation errors and preserves regulatory nuances that non-technical domain experts care about. Stakeholders can read, verify, and own this layer directly.
+- **Layer 1 (Human and Business Truth):** Written in native business prose to capture stakeholder rules directly. In our projects in the Netherlands, capturing policies in Dutch prevents premature translation errors and preserves regulatory nuances that non-technical domain experts care about. Stakeholders can read, verify, and own this layer directly.
 - **Layer 2 (Functional Design and Domain Model):** Expressed as an English architectural specification following [Domain-Driven Design](https://www.domainlanguage.com/ddd/) principles. This layer normalizes business concepts into formal entities, [value objects](/nodes/using-value-objects-in-net/), lifecycle states, and domain invariants without any transport or serialization baggage. It defines what the system does and why, independent of delivery protocols.
 - **Layer 3 (Verifiable Contract):** Defined in [TypeSpec](https://typespec.io/), OpenAPI, or schema definitions. This layer handles transport mechanics, status codes, query parameters, header definitions, and serialization, following the principles we described in [Designing APIs for AI Agents](/nodes/designing-apis-for-ai-agents/). Wire contracts and API schemas are not the starting point. They are the final compiled layer of functional design.
 
@@ -50,7 +50,7 @@ This workflow is an automated compiler pipeline rather than a traditional waterf
 
 ## How Do We Capture and Validate Business Rules?
 
-You cannot expect an AI model or an engineer sitting alone to invent business truth. Layer 1 requires collaborative discovery with domain experts before any code or prompt runs. In our projects at New Orange, we use three discovery techniques to draw out rules from stakeholders:
+You cannot expect an AI model or an engineer sitting alone to invent business truth. Layer 1 requires collaborative discovery with domain experts before any code or prompt runs. In our projects, we use three discovery techniques to draw out rules from stakeholders:
 
 - **[Event Storming](https://www.eventstorming.com/):** We gather domain experts and developers in a room to map domain events along a business timeline. We explore what happens across a process, what triggers each action, and which policies govern state changes.
 - **[Example Mapping](https://cucumber.io/blog/bdd/example-mapping-introduction/):** We take each user story and break it down into concrete business rules illustrated by realistic examples. Talking through concrete scenarios reveals edge cases and hidden assumptions that abstract bullet points conceal.
@@ -166,7 +166,7 @@ Eventually, models will be capable enough to jump from business discussions to v
 
 Model behavior changes with every new release, but this pipeline keeps our specifications stable. Layer 1 functions as source code, while Layer 2 and Layer 3 act as compiled build artifacts. When business requirements shift, we update the business rules in Layer 1 and trigger a clean compilation rather than patching downstream files.
 
-At New Orange, we store domain rules, conventions, and architectural constraints inside version-controlled repository instructions and skills. Keeping guidance in git repositories ensures every engineer and continuous integration agent runs the exact same prompts. Ad-hoc chat sessions lose context quickly, but versioned skills keep that knowledge in the repository where everyone can use it.
+In our team, we store domain rules, conventions, and architectural constraints inside version-controlled repository instructions and skills. Keeping guidance in git repositories ensures every engineer and continuous integration agent runs the exact same prompts. Ad-hoc chat sessions lose context quickly, but versioned skills keep that knowledge in the repository where everyone can use it.
 
 The architecture remains completely tool-agnostic. You can switch the underlying foundation model or migrate from TypeSpec to another interface definition language whenever you choose. Because your core functional design lives upstream in clean domain models, changing a code generator never forces a rewrite of your business rules. When tools improve, downstream layers are simply regenerated.
 
@@ -205,7 +205,7 @@ We capture business rules through collaborative workshops with domain experts, u
 
 ### Why write Layer 1 in native language instead of English?
 
-Writing Layer 1 in native business prose, such as Dutch in our projects at New Orange in the Netherlands, captures policies directly from stakeholders without premature translation. This preserves regulatory nuances and policy details that domain experts care about, before Layer 2 translates and normalizes them into English domain concepts.
+Writing Layer 1 in native business prose, such as Dutch in our projects in the Netherlands, captures policies directly from stakeholders without premature translation. This preserves regulatory nuances and policy details that domain experts care about, before Layer 2 translates and normalizes them into English domain concepts.
 
 ### What happens when business requirements change or tools improve?
 
