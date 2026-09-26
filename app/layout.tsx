@@ -81,7 +81,7 @@ const siteJsonLd = {
       jobTitle: AUTHOR.jobTitle,
       worksFor: { "@type": "Organization", name: AUTHOR.worksFor.name, url: AUTHOR.worksFor.url },
       sameAs: AUTHOR.sameAs,
-      knowsAbout: ["Software architecture", "API design", "AI agents", ".NET", "Umbraco"],
+      knowsAbout: ["Software architecture", "Solution architecture", "Domain-Driven Design", "API design", "AI agents", ".NET", "Next.js"],
     },
   ],
 }
