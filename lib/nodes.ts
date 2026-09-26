@@ -103,8 +103,8 @@ export function getNodeSummaries(): NodeSummary[] {
   return getParsedNodes().map(toSummary)
 }
 
-function buildGraph(): GraphData {
-  const posts = getParsedNodes()
+function buildGraph(include: (node: NodePost) => boolean = () => true): GraphData {
+  const posts = getParsedNodes().filter(include)
   const slugs = new Set(posts.map((p) => p.slug))
   const clusterCounts = new Map<string, number>()
   const links: GraphLink[] = []
@@ -140,8 +140,8 @@ function buildGraph(): GraphData {
   }
 }
 
-export function getGraph(): GraphData {
-  return withLayout(buildGraph())
+export function getGraph(include?: (node: NodePost) => boolean): GraphData {
+  return withLayout(buildGraph(include))
 }
 
 // Subgraph of one node, its clusters and every node sharing a cluster or a related link

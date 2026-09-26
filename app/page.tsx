@@ -3,6 +3,7 @@ import Link from "next/link"
 import { ArrowDown, ArrowRight } from "lucide-react"
 import { GraphExplorer } from "@/components/graph/graph-explorer"
 import { formatDate, getGraph, getNodeSummaries } from "@/lib/nodes"
+import { DEFAULT_WINDOW_YEARS, isWithinYears, maxWindowYears } from "@/lib/node-age"
 import { AUTHOR, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site"
 
 const LATEST_COUNT = 12
@@ -24,14 +25,21 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-  const graph = getGraph()
   const nodes = getNodeSummaries()
-  const latest = nodes.slice(0, LATEST_COUNT)
+  // The window is relative to the build, so it moves forward with every deploy
+  const now = new Date()
+  const maxYears = maxWindowYears(nodes.map((n) => n.date), now)
+  // One pre-laid-out graph per slider step, so the map stays tidy at every range
+  const graphs = Object.fromEntries(
+    Array.from({ length: maxYears }, (_, i) => i + 1).map((years) => [years, getGraph((n) => isWithinYears(n.date, years, now))]),
+  )
+  const recent = nodes.filter((n) => isWithinYears(n.date, DEFAULT_WINDOW_YEARS, now))
+  const latest = recent.slice(0, LATEST_COUNT)
 
   return (
     <main className="hud-grid">
       <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14">
-        <GraphExplorer graph={graph} nodes={nodes} />
+        <GraphExplorer graphs={graphs} nodes={nodes} now={now.toISOString()} maxYears={maxYears} />
 
         {/* The map captures wheel and drag, so give an explicit way down to the readable content */}
         <a
@@ -59,7 +67,7 @@ export default function HomePage() {
             </p>
           </header>
 
-          <h2 className="hud-label mt-12 text-foreground">Latest nodes</h2>
+          <h2 className="hud-label mt-12 text-foreground">Latest nodes · last {DEFAULT_WINDOW_YEARS} years</h2>
           <ol className="mt-4 grid gap-4 md:grid-cols-2">
             {latest.map((node) => (
               <li key={node.slug}>
@@ -79,7 +87,7 @@ export default function HomePage() {
           </ol>
 
           <Link href="/nodes/" className="hud-chip mt-6 hover:border-cyan hover:text-cyan">
-            All {nodes.length} nodes in the index
+            {nodes.length > recent.length ? `All ${nodes.length} nodes, including older ones, in the index` : `All ${nodes.length} nodes in the index`}
             <ArrowRight className="size-3" />
           </Link>
         </div>
