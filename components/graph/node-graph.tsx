@@ -119,8 +119,8 @@ const NodeView = memo(function NodeView({ node: n, lit, active, showLabel, compa
       ) : (
         <>
           {/* Gradient halo instead of an SVG blur filter: same glow, no per-frame filter cost */}
-          <circle r={r * 2.4} fill="url(#halo)" />
-          <circle r={r + 6} fill="none" style={{ stroke: active ? "var(--cyan)" : "var(--neon)", strokeOpacity: 0.55 }} strokeWidth={1} />
+          <circle r={r * 1.8} fill="url(#halo)" />
+          <circle r={r + 6} fill="none" style={{ stroke: active ? "var(--cyan)" : "var(--neon)", strokeOpacity: 0.35 }} strokeWidth={1} />
           <circle r={r} fill="url(#core)" />
           {showLabel && (
             <text y={r + 18} textAnchor="middle" style={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 600 }}>
@@ -331,12 +331,12 @@ export function NodeGraph({
       >
         <defs>
           <radialGradient id="core" cx="35%" cy="35%" r="65%">
-            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="0%" stopColor="oklch(0.9 0.08 293)" />
             <stop offset="45%" stopColor="oklch(0.78 0.2 293)" />
             <stop offset="100%" stopColor="oklch(0.5 0.25 293)" />
           </radialGradient>
           <radialGradient id="halo">
-            <stop offset="0%" stopColor="oklch(0.68 0.25 293)" stopOpacity="0.55" />
+            <stop offset="0%" stopColor="oklch(0.68 0.25 293)" stopOpacity="0.28" />
             <stop offset="100%" stopColor="oklch(0.68 0.25 293)" stopOpacity="0" />
           </radialGradient>
         </defs>

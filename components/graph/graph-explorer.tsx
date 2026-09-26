@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { useRouter } from "next/navigation"
 import { ArrowUpRight, Clock, Crosshair, Search, X } from "lucide-react"
 import { NodeGraph } from "@/components/graph/node-graph"
@@ -15,11 +15,12 @@ interface GraphExplorerProps {
   nodes: NodeSummary[]
   now: string // build time; the window is relative to it
   maxYears: number // the step that covers every node
+  bottomSlot?: ReactNode // rendered under the cluster filter
 }
 
 const MAX_RESULTS = 5
 
-export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears }: GraphExplorerProps) {
+export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears, bottomSlot }: GraphExplorerProps) {
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState("")
@@ -254,7 +255,7 @@ export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears }: GraphE
 
       {/* Thumb-zone cluster filter */}
       <div className="pointer-events-none absolute inset-x-0 bottom-0 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <div className="bg-gradient-to-t from-background via-background/80 to-transparent pt-10">
+        <div className="bg-gradient-to-t from-background via-background/95 to-transparent pt-10 lg:via-background/80">
           <p className="hud-label mb-2 px-4 md:px-8">Clusters</p>
           <div className="no-scrollbar pointer-events-auto flex gap-2 overflow-x-auto px-4 md:px-8" role="toolbar" aria-label="Filter by cluster">
             <button
@@ -278,6 +279,7 @@ export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears }: GraphE
               </button>
             ))}
           </div>
+          {bottomSlot}
         </div>
       </div>
     </div>

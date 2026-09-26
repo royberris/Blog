@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowDown, ArrowRight } from "lucide-react"
 import { GraphExplorer } from "@/components/graph/graph-explorer"
+import { LatestNodesPanel, LatestNodesStrip } from "@/components/latest-nodes"
 import { formatDate, getGraph, getNodeSummaries } from "@/lib/nodes"
 import { DEFAULT_WINDOW_YEARS, isWithinYears, maxWindowYears } from "@/lib/node-age"
 import { AUTHOR, SITE_DESCRIPTION, SITE_NAME } from "@/lib/site"
@@ -39,12 +40,26 @@ export default function HomePage() {
   return (
     <main className="hud-grid">
       <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14">
-        <GraphExplorer graphs={graphs} nodes={nodes} now={now.toISOString()} maxYears={maxYears} />
+        <GraphExplorer
+          graphs={graphs}
+          nodes={nodes}
+          now={now.toISOString()}
+          maxYears={maxYears}
+          bottomSlot={
+            <div className="lg:hidden">
+              <LatestNodesStrip nodes={nodes.slice(0, 3)} />
+            </div>
+          }
+        />
+
+        <div className="pointer-events-none absolute left-8 top-60 z-10 hidden lg:block">
+          <LatestNodesPanel nodes={nodes.slice(0, 3)} />
+        </div>
 
         {/* The map captures wheel and drag, so give an explicit way down to the readable content */}
         <a
           href="#latest"
-          className="hud-label absolute right-4 z-10 flex items-center gap-1.5 bottom-[calc(max(1rem,env(safe-area-inset-bottom))_+_2.5rem)] hover:text-cyan md:right-8"
+          className="hud-label absolute right-4 z-10 hidden items-center gap-1.5 lg:flex bottom-[calc(max(1rem,env(safe-area-inset-bottom))_+_2.5rem)] hover:text-cyan md:right-8"
         >
           About · latest nodes
           <ArrowDown className="size-3" />
