@@ -1,7 +1,7 @@
 ---
 title: "Going Headless with MVC: Umbraco Community Day Talk"
 date: "2023-01-19"
-excerpt: "My Umbraco Community Day 2023 talk on headless and MVC: decoupling Umbraco from the presentation layer, with the prototype source code and the slides."
+excerpt: "My Umbraco Community Day 2023 talk on headless and MVC: decoupling Umbraco from the presentation layer, with the source code of the working prototype."
 tags: ["Umbraco", "Software Architecture"]
 author: "Roy Berris"
 ---
@@ -25,9 +25,3 @@ In the talk I showed snippets of a prototype working with these concepts. This p
 *At this time the project is a prototype and nowhere near completion. I'd like to continue developing this into a sort of template if there would be any interest. You can star the repo to follow changes or developments.*
 
 [Go to GitHub](https://github.com/royberris/GoingHeadlessWithMVC)
-
-## The Slides
-
-I probably went way too fast in the talk because of nerves. So for anyone that is interested; I've exported the slides to PDF for anyone to see. You can download it in the link below.
-
-[Open the slides](https://web.archive.org/web/20230606020246/https://berris.dev/media/d05bpegq/going-headless-with-mvc.pdf)
