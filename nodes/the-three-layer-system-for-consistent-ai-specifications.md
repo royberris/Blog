@@ -210,7 +210,3 @@ Writing Layer 1 in native business prose, such as Dutch in our projects in the N
 ### What happens when business requirements change or tools improve?
 
 You update the approved business rules in Layer 1 and recompile downstream layers through the automated pipeline. Because Layer 2 and Layer 3 are compiled build artifacts, you never hand-patch downstream files, and you can regenerate your entire contract whenever your foundation models or toolchain improve.
-
----
-
-*This blog post was created using the AI-assisted approach described in [AI-Assisted Blogging](/nodes/ai-assisted-blogging/). All technical insights, architecture decisions and recommendations reflect our direct experience as software architects, while AI helped refine the structure and readability.*
