@@ -1,7 +1,6 @@
 "use client"
 
 import { useEffect, useRef } from "react"
-import mermaid from "mermaid"
 
 interface MermaidDiagramProps {
   chart: string
@@ -11,22 +10,28 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (ref.current) {
+    if (!ref.current) return
+    let cancelled = false
+    // Mermaid is ~1 MB: load it only when a post actually contains a diagram
+    import("mermaid").then(({ default: mermaid }) => {
+      if (cancelled || !ref.current) return
       try {
         // Initialize mermaid with configuration
         mermaid.initialize({
           startOnLoad: false,
           theme: "base",
           themeVariables: {
-            primaryColor: "#3b82f6",
-            primaryTextColor: "#1f2937",
-            primaryBorderColor: "#e5e7eb",
-            lineColor: "#6b7280",
-            secondaryColor: "#f3f4f6",
-            tertiaryColor: "#f9fafb",
-            background: "#ffffff",
-            mainBkg: "#ffffff",
-            secondBkg: "#f3f4f6",
+            darkMode: true,
+            primaryColor: "#2a1f55",
+            primaryTextColor: "#ece9ff",
+            primaryBorderColor: "#8b5cf6",
+            lineColor: "#67e8f9",
+            secondaryColor: "#1b1638",
+            tertiaryColor: "#15122b",
+            background: "#110e24",
+            mainBkg: "#2a1f55",
+            secondBkg: "#1b1638",
+            textColor: "#ece9ff",
           },
           // Enable pan and zoom controls
           gantt: {
@@ -157,29 +162,31 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         }).catch((error) => {
           console.error("Mermaid rendering error:", error)
           if (ref.current) {
-            ref.current.innerHTML = `<pre class="bg-red-50 border border-red-200 p-4 rounded text-red-700">Error rendering diagram: ${error.message}</pre>`
+            ref.current.innerHTML = `<pre class="border border-destructive/50 p-4 rounded text-destructive">Error rendering diagram: ${error.message}</pre>`
           }
         })
       } catch (error) {
         console.error("Mermaid initialization error:", error)
         if (ref.current) {
-          ref.current.innerHTML = `<pre class="bg-red-50 border border-red-200 p-4 rounded text-red-700">Error initializing Mermaid: ${error}</pre>`
+          ref.current.innerHTML = `<pre class="border border-destructive/50 p-4 rounded text-destructive">Error initializing Mermaid: ${error}</pre>`
         }
       }
+    })
+    return () => {
+      cancelled = true
     }
   }, [chart])
 
   return (
-    <div className="my-8 -mx-4 md:-mx-8 lg:-mx-16 xl:-mx-24">
-      <div className="bg-white border border-gray-200 rounded-lg p-6 shadow-sm overflow-hidden">
+    <div className="my-8 md:-mx-8 lg:-mx-16">
+      <div className="hud-panel overflow-hidden p-4 md:p-6">
         <div 
           ref={ref} 
-          className="w-full min-h-[400px] flex justify-center items-center relative"
+          className="w-full min-h-[280px] md:min-h-[400px] flex justify-center items-center relative"
         />
-        <div className="text-xs text-gray-500 text-center mt-2 border-t pt-2">
+        <div className="hud-label mt-2 border-t border-border/60 pt-2 text-center">
           <span className="inline-flex items-center gap-2">
-            <span>💡 Tip:</span>
-            <span>Scroll to zoom • Drag to pan • Double-click to reset</span>
+            <span>Scroll to zoom · Drag to pan · Double-click to reset</span>
           </span>
         </div>
       </div>

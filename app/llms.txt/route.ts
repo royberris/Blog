@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server'
-import { getAllBlogs } from '@/lib/blog-data'
+import { getAllNodes } from '@/lib/nodes'
 import tagsConfig from '@/data/tags.json'
+import { getAllAuthors } from '@/lib/authors'
 
 // Required for static export
 export const dynamic = 'force-static'
@@ -13,10 +14,12 @@ interface TagConfig {
 function generateLlmsTxtContent(blogs: any[]): string {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://berris.dev"
   
-  let content = `# Roy Berris - Technical Blog
+  let content = `# Berris.dev - Technical Knowledge Base
 
-## About Roy Berris
-Roy Berris is an experienced software architect specializing in .NET and C# development with substantial expertise in API design, software architecture, and team collaboration methodologies.
+Berris.dev is a mapped database of posts ("nodes") on software architecture, API design and AI, grouped into topic clusters.
+
+## Authors
+${getAllAuthors().map(a => `- **${a.name}** (${a.role}): ${a.bio}`).join('\n')}
 
 ## Expertise Areas & Related Content
 
@@ -52,19 +55,20 @@ Roy Berris is an experienced software architect specializing in .NET and C# deve
       
       content += `**Related Posts:**\n`
       relatedBlogs.forEach(blog => {
-        content += `- [${blog.title}](${baseUrl}/blogs/${blog.slug}) (${blog.date})\n`
+        content += `- [${blog.title}](${baseUrl}/nodes/${blog.slug}) (${blog.date})\n`
         content += `  ${blog.excerpt}\n\n`
       })
     })
   
-  content += `## All Blog Posts (Chronological)
+  content += `## All Nodes (Chronological)
 
 `
   
   blogs.forEach(blog => {
     const tagsList = blog.tags ? blog.tags.join(', ') : 'No tags'
-    content += `### [${blog.title}](${baseUrl}/blogs/${blog.slug})
+    content += `### [${blog.title}](${baseUrl}/nodes/${blog.slug})
 **Published:** ${blog.date}  
+**Author:** ${blog.author || 'Unknown'}  
 **Topics:** ${tagsList}  
 **Summary:** ${blog.excerpt}
 
@@ -72,20 +76,20 @@ Roy Berris is an experienced software architect specializing in .NET and C# deve
   })
   
   content += `## Content Statistics
-- **Total Posts:** ${blogs.length}
+- **Total Nodes:** ${blogs.length}
 - **Topics Covered:** ${tagGroups.size}
 - **Latest Post:** ${blogs[0]?.date || 'N/A'}
 - **Content Focus:** Software Architecture, API Design, Development Practices
 
 ## How to Use This Content
-This blog focuses on practical software architecture insights, real-world implementation experiences, and team collaboration strategies. Each post includes specific examples and actionable recommendations based on Roy's professional experience.`
+Berris.dev focuses on practical software architecture insights, real-world implementation experiences, and team collaboration strategies. Each post includes specific examples and actionable recommendations based on the authors' professional experience.`
 
   return content
 }
 
 export async function GET() {
   try {
-    const blogs = getAllBlogs()
+    const blogs = getAllNodes()
     
     // Generate the llms.txt content
     const llmsTxtContent = generateLlmsTxtContent(blogs)

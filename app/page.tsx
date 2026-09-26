@@ -1,29 +1,34 @@
-import { Header } from "@/components/header"
-import { BlogCard } from "@/components/blog-card"
-import { AuthorSection } from "@/components/author-section"
-import { getAllBlogs } from "@/lib/blog-data"
 import Link from "next/link"
+import { GraphExplorer } from "@/components/graph/graph-explorer"
+import { getGraph, getNodeSummaries } from "@/lib/nodes"
 
 export default function HomePage() {
-  const blogs = getAllBlogs()
+  const graph = getGraph()
+  const nodes = getNodeSummaries()
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header />
+    <main className="hud-grid relative h-[100dvh] overflow-hidden pt-14">
+      <GraphExplorer graph={graph} nodes={nodes} />
 
-      <main className="max-w-4xl mx-auto px-6 py-12 md:px-12">
-        <div className="flex items-center justify-between mb-8">
-          <p className="text-muted-foreground">{blogs.length} blogs</p>
-        </div>
-
-        <div className="space-y-12">
-          {blogs.map((blog) => (
-            <BlogCard key={blog.slug} blog={blog} />
+      {/* Keyboard / screen reader / no-JS path through the same content */}
+      <nav aria-label="All nodes" className="sr-only focus-within:not-sr-only focus-within:absolute focus-within:left-4 focus-within:top-20 focus-within:z-50 focus-within:rounded-xl focus-within:border focus-within:bg-card focus-within:p-4">
+        <ul className="space-y-2">
+          {nodes.map((n) => (
+            <li key={n.slug}>
+              <Link href={`/nodes/${n.slug}`}>{n.title}</Link>
+            </li>
           ))}
-        </div>
-      </main>
-
-      <AuthorSection />
-    </div>
+        </ul>
+      </nav>
+      <noscript>
+        <ul className="absolute inset-x-4 top-20 z-50 space-y-3 hud-panel p-4">
+          {nodes.map((n) => (
+            <li key={n.slug}>
+              <a href={`/nodes/${n.slug}`}>{n.title}</a>
+            </li>
+          ))}
+        </ul>
+      </noscript>
+    </main>
   )
 }

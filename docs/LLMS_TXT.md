@@ -14,7 +14,7 @@ This project automatically generates an `/llms.txt` file during build time, simi
 The `/llms.txt` file includes:
 
 - **Technical Glossary**: Terms based on your actual blog tags with managed descriptions
-- **Blog Posts**: Complete list of all blog posts with excerpts
+- **All Nodes**: Complete list of all posts (nodes) with excerpts, linking to `/nodes/<slug>`
 - **Tags**: Categorized view of content by tags
 
 ## Managing Tags

@@ -1,30 +1,36 @@
 import Image from "next/image"
+import { getAuthor } from "@/lib/authors"
 
-export function AuthorSection() {
+export function AuthorSection({ name }: { name?: string }) {
+  const author = getAuthor(name)
+  if (!author) return null
+
   return (
-    <section className="bg-muted/30 py-16 mt-16">
-      <div className="max-w-4xl mx-auto px-6 md:px-12 text-center">
-        <div className="flex flex-col items-center gap-6">
-          <div className="relative w-24 h-24 rounded-full overflow-hidden bg-muted">
-            <Image src="/author.png" alt="Author profile picture" fill className="object-cover" />
-          </div>
+    <section className="mt-16 border-t border-border/60 py-14">
+      <div className="mx-auto max-w-3xl px-4 md:px-8">
+        <div className="hud-panel flex flex-col items-center gap-5 p-6 text-center sm:flex-row sm:items-start sm:text-left">
+          {author.avatar && (
+            <div className="relative size-20 shrink-0 overflow-hidden rounded-full ring-1 ring-neon/50 shadow-[0_0_30px_-6px_var(--neon)]">
+              <Image src={author.avatar} alt={`${author.name} profile picture`} fill className="object-cover" />
+            </div>
+          )}
 
           <div className="space-y-2">
-            <h3 className="text-xl font-semibold text-foreground">Roy Berris</h3>
-            <p className="text-muted-foreground max-w-2xl text-pretty">
-              As a .NET Software Architect, I specialize in designing and building scalable, high-performance applications. With a deep passion for clean code and robust architecture, I guide teams in leveraging the full potential of the Microsoft stack to solve complex business problems and deliver exceptional software solutions.
-            </p>
-          </div>
-
-          <div className="flex items-center gap-4 text-sm">
-            <a
-              href="https://github.com/royberris"
-              className="text-foreground/80 hover:text-foreground transition-colors"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              GitHub
-            </a>
+            <p className="hud-label text-cyan">// author · {author.role}</p>
+            <h3 className="text-xl font-semibold text-foreground">{author.name}</h3>
+            <p className="text-sm leading-relaxed text-muted-foreground text-pretty">{author.bio}</p>
+            {author.github && (
+              <div className="pt-2">
+                <a
+                  href={author.github}
+                  className="hud-chip hover:border-cyan hover:text-cyan"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  GitHub
+                </a>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -18,7 +18,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             <h1 className="text-3xl font-bold text-foreground mb-6 mt-8 first:mt-0 text-balance">{children}</h1>
           ),
           h2: ({ children }) => (
-            <h2 className="text-2xl font-semibold text-foreground mb-4 mt-8 text-balance">{children}</h2>
+            <h2 className="text-2xl font-semibold text-foreground mb-4 mt-12 text-balance scroll-mt-20">{children}</h2>
           ),
           h3: ({ children }) => (
             <h3 className="text-xl font-semibold text-foreground mb-3 mt-6 text-balance">{children}</h3>
@@ -40,7 +40,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             // Handle inline code
             if (inline) {
               return (
-                <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-foreground">{children}</code>
+                <code className="rounded bg-neon/15 px-1.5 py-0.5 font-mono text-[0.85em] text-cyan">{children}</code>
               )
             }
             
@@ -86,7 +86,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             )
           },
           blockquote: ({ children }) => (
-            <blockquote className="border-l-4 border-muted-foreground/20 pl-4 italic text-foreground/70 mb-6">
+            <blockquote className="border-l-2 border-cyan/70 bg-cyan/5 py-2 pl-4 pr-3 italic text-foreground/75 mb-6 rounded-r">
               {children}
             </blockquote>
           ),
