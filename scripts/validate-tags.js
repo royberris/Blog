@@ -28,13 +28,13 @@ try {
     }
   });
 
-  // Legacy /blogs/<slug>/ redirects must point at a node that exists (or a list page)
+  // Legacy /blogs/<slug>/ redirects must point at a node that exists, a list page or /about/
   const legacyPath = path.join(root, 'data', 'legacy-redirects.json');
   const legacy = fs.existsSync(legacyPath) ? JSON.parse(fs.readFileSync(legacyPath, 'utf8')) : {};
   const brokenLegacy = Object.entries(legacy).filter(([, target]) => {
     const node = /^\/nodes\/([^/]+)\/$/.exec(target);
     if (node) return !slugs.has(node[1]);
-    return !/^\/(nodes|clusters)\/([^/]+\/)?$/.test(target);
+    return !/^\/((nodes|clusters)\/([^/]+\/)?|about\/)$/.test(target);
   });
   if (brokenLegacy.length) {
     issues.push({ node: 'data/legacy-redirects.json', invalidTags: [], brokenRelated: [], brokenLegacy });

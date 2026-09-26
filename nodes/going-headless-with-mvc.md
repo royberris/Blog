@@ -2,7 +2,7 @@
 title: "Going Headless with MVC: Umbraco Community Day Talk"
 date: "2023-01-19"
 excerpt: "My Umbraco Community Day 2023 talk on headless and MVC: decoupling Umbraco from the presentation layer, with the prototype source code and the slides."
-tags: ["Umbraco", "Events", "Software Architecture"]
+tags: ["Umbraco", "Software Architecture"]
 author: "Roy Berris"
 ---
 
