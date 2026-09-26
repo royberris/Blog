@@ -4,6 +4,7 @@ date: "2025-09-29"
 excerpt: "How I leverage AI collaboration to transform technical insights into polished blog content while maintaining authenticity and technical accuracy in my writing process."
 tags: ["AI", "Blogging", "Technical Writing"]
 author: "Roy Berris"
+related: ["designing-apis-for-ai-agents"]
 ---
 
 # AI-Assisted Blogging: When Technology Meets Technical Writing

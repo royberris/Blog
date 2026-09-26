@@ -4,6 +4,7 @@ date: "2025-10-21"
 excerpt: "How AI agents as main API consumers need big changes to our design patterns. Looking at ways to build reliable machine-to-machine communication through clear interfaces."
 tags: ["API Design", "AI Agents", "Software Architecture", "Design Patterns"]
 author: "Roy Berris"
+related: ["standardizing-api-conventions"]
 ---
 
 # Designing APIs for AI Agents: Building Better Interfaces for Machine Use

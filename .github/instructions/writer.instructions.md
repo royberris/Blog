@@ -48,6 +48,8 @@ Write as an experienced software architect with deep knowledge of .NET and C# de
 
 ## Blog Post Header Requirements
 
+On the site, blog posts are called **nodes** and tags are called **clusters**. Each post is a Markdown file in `/nodes/` (for example `/nodes/my-post-slug.md`), served at `/nodes/my-post-slug`. Nodes show up on the interactive node map and link to each other through their shared clusters. Every node gets a what3words-style code (for example `///willow.cedar.hollow`) derived from its slug, so pick the slug carefully: renaming it changes the code.
+
 All blog posts must include a YAML front matter header at the beginning of the file with the following structure:
 
 ```yaml
@@ -57,6 +59,7 @@ date: "YYYY-MM-DD"
 excerpt: "Brief description of the blog post content and key insights covered."
 tags: ["Tag1", "Tag2", "Tag3"]
 author: "Roy Berris"
+related: ["other-post-slug"]
 ---
 ```
 
@@ -65,7 +68,10 @@ Required fields:
 - **date**: Publication date in YYYY-MM-DD format
 - **excerpt**: Concise summary that describes the main content and value proposition
 - **tags**: Array of relevant technical tags for categorization and searchability
-- **author**: Must be "Roy Berris"
+- **author**: The name of the post's author, exactly as it appears as a key in `/data/authors.json` (for example "Roy Berris"). Berris.dev can have more than one author; add a new author to that file (role, bio, avatar, github) before using their name.
+
+Optional fields:
+- **related**: Array of slugs (file names without `.md`) of other posts this one builds on. Each slug draws a direct link between the two nodes on the map. Only add a link when the posts really build on each other.
 
 ## Tag Selection Guidelines
 
