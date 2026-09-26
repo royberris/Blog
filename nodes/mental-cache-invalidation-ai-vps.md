@@ -1,5 +1,5 @@
 ---
-title: "Mental Cache Invalidation: Self-Hosting a Personal AI Assistant on a $5 VPS to Save Your Weekends"
+title: "Clearing my evening thoughts with a personal VPS"
 date: "2026-09-26"
 excerpt: "How I stopped evening work anxiety by wiring up a private VPS, Matrix, and an Obsidian second brain into an always-on personal AI assistant."
 tags: ["AI", "AI Agents", "Software Architecture"]
