@@ -123,7 +123,7 @@ Here is what this looks like on a typical evening:
 2. **The 5-Second Offload**: In the past, this was where the evening dissolved into rumination. My brain would clutch the idea, turning it over in an anxious loop while dinner burned. Instead of ruminating, I reach for my phone on the counter with a clean hand and send a quick message to Hermes: *"Check the partition key on the event consumer. If two tenant updates arrive out of order, the state store could get corrupted. Put this on the todo list for tomorrow morning."*
 3. **The Agent Handling**: Hermes intercepts the message over Matrix, transcribes the note, tags it `#architecture/concurrency`, and immediately appends it to my actionable todo list for the next day or upcoming week in Obsidian.
 4. **The Flush**: Within three seconds, Hermes replies: *"Captured. Added to tomorrow's todo list under Architecture Review."*
-5. **Cache Invalidated**: Because I trust the storage system implicitly, my working memory immediately lets go. The cognitive residue dissolves, the intrusive loop terminates, and I can return entirely to stir-frying my chicken and enjoying my evening.
+5. **Taking the Edge Off**: Having a dependable place to capture the detail doesn't magically wipe my mind clean, but it takes the immediate edge off. Knowing it's safely logged stops the thought from looping in the background, making it easier to step away from work mode and get back to stir-frying my chicken.
 
 > **The Zero-Friction Rule**: If capturing a thought requires more than three taps or more than five seconds, you will hesitate. When you hesitate, you retain the thought in working memory, and working memory ruins your downtime.
 
@@ -139,8 +139,4 @@ If you are setting up a personal assistant sink, keep these rules in mind:
 
 Engineering velocity with AI is only an advantage if you have the discipline—and the infrastructure—to disconnect from it. 
 
-Building a self-hosted assistant isn't about hoarding infrastructure or spending weekends writing YAML. It's about designing an architectural safety valve: an owner-operated sink that leverages cognitive offloading to invalidate your mental cache, eliminate cognitive residue, and let you enjoy your life outside the editor.
-
----
-
-*Written by Roy Berris. Maintained in a self-hosted Obsidian vault.*
+Building a self-hosted assistant isn't a magic bullet or instant cure-all, nor is it about hoarding infrastructure or spending weekends writing YAML. It's simply a modest, practical habit backed by an owner-operated safety valve: a dependable sink that takes the edge off lingering work thoughts, keeps ideas from looping, and makes it that much easier to step away from the editor.
