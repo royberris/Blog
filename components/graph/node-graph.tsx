@@ -1,12 +1,12 @@
 "use client"
 
-import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { memo, useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react"
 import { select } from "d3-selection"
-import { zoom, zoomIdentity, type ZoomBehavior } from "d3-zoom"
+import { zoom, zoomIdentity, type ZoomBehavior, type ZoomTransform } from "d3-zoom"
 import { drag } from "d3-drag"
 import "d3-transition"
 import type { GraphData, GraphNode } from "@/lib/graph-types"
-import { createSimulation, nodeRadius, type SimLink, type SimNode } from "@/lib/graph-layout"
+import { createSimulation, labelBox, nodeRadius, shortLabel, type SimLink, type SimNode } from "@/lib/graph-layout"
 import { cn } from "@/lib/utils"
 
 interface NodeGraphProps {
@@ -19,14 +19,16 @@ interface NodeGraphProps {
   compact?: boolean
   className?: string
   onNodeSelect?: (node: GraphNode) => void
+  // Floating preview next to a hovered/focused post node; return null to show nothing
+  renderHoverCard?: (node: GraphNode) => ReactNode
 }
+
+const HOVER_CARD_WIDTH = 288
 
 const ZOOMED_OUT_BELOW = 0.45
 
-const shortLabel = (label: string, max = 26) => {
-  const head = label.split(/[:—–]/)[0].trim()
-  return head.length > max ? `${head.slice(0, max - 1)}…` : head
-}
+// Dark outline behind labels so links and neighbouring nodes don't bleed through the text
+const labelHalo = { stroke: "var(--background)", strokeWidth: 4, strokeLinejoin: "round", paintOrder: "stroke" } as const
 
 const hexagon = (r: number) =>
   Array.from({ length: 6 }, (_, i) => {
@@ -84,6 +86,8 @@ const NodeView = memo(function NodeView({ node: n, lit, active, showLabel, compa
       style={{ opacity: lit ? 1 : 0.18, transition: "opacity 250ms" }}
       onPointerEnter={(e) => e.pointerType === "mouse" && onHover(n.id)}
       onPointerLeave={() => onHover(null)}
+      onFocus={() => onHover(n.id)}
+      onBlur={() => onHover(null)}
       onClick={() => onSelect?.(n)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -111,7 +115,7 @@ const NodeView = memo(function NodeView({ node: n, lit, active, showLabel, compa
             y={r + 16}
             textAnchor="middle"
             className="font-mono uppercase"
-            style={{ fill: active ? "var(--cyan)" : "var(--muted-foreground)", fontSize: 9.5, letterSpacing: "0.14em" }}
+            style={{ ...labelHalo, fill: active ? "var(--cyan)" : "var(--muted-foreground)", fontSize: 9.5, letterSpacing: "0.14em" }}
           >
             {n.label}
           </text>
@@ -123,7 +127,7 @@ const NodeView = memo(function NodeView({ node: n, lit, active, showLabel, compa
           <circle r={r + 6} fill="none" style={{ stroke: active ? "var(--cyan)" : "var(--neon)", strokeOpacity: 0.35 }} strokeWidth={1} />
           <circle r={r} fill="url(#core)" />
           {showLabel && (
-            <text y={r + 18} textAnchor="middle" style={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 600 }}>
+            <text y={r + 18} textAnchor="middle" style={{ ...labelHalo, fill: "var(--foreground)", fontSize: 12, fontWeight: 600 }}>
               {shortLabel(n.label, compact ? 22 : 26)}
             </text>
           )}
@@ -142,6 +146,7 @@ export function NodeGraph({
   compact = false,
   className,
   onNodeSelect,
+  renderHoverCard,
 }: NodeGraphProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
@@ -152,6 +157,8 @@ export function NodeGraph({
   const [size, setSize] = useState({ width: 0, height: 0 })
   const [zoomedOut, setZoomedOut] = useState(false)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
+  const [dragging, setDragging] = useState(false)
+  const transformRef = useRef<ZoomTransform>(zoomIdentity)
   const reducedMotion = usePrefersReducedMotion()
   const { nodes, links, sim } = useLayout(data)
 
@@ -210,7 +217,10 @@ export function NodeGraph({
     if (!svg) return
     const behavior = zoom<SVGSVGElement, unknown>()
       .scaleExtent([0.25, 4])
+      // The hover card is positioned from the transform at render time, so drop it rather than let it drift
+      .on("start", () => setHoveredId(null))
       .on("zoom", (event) => {
+        transformRef.current = event.transform
         layerRef.current?.setAttribute("transform", event.transform.toString())
         setZoomedOut(event.transform.k < ZOOMED_OUT_BELOW)
       })
@@ -235,10 +245,9 @@ export function NodeGraph({
       if (!targets.length) return
       // Keep clear of the overlay search (top) and cluster chips (bottom) on the full map
       const inset = compact ? { x: 16, top: 24, bottom: 24 } : { x: 12, top: size.width >= 768 ? 180 : 130, bottom: 110 }
-      const halfWidth = (n: SimNode) =>
-        Math.max(nodeRadius(n), n.kind === "cluster" ? n.label.length * 3.7 : shortLabel(n.label, compact ? 22 : 26).length * 3.5)
-      const xs = targets.flatMap((n) => [(n.x ?? 0) - halfWidth(n), (n.x ?? 0) + halfWidth(n)])
-      const ys = targets.flatMap((n) => [(n.y ?? 0) - nodeRadius(n), (n.y ?? 0) + nodeRadius(n) + 24])
+      const boxes = targets.map((n) => ({ n, box: labelBox(n) }))
+      const xs = boxes.flatMap(({ n, box }) => [(n.x ?? 0) - box.halfWidth, (n.x ?? 0) + box.halfWidth])
+      const ys = boxes.flatMap(({ n, box }) => [(n.y ?? 0) - box.top, (n.y ?? 0) + box.bottom])
       const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)]
       const availW = size.width - inset.x * 2
       const availH = size.height - inset.top - inset.bottom
@@ -288,6 +297,7 @@ export function NodeGraph({
         const n = byId.get(this.dataset.id ?? "")
         if (!n) return
         if (!event.active) sim.alphaTarget(0.25).restart()
+        setDragging(true)
         n.fx = n.x
         n.fy = n.y
       })
@@ -301,6 +311,7 @@ export function NodeGraph({
         const n = byId.get(this.dataset.id ?? "")
         if (!n) return
         if (!event.active) sim.alphaTarget(0)
+        setDragging(false)
         n.fx = null
         n.fy = null
       })
@@ -318,6 +329,29 @@ export function NodeGraph({
   }, [hoveredId, matchIds, selectedId, activeCluster, focusId, compact, adjacency])
 
   const isLit = (id: string) => !highlight || highlight.has(id)
+
+  const hoverCard = useMemo(() => {
+    if (!renderHoverCard || !hoveredId || dragging || !size.width) return null
+    const n = nodes.find((node) => node.id === hoveredId)
+    if (!n || n.kind !== "node") return null
+    const content = renderHoverCard(n)
+    if (!content) return null
+    const t = transformRef.current
+    const [x, y] = t.apply([n.x ?? 0, n.y ?? 0])
+    const gap = nodeRadius(n) * t.k + 18
+    // Right of the node when it fits, otherwise flip to the left
+    const flip = x + gap + HOVER_CARD_WIDTH > size.width - 12
+    const left = flip ? Math.max(12, x - gap - HOVER_CARD_WIDTH) : x + gap
+    const top = Math.min(Math.max(y, 120), size.height - 120)
+    return (
+      <div
+        className="pointer-events-none absolute z-20 -translate-y-1/2 animate-in fade-in zoom-in-95 duration-150"
+        style={{ left, top, width: Math.min(HOVER_CARD_WIDTH, size.width - 24) }}
+      >
+        {content}
+      </div>
+    )
+  }, [renderHoverCard, hoveredId, dragging, size, nodes])
 
   return (
     <div ref={containerRef} className={cn("relative h-full w-full touch-none select-none", className)}>
@@ -386,6 +420,7 @@ export function NodeGraph({
           ))}
         </g>
       </svg>
+      {hoverCard}
     </div>
   )
 }
