@@ -89,6 +89,26 @@ export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears, bottomSl
 
   useEffect(() => setCursor(0), [query])
 
+  const summaryBySlug = useMemo(() => new Map(allNodes.map((n) => [n.slug, n])), [allNodes])
+
+  const renderHoverCard = useCallback(
+    (node: GraphNode) => {
+      const summary = node.slug ? summaryBySlug.get(node.slug) : undefined
+      if (!summary) return null
+      return (
+        <div className="hud-panel space-y-2 bg-popover/95 p-4 shadow-[0_0_40px_-12px_var(--neon)]">
+          <p className="hud-label normal-case text-cyan">///{summary.code}</p>
+          <p className="font-semibold leading-snug text-balance">{summary.title}</p>
+          <p className="line-clamp-4 text-sm leading-relaxed text-foreground/65 text-pretty">{summary.excerpt}</p>
+          <p className="hud-label border-t border-border/60 pt-2">
+            <time dateTime={summary.date}>{summary.date}</time> · {summary.readingTime} min
+          </p>
+        </div>
+      )
+    },
+    [summaryBySlug],
+  )
+
   const openNode = useCallback((slug: string) => router.push(`/nodes/${slug}`), [router])
 
   // Stable identity so memoised graph nodes don't re-render on every keystroke
@@ -130,6 +150,7 @@ export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears, bottomSl
         activeCluster={activeCluster}
         matchIds={matchIds}
         onNodeSelect={handleSelect}
+        renderHoverCard={renderHoverCard}
       />
 
       {/* Search: the primary way into the database */}
