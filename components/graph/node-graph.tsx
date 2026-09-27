@@ -6,7 +6,7 @@ import { zoom, zoomIdentity, type ZoomBehavior } from "d3-zoom"
 import { drag } from "d3-drag"
 import "d3-transition"
 import type { GraphData, GraphNode } from "@/lib/graph-types"
-import { createSimulation, nodeRadius, type SimLink, type SimNode } from "@/lib/graph-layout"
+import { createSimulation, labelBox, nodeRadius, shortLabel, type SimLink, type SimNode } from "@/lib/graph-layout"
 import { cn } from "@/lib/utils"
 
 interface NodeGraphProps {
@@ -23,10 +23,8 @@ interface NodeGraphProps {
 
 const ZOOMED_OUT_BELOW = 0.45
 
-const shortLabel = (label: string, max = 26) => {
-  const head = label.split(/[:—–]/)[0].trim()
-  return head.length > max ? `${head.slice(0, max - 1)}…` : head
-}
+// Dark outline behind labels so links and neighbouring nodes don't bleed through the text
+const labelHalo = { stroke: "var(--background)", strokeWidth: 4, strokeLinejoin: "round", paintOrder: "stroke" } as const
 
 const hexagon = (r: number) =>
   Array.from({ length: 6 }, (_, i) => {
@@ -111,7 +109,7 @@ const NodeView = memo(function NodeView({ node: n, lit, active, showLabel, compa
             y={r + 16}
             textAnchor="middle"
             className="font-mono uppercase"
-            style={{ fill: active ? "var(--cyan)" : "var(--muted-foreground)", fontSize: 9.5, letterSpacing: "0.14em" }}
+            style={{ ...labelHalo, fill: active ? "var(--cyan)" : "var(--muted-foreground)", fontSize: 9.5, letterSpacing: "0.14em" }}
           >
             {n.label}
           </text>
@@ -123,7 +121,7 @@ const NodeView = memo(function NodeView({ node: n, lit, active, showLabel, compa
           <circle r={r + 6} fill="none" style={{ stroke: active ? "var(--cyan)" : "var(--neon)", strokeOpacity: 0.35 }} strokeWidth={1} />
           <circle r={r} fill="url(#core)" />
           {showLabel && (
-            <text y={r + 18} textAnchor="middle" style={{ fill: "var(--foreground)", fontSize: 12, fontWeight: 600 }}>
+            <text y={r + 18} textAnchor="middle" style={{ ...labelHalo, fill: "var(--foreground)", fontSize: 12, fontWeight: 600 }}>
               {shortLabel(n.label, compact ? 22 : 26)}
             </text>
           )}
@@ -235,10 +233,9 @@ export function NodeGraph({
       if (!targets.length) return
       // Keep clear of the overlay search (top) and cluster chips (bottom) on the full map
       const inset = compact ? { x: 16, top: 24, bottom: 24 } : { x: 12, top: size.width >= 768 ? 180 : 130, bottom: 110 }
-      const halfWidth = (n: SimNode) =>
-        Math.max(nodeRadius(n), n.kind === "cluster" ? n.label.length * 3.7 : shortLabel(n.label, compact ? 22 : 26).length * 3.5)
-      const xs = targets.flatMap((n) => [(n.x ?? 0) - halfWidth(n), (n.x ?? 0) + halfWidth(n)])
-      const ys = targets.flatMap((n) => [(n.y ?? 0) - nodeRadius(n), (n.y ?? 0) + nodeRadius(n) + 24])
+      const boxes = targets.map((n) => ({ n, box: labelBox(n) }))
+      const xs = boxes.flatMap(({ n, box }) => [(n.x ?? 0) - box.halfWidth, (n.x ?? 0) + box.halfWidth])
+      const ys = boxes.flatMap(({ n, box }) => [(n.y ?? 0) - box.top, (n.y ?? 0) + box.bottom])
       const [minX, maxX, minY, maxY] = [Math.min(...xs), Math.max(...xs), Math.min(...ys), Math.max(...ys)]
       const availW = size.width - inset.x * 2
       const availH = size.height - inset.top - inset.bottom
