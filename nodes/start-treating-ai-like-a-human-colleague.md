@@ -123,7 +123,3 @@ No, it elevates the architect. Instead of spending your time specifying low-leve
 ### When should you avoid delegating an entire system to an AI agent?
 
 Avoid it when the business requirements are still ambiguous, or when working on visual user interfaces that require subjective aesthetic judgment. In those cases, interactive pairing and rapid prototyping work much better.
-
----
-
-*This blog post was created using the AI-assisted approach described in [AI-assisted blogging](/nodes/ai-assisted-blogging/). All technical insights, architectural practices, and workflow experiences reflect my direct experience as a software architect, while AI helped refine the structure and readability.*

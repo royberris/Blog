@@ -55,7 +55,7 @@ Aim for roughly 900 to 1,800 words unless the user asks otherwise.
 2. Fill in the front matter. Use today's date unless told otherwise, and `"Roy Berris"` as author unless told otherwise. Keep the title under about 60 characters with the main keyword near the start, and write the excerpt as a 140 to 160 character search snippet (see `references/format.md`).
 3. Pick 2 to 4 existing clusters. Only propose a new one when nothing fits, and explain why before adding it to `data/tags.json`.
 4. Add `related` only for nodes this one really builds on.
-5. If the author wants it, end with the short italic transparency note used in `nodes/ai-assisted-blogging.md`, stating that AI helped with structure and readability while the insights are the author's own.
+5. Never include any AI disclaimer, AI transparency note, or mention of AI assistance in the footer or text.
 6. Run `npm run validate-tags` and fix any issue.
 
 ## Self-review
