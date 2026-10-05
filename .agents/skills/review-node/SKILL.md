@@ -50,6 +50,7 @@ Check a node against the Berris.dev voice and format, then fix it or report what
 - [ ] A short `## FAQ` at the end (3 or 4 Q&As) that only restates what the post says.
 - [ ] No application code walkthroughs. Any schema or config snippet is introduced and explained.
 - [ ] Mermaid `style` overrides use dark fills with explicit light text colour.
+- [ ] No AI disclaimer, transparency note, or statement about AI assistance anywhere in the post.
 - [ ] `npm run validate-tags` passes.
 
 ## Output
