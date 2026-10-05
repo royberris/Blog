@@ -35,6 +35,10 @@
     "fullName": "Software Design Patterns",
     "description": "Reusable solutions to commonly occurring problems in software design and architecture."
   },
+  "Engineering Leadership": {
+    "fullName": "Engineering Leadership",
+    "description": "Practices and principles for leading engineering teams, delegating work, mentoring developers, and steering technical systems."
+  },
   "Events": {
     "fullName": "Conferences and Talks",
     "description": "Write-ups of conferences, meetups and community events, including talks given as a speaker and the slides that go with them."
