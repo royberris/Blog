@@ -72,9 +72,11 @@ flowchart TD
 
 This completely changes how I use Visual Studio Code (VS Code). Manual side-by-side programming is gone. VS Code becomes an orchestration dashboard and terminal control plane: one large terminal surface connected to the devbox, a sidebar tracking running sessions and processes, and the file explorer to inspect docs-as-code, [Architecture Decision Records (ADRs)](/nodes/standardizing-api-conventions/), and generated diffs whenever verification is needed.
 
+A key practical advantage of using [VS Code Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) here is automatic port forwarding. When you or an agent run a dev server on the devbox (like `npm run dev`), VS Code Remote detects the listening process and forwards the port automatically. You can open `localhost:3000` directly in your local laptop browser without fiddling with manual SSH tunnel flags. The devbox handles the compute and file watching, but previewing the application feels like running it locally.
+
 ## How Does the Extension Architecture Work?
 
-To tie this workflow together without switching windows, I built [devbox-vscode-extension](https://github.com/royberris/devbox-vscode-extension) (documented in our [Projects catalog](/projects/devbox-vscode-extension/)). You can install it directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=RoyBerris.devbox-agents) or download the `.vsix` from GitHub releases. It runs directly inside VS Code over [VS Code Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) and acts as the interface layer over tmux, git worktrees, and running agent processes.
+To tie this workflow together without switching windows, I built [devbox-vscode-extension](https://github.com/royberris/devbox-vscode-extension) (documented in our [Projects catalog](/projects/devbox-vscode-extension/)). You can install it directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=RoyBerris.devbox-agents). It runs directly inside VS Code over [VS Code Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) and acts as the interface layer over tmux, git worktrees, and running agent processes.
 
 ### Worktree Isolation and Session Management
 
