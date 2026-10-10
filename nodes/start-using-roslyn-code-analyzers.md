@@ -5,6 +5,11 @@ excerpt: "How to set up Roslyn code analyzers like StyleCop with a shared .edito
 tags: [".NET", "Best Practices", "Team Collaboration"]
 author: "Roy Berris"
 related: ["standardizing-api-conventions"]
+links:
+  - label: "StyleCop Analyzers"
+    url: "https://github.com/DotNetAnalyzers/StyleCopAnalyzers"
+  - label: "Meziantou Analyzer"
+    url: "https://github.com/meziantou/Meziantou.Analyzer"
 ---
 
 # Start Using Roslyn Code Analyzers

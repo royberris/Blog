@@ -19,6 +19,9 @@ excerpt: "140 to 160 characters on what the reader gets out of this node, writte
 tags: ["Tag1", "Tag2", "Tag3"]
 author: "Roy Berris"
 related: ["other-node-slug"]
+links:
+  - label: "GitHub Repository"
+    url: "https://github.com/..."
 ---
 ```
 
@@ -33,6 +36,7 @@ Required:
 Optional:
 
 - **related**: Slugs (file name without `.md`) of nodes this one really builds on. Each one draws a direct line on the map. Don't add links just to connect things.
+- **links**: Key external links highlighted as buttons under the clusters in the page header, for nodes about something readers will want to open (a GitHub repo, a marketplace listing, a package). A list of `{ label, url }`; `url` must be an external `https://` link, never a page on this site. Keep it to 1 to 3 links and still link them inline in the body.
 - **updated**: `YYYY-MM-DD`, quoted. Set it whenever you revise a published node in a meaningful way (new sections, corrected facts, a TL;DR or FAQ). Leave `date` as the original publication date. Typo fixes don't count.
 
 ## Body

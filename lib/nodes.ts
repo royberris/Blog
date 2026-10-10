@@ -6,9 +6,15 @@ import { nodeCodeFor } from "@/lib/node-code"
 import { withLayout } from "@/lib/graph-layout"
 import { clusterId, nodeId, type GraphData, type GraphLink, type NodeSummary } from "@/lib/graph-types"
 
+export interface NodeLink {
+  label: string
+  url: string
+}
+
 export interface NodePost extends NodeSummary {
   content: string
   related: string[]
+  links: NodeLink[] // Key links highlighted in the page header
   invalidTags?: string[] // For tracking invalid tags during development
 }
 
@@ -34,6 +40,18 @@ function validateTags(tags: string[] | undefined, fileName: string): { validTags
   })
 
   return { validTags, invalidTags }
+}
+
+// Highlights are always external; only http(s) so front matter can't inject javascript: hrefs
+function parseLinks(links: unknown, fileName: string): NodeLink[] {
+  if (links === undefined) return []
+  if (!Array.isArray(links)) throw new Error(`"links" in ${fileName} must be a list of { label, url }`)
+  return links.map((link) => {
+    if (typeof link?.label !== "string" || typeof link?.url !== "string" || !/^https?:\/\//.test(link.url)) {
+      throw new Error(`Invalid link ${JSON.stringify(link)} in ${fileName}; use { label, url } with an http(s) url`)
+    }
+    return { label: link.label, url: link.url }
+  })
 }
 
 function getParsedNodes(): NodePost[] {
@@ -63,6 +81,7 @@ function getParsedNodes(): NodePost[] {
         tags: validTags, // Only include valid tags
         author: data.author ?? null,
         related: Array.isArray(data.related) ? data.related : [],
+        links: parseLinks(data.links, fileName),
         readingTime: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
       }
 

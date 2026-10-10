@@ -5,6 +5,9 @@ excerpt: "How I turned my Umbraco website into a static site with xStatic and fr
 tags: ["Umbraco", "Hosting"]
 author: "Roy Berris"
 related: ["going-headless-with-mvc"]
+links:
+  - label: "xStatic on GitHub"
+    url: "https://github.com/Mulliman/xStatic-for-Umbraco"
 ---
 
 # The Statically Generated Umbraco Website
