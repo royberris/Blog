@@ -6,8 +6,9 @@ export const dynamic = "force-static"
 
 const nodeUrl = (slug: string) => absoluteUrl(`/nodes/${slug}/`)
 const markdownUrl = (slug: string) => absoluteUrl(`/nodes/${slug}.md`)
-const linkedIn = AUTHOR.sameAs.find((u) => u.includes("linkedin.com"))
-const gitHub = AUTHOR.sameAs.find((u) => u.includes("github.com"))
+const hostOf = (url: string) => new URL(url).hostname.replace(/^www\./, "")
+const linkedIn = AUTHOR.sameAs.find((u) => hostOf(u) === "linkedin.com")
+const gitHub = AUTHOR.sameAs.find((u) => hostOf(u) === "github.com")
 
 function nodeLine(node: NodePost): string {
   return `- [${node.title}](${nodeUrl(node.slug)}): ${node.excerpt} ([Markdown](${markdownUrl(node.slug)}))`
