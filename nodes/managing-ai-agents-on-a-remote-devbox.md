@@ -74,7 +74,7 @@ This completely changes how I use Visual Studio Code (VS Code). Manual side-by-s
 
 ## How Does the Extension Architecture Work?
 
-To tie this workflow together without switching windows, I built [devbox-vscode-extension](https://github.com/royberris/devbox-vscode-extension). It runs directly inside VS Code over [VS Code Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) and acts as the interface layer over tmux, git worktrees, and running agent processes.
+To tie this workflow together without switching windows, I built [devbox-vscode-extension](https://github.com/royberris/devbox-vscode-extension). You can install it directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=RoyBerris.devbox-agents). It runs directly inside VS Code over [VS Code Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) and acts as the interface layer over tmux, git worktrees, and running agent processes.
 
 ### Worktree Isolation and Session Management
 
@@ -100,7 +100,7 @@ Running agents on a dedicated Linux host makes sandboxing practical. Instead of 
 Adopting a remote devbox for agent workflows is not without friction. A few real-world trade-offs stand out from my experience:
 
 - **The Hardware Paradox:** Running agents on a remote 8-core Ubuntu devbox means my powerful local machine (an Apple Silicon M4 Max) sits mostly idle while the devbox compiles code. You trade raw local burst speed for persistence and isolation.
-- **Rate Limit Juggling:** Heavy agent usage burns through provider quotas quickly. When hitting Claude rate limits or weekly token caps, the devbox setup allows pivoting the existing worktree session to Codex without losing worktree state or branch progress.
+- **Rate Limit Juggling:** Heavy agent usage burns through provider quotas quickly. When hitting Claude rate limits or weekly token caps, the devbox setup lets me pivot the existing worktree session to Codex without losing worktree state or branch progress.
 - **Overkill for Casual Use:** If you run one or two simple prompts a day, maintaining a remote server, SSH keys, VPNs, and worktree extensions is unnecessary overhead. This architecture only pays for itself when managing multiple autonomous tasks concurrently across complex repositories.
 
 ## Recommendations for You
