@@ -1,2 +1,8 @@
 ignoredBuiltDependencies:
   - sharp
+
+# Security patches for transitive dependencies pinned to vulnerable versions by their parents
+overrides:
+  katex: ^0.18.2
+  postcss: ^8.5.23
+  prismjs: ^1.30.0

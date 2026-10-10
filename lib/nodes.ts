@@ -42,6 +42,8 @@ function getParsedNodes(): NodePost[] {
     .filter((fileName) => fileName.endsWith(".md"))
     .map((fileName) => {
       const slug = fileName.replace(/\.md$/, "")
+      // Slugs end up in URLs and hrefs, so only allow safe URL path characters
+      if (!/^[a-z0-9-]+$/.test(slug)) throw new Error(`Invalid node slug "${slug}"; use lowercase letters, digits and dashes`)
       const fileContents = fs.readFileSync(path.join(nodesDirectory, fileName), "utf8")
       const { data, content } = matter(fileContents)
 
