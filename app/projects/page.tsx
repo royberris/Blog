@@ -74,7 +74,7 @@ export default function ProjectsIndexPage() {
                       </div>
                       <div>
                         <span className="hud-label text-[10px] text-cyan">
-                          {project.category} · v{project.version}
+                          {project.category}
                         </span>
                         <h2 className="text-xl font-semibold leading-tight text-foreground group-hover:text-cyan transition-colors">
                           <Link href={`/projects/${project.slug}/`} className="focus:outline-none">

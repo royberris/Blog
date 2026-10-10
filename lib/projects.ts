@@ -16,15 +16,21 @@ export interface ProjectRequirements {
   server: string[]
 }
 
+export interface ProjectAgentQuickStart {
+  title: string
+  intro: string
+  prompt: string
+}
+
 export interface ProjectItem {
   slug: string
   name: string
   repo: string
   githubUrl: string
+  marketplaceUrl?: string
   tagline: string
   category: string
   status: string
-  version: string
   license: string
   language: string
   stars: number
@@ -36,6 +42,7 @@ export interface ProjectItem {
   techStack: string[]
   requirements: ProjectRequirements
   quickStart: string[]
+  agentQuickStart?: ProjectAgentQuickStart
   settings: ProjectSetting[]
 }
 

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, ArrowUpRight, Box, CheckCircle2, ChevronRight, Download, ExternalLink, FileCode, GitFork, Laptop, Server, Settings, ShieldCheck, Terminal } from "lucide-react"
+import { ArrowLeft, ArrowUpRight, Box, Bot, CheckCircle2, ChevronRight, ExternalLink, FileCode, GitFork, Laptop, Server, Settings, ShieldCheck, Terminal } from "lucide-react"
 import { getAllProjectSlugs, getProjectBySlug } from "@/lib/projects"
 import { JsonLd } from "@/components/json-ld"
 import { CodeBlock } from "@/components/code-block"
@@ -70,10 +70,9 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
         operatingSystem: "Linux, macOS, Windows",
         description: project.description,
         url: pageUrl,
-        downloadUrl: `${project.githubUrl}/releases`,
+        downloadUrl: project.marketplaceUrl ?? `${project.githubUrl}/releases`,
         author: { "@id": `${SITE_URL}/#person` },
         publisher: { "@id": `${SITE_URL}/#person` },
-        softwareVersion: project.version,
         license: project.license,
       },
       {
@@ -101,8 +100,6 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             <div className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-1">
               <span className="hud-label normal-case text-cyan">{project.category}</span>
               <span className="hud-label">·</span>
-              <span className="hud-label">v{project.version}</span>
-              <span className="hud-label">·</span>
               <span className="hud-label">{project.license} License</span>
               <span className="hud-label">·</span>
               <span className="hud-label text-foreground/80">by {AUTHOR.name}</span>
@@ -116,24 +113,26 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
             </p>
 
             <div className="mt-6 flex flex-wrap gap-3">
+              {project.marketplaceUrl ? (
+                <a
+                  href={project.marketplaceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hud-chip bg-cyan/15 text-cyan border-cyan/40 hover:bg-cyan/25"
+                >
+                  VS Code Marketplace
+                  <ExternalLink className="size-3" />
+                </a>
+              ) : null}
+
               <a
                 href={project.githubUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hud-chip bg-cyan/15 text-cyan border-cyan/40 hover:bg-cyan/25"
+                className="hud-chip hover:border-cyan hover:text-cyan"
               >
                 GitHub Repository
                 <ExternalLink className="size-3" />
-              </a>
-
-              <a
-                href={`${project.githubUrl}/releases`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hud-chip hover:border-cyan hover:text-cyan"
-              >
-                Releases & VSIX
-                <Download className="size-3" />
               </a>
 
               {project.relatedBlogSlug && (
@@ -244,20 +243,43 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
           </section>
 
           {/* Quick Setup instructions */}
-          <section className="space-y-4">
+          <section className="space-y-6">
             <h2 className="text-2xl font-semibold tracking-tight text-foreground">
               Quick start
             </h2>
-            <ol className="space-y-3 text-sm leading-relaxed">
-              {project.quickStart.map((step, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-cyan/40 bg-cyan/10 font-mono text-xs font-semibold text-cyan">
-                    {idx + 1}
-                  </span>
-                  <span className="pt-0.5 text-foreground/85">{step}</span>
-                </li>
-              ))}
-            </ol>
+
+            {project.agentQuickStart && (
+              <div className="hud-panel p-5 sm:p-6 border-l-4 border-l-cyan space-y-3 bg-cyan/[0.04]">
+                <div className="flex items-center gap-2">
+                  <Bot className="size-4 text-cyan" />
+                  <h3 className="text-base font-semibold text-foreground">
+                    {project.agentQuickStart.title}
+                  </h3>
+                </div>
+                <p className="text-xs sm:text-sm text-foreground/80 leading-relaxed text-pretty">
+                  {project.agentQuickStart.intro}
+                </p>
+                <div className="pt-1">
+                  <CodeBlock language="text">
+                    {project.agentQuickStart.prompt}
+                  </CodeBlock>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-3 pt-2">
+              <h3 className="hud-label text-foreground">// manual setup (5 steps)</h3>
+              <ol className="space-y-3 text-sm leading-relaxed">
+                {project.quickStart.map((step, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full border border-cyan/40 bg-cyan/10 font-mono text-xs font-semibold text-cyan">
+                      {idx + 1}
+                    </span>
+                    <span className="pt-0.5 text-foreground/85">{step}</span>
+                  </li>
+                ))}
+              </ol>
+            </div>
 
             <div className="mt-6">
               <p className="hud-label text-cyan mb-2">// server CLI installation snippet</p>
@@ -316,6 +338,17 @@ agy # log in once`}
           <section className="hud-panel p-6 sm:p-8 space-y-4">
             <h2 className="hud-label text-foreground">// repository resources</h2>
             <div className="flex flex-wrap gap-3">
+              {project.marketplaceUrl && (
+                <a
+                  href={project.marketplaceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hud-chip bg-cyan/15 text-cyan border-cyan/40 hover:bg-cyan/25"
+                >
+                  VS Code Marketplace
+                  <ExternalLink className="size-3" />
+                </a>
+              )}
               <a
                 href={project.githubUrl}
                 target="_blank"
@@ -333,15 +366,6 @@ agy # log in once`}
               >
                 Full README Documentation
                 <FileCode className="size-3" />
-              </a>
-              <a
-                href={`${project.githubUrl}/releases`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hud-chip hover:border-cyan hover:text-cyan"
-              >
-                Download .VSIX
-                <Download className="size-3" />
               </a>
             </div>
           </section>
