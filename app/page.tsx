@@ -101,10 +101,16 @@ export default function HomePage() {
             ))}
           </ol>
 
-          <Link href="/nodes/" className="hud-chip mt-6 hover:border-cyan hover:text-cyan">
-            {nodes.length > recent.length ? `All ${nodes.length} nodes, including older ones, in the index` : `All ${nodes.length} nodes in the index`}
-            <ArrowRight className="size-3" />
-          </Link>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/nodes/" className="hud-chip hover:border-cyan hover:text-cyan">
+              {nodes.length > recent.length ? `All ${nodes.length} nodes, including older ones, in the index` : `All ${nodes.length} nodes in the index`}
+              <ArrowRight className="size-3" />
+            </Link>
+            <Link href="/projects/" className="hud-chip hover:border-cyan hover:text-cyan">
+              Projects & Packages
+              <ArrowRight className="size-3" />
+            </Link>
+          </div>
         </div>
       </section>
     </main>

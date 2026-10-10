@@ -83,6 +83,16 @@ export function SearchPalette({ nodes }: { nodes: NodeSummary[] }) {
               </CommandItem>
             ))}
           </CommandGroup>
+          <CommandGroup heading="Projects & Tools">
+            <CommandItem
+              value="Devbox Agents devbox-vscode-extension VS Code Extension Claude Code Codex Antigravity tmux worktree"
+              onSelect={() => go(`/projects/devbox-vscode-extension/`)}
+              className="flex flex-col items-start gap-1"
+            >
+              <span className="hud-label text-cyan">VS Code Extension · v1.0.0</span>
+              <span className="font-medium">Devbox Agents (devbox-vscode-extension)</span>
+            </CommandItem>
+          </CommandGroup>
           <CommandGroup heading="Clusters">
             {clusters.map((tag) => (
               <CommandItem key={tag} value={`cluster ${tag}`} onSelect={() => go(`/clusters/${clusterSlug(tag)}/`)}>

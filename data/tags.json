@@ -51,6 +51,10 @@
     "fullName": ".NET",
     "description": "Microsoft's open-source developer platform and runtime for building web, cloud, desktop and mobile applications, including ASP.NET Core."
   },
+  "Remote Development": {
+    "fullName": "Remote Development",
+    "description": "Techniques and workflows for running developer environments, tooling, and agent workloads on remote servers and devboxes."
+  },
   "Security": {
     "fullName": "Web Application Security",
     "description": "Techniques and configuration for protecting web applications and their users, such as security headers, policies and threat mitigation."

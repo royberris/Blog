@@ -1,0 +1,75 @@
+[
+  {
+    "slug": "devbox-vscode-extension",
+    "name": "Devbox Agents",
+    "repo": "royberris/devbox-vscode-extension",
+    "githubUrl": "https://github.com/royberris/devbox-vscode-extension",
+    "tagline": "Run Claude Code, Codex, and Antigravity in persistent tmux sessions and isolated git worktrees on a remote Linux devbox.",
+    "category": "VS Code Extension",
+    "status": "Active",
+    "version": "1.0.0",
+    "license": "MIT",
+    "language": "TypeScript",
+    "stars": 0,
+    "highlight": true,
+    "relatedBlogSlug": "managing-ai-agents-on-a-remote-devbox",
+    "relatedBlogTitle": "Managing AI Agents on a Remote Devbox",
+    "description": "A VS Code extension to start, monitor, and resume autonomous AI coding agents (Claude Code, OpenAI Codex, Antigravity CLI) on a remote devbox over VS Code Remote - SSH. Every agent runs in its own dedicated git worktree and tmux session, continuing execution uninterrupted even when your laptop sleeps or disconnects.",
+    "features": [
+      {
+        "title": "One-Click Agent Worktree Provisioning",
+        "description": "Start Claude Code, Codex, or Antigravity (agy) in an isolated git worktree (<worktreesRoot>/<repo>/<name>) on a dedicated branch (agent/<name>), inside an independent tmux session."
+      },
+      {
+        "title": "Uninterrupted Remote Execution",
+        "description": "Agents execute on the remote Linux host inside tmux. They never terminate when your laptop closes, Wi-Fi drops, or the SSH connection is interrupted."
+      },
+      {
+        "title": "Active Session Control Plane & Explorer",
+        "description": "Focusing a session immediately aligns your workspace: the worktree folder appears in VS Code, diffs render in the editor, and the terminal connects directly to the tmux session."
+      },
+      {
+        "title": "Process Inspection & Orphan Detection",
+        "description": "Inspects running agent PIDs across the server via /proc, detecting whether they are active in tmux, running via SSH, or orphaned, with safe kill controls."
+      },
+      {
+        "title": "Safe Worktree Cleanup",
+        "description": "Clean up stops tmux sessions and tears down worktrees only when there are no uncommitted or untracked changes, keeping git branches safe."
+      },
+      {
+        "title": "Smart Notifications & Status Hooks",
+        "description": "Lightweight status hooks notify you immediately when an agent finishes its turn or pauses waiting for user permission or input."
+      },
+      {
+        "title": "Chat History & Resume",
+        "description": "Browse past agent chat sessions by repository and worktree, and resume previous discussions directly in their original directory."
+      }
+    ],
+    "techStack": [
+      "TypeScript",
+      "VS Code Extension API",
+      "Git Worktrees",
+      "tmux",
+      "Linux /proc scanning",
+      "Bash Hooks"
+    ],
+    "requirements": {
+      "laptop": ["VS Code", "Remote - SSH (or WSL / Dev Containers / Codespaces)"],
+      "server": ["Linux", "tmux >= 3.2", "git >= 2.38", "bash", "claude / codex / agy CLI"]
+    },
+    "quickStart": [
+      "Connect VS Code to your remote devbox using Remote - SSH.",
+      "Install Devbox Agents from the Extensions view (or from release VSIX).",
+      "Configure devboxAgents.repoRoots (default ~/repos) and devboxAgents.worktreesRoot (default ~/worktrees).",
+      "Run 'Devbox Agents: Install Status Hooks...' to enable turn and permission notifications.",
+      "Click '+' in the Sessions view and select Claude Code, Codex, or Antigravity."
+    ],
+    "settings": [
+      { "name": "devboxAgents.repoRoots", "default": "[\"~/repos\"]", "description": "Directories containing your source repositories on the remote server." },
+      { "name": "devboxAgents.worktreesRoot", "default": "\"~/worktrees\"", "description": "Base directory where isolated git worktrees are created." },
+      { "name": "devboxAgents.branchPrefix", "default": "\"agent/\"", "description": "Prefix for branches created per session." },
+      { "name": "devboxAgents.focusMode", "default": "\"activeSessions\"", "description": "Workspace behavior on focus (activeSessions, swapFolder, addFolder, terminalOnly)." },
+      { "name": "devboxAgents.notify", "default": "[\"waiting\", \"idle\"]", "description": "Status events that trigger notifications." }
+    ]
+  }
+]
