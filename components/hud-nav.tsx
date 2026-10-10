@@ -2,12 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { LayoutGrid, UserRound, Waypoints } from "lucide-react"
+import { Box, LayoutGrid, UserRound, Waypoints } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 const views = [
   { href: "/", label: "Map", icon: Waypoints, match: (p: string) => p === "/" },
   { href: "/nodes/", label: "Index", icon: LayoutGrid, match: (p: string) => p.startsWith("/nodes") },
+  { href: "/projects/", label: "Projects", icon: Box, match: (p: string) => p.startsWith("/projects") },
   { href: "/about/", label: "About", icon: UserRound, match: (p: string) => p.startsWith("/about") },
 ]
 

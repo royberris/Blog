@@ -76,7 +76,7 @@ A key practical advantage of using [VS Code Remote - SSH](https://code.visualstu
 
 ## How Does the Extension Architecture Work?
 
-To tie this workflow together without switching windows, I built [devbox-vscode-extension](https://github.com/royberris/devbox-vscode-extension). You can install it directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=RoyBerris.devbox-agents). It runs directly inside VS Code over [VS Code Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) and acts as the interface layer over tmux, git worktrees, and running agent processes.
+To tie this workflow together without switching windows, I built [devbox-vscode-extension](https://github.com/royberris/devbox-vscode-extension) (documented in our [Projects catalog](/projects/devbox-vscode-extension/)). You can install it directly from the [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=RoyBerris.devbox-agents). It runs directly inside VS Code over [VS Code Remote - SSH](https://code.visualstudio.com/docs/remote/ssh) and acts as the interface layer over tmux, git worktrees, and running agent processes.
 
 ### Worktree Isolation and Session Management
 

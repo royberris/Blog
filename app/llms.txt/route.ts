@@ -45,6 +45,7 @@ ${sections.join("\n\n")}
 
 ## Optional
 
+- [Projects](${absoluteUrl("/projects/")}): Open-source packages and developer tools by ${AUTHOR.name}.
 - [About ${AUTHOR.name}](${absoluteUrl("/about/")}): Who writes ${SITE_NAME}, background and speaking.
 - [Node index](${absoluteUrl("/nodes/")}): Every node, filterable by cluster.
 - [Full text](${absoluteUrl("/llms-full.txt")}): All nodes as one Markdown document, newest first.

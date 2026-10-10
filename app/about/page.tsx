@@ -187,8 +187,9 @@ export default function AboutPage() {
           </p>
           <p>
             {SITE_NAME} is where I write it down. It&apos;s a mapped database rather than a classic blog: every post is a
-            node, grouped into clusters. Browse the <Link href="/" className="text-cyan hover:underline">map</Link> or the{" "}
-            <Link href="/nodes/" className="text-cyan hover:underline">index</Link>. I use AI as a writing partner, not a
+            node, grouped into clusters. Browse the <Link href="/" className="text-cyan hover:underline">map</Link>, the{" "}
+            <Link href="/nodes/" className="text-cyan hover:underline">index</Link>, or check out open-source tools in the{" "}
+            <Link href="/projects/" className="text-cyan hover:underline">projects catalog</Link>. I use AI as a writing partner, not a
             ghostwriter, and I own every technical claim. More on that in{" "}
             <Link href="/nodes/ai-assisted-blogging/" className="text-cyan hover:underline">AI-Assisted Blogging</Link>.
           </p>
