@@ -16,6 +16,7 @@ export const AUTHOR = {
     "https://www.linkedin.com/in/roy-berris/",
     "https://sessionize.com/roy-berris",
     "https://www.youtube.com/channel/UCGWLWa8GcCznhLxpfC8hbWQ",
+    "https://dev.to/royberris",
   ],
 }
 

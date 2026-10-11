@@ -156,14 +156,24 @@ async function fetchExistingArticles() {
   }
 }
 
+// List endpoints return tag_list as an array and tags as a string; single-article
+// responses (create, update) return them the other way around
+function tagsOf(article) {
+  const value = Array.isArray(article.tag_list) || typeof article.tag_list === "string" ? article.tag_list : article.tags
+  if (Array.isArray(value)) return value
+  return typeof value === "string" ? value.split(",").map((tag) => tag.trim()).filter(Boolean) : null
+}
+
+const sameTags = (a, b) => [...a].sort().join(",") === [...b].sort().join(",")
+
 function isUnchanged(existing, article) {
-  const existingTags = Array.isArray(existing.tag_list) ? existing.tag_list : existing.tags?.split(", ") || []
+  const existingTags = tagsOf(existing) || []
   return (
     existing.title === article.title &&
     existing.body_markdown?.trim() === article.body_markdown.trim() &&
     existing.description === article.description &&
     existing.published === article.published &&
-    [...existingTags].sort().join(",") === [...article.tags].sort().join(",")
+    sameTags(existingTags, article.tags)
   )
 }
 
@@ -177,9 +187,11 @@ function writeArticleMap(map) {
   fs.writeFileSync(articlesFile, `${JSON.stringify(sorted, null, 2)}\n`)
 }
 
-// Only published articles get an entry: drafts have no public page or comments
+// Only published articles get an entry: drafts have no public page or comments.
+// Single-article responses have no `published` field, only `published_at`.
 function recordArticle(map, slug, article) {
-  if (article?.published && article.url) map[slug] = { id: article.id, url: article.url }
+  const published = article?.published ?? Boolean(article?.published_at)
+  if (published && article.url) map[slug] = { id: article.id, url: article.url }
   else delete map[slug]
 }
 
@@ -241,8 +253,8 @@ async function main() {
         continue
       }
 
-      // The v1 API takes tags as a comma-separated string
-      const payload = { article: { ...article, tags: article.tags.join(",") } }
+      // tags must be an array: dev.to silently drops a comma-separated string
+      const payload = { article }
       const result = match ? await api("PUT", `/articles/${match.id}`, payload) : await api("POST", "/articles", payload)
       counts[match ? "updated" : "created"]++
       recordArticle(articleMap, slug, result)
@@ -266,10 +278,8 @@ async function main() {
 // The front matter is the source of truth for tags, but dev.to may store different ones.
 // Warn so a node that gets re-updated on every deploy is easy to spot.
 function warnOnTagDrift(slug, sentTags, result) {
-  const stored = Array.isArray(result.tag_list) ? result.tag_list : typeof result.tags === "string" ? result.tags.split(", ") : null
-  if (!stored) return
-  const sorted = (tags) => [...tags].sort().join(",")
-  if (sorted(stored) !== sorted(sentTags)) {
+  const stored = tagsOf(result)
+  if (stored && !sameTags(stored, sentTags)) {
     console.log(`::warning::${slug}: sent tags ${sentTags.join(",")} but dev.to stored ${stored.join(",")}`)
   }
 }
