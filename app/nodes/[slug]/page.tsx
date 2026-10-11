@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, Waypoints } from "lucide-react"
+import { ArrowLeft, ArrowRight, ArrowUpRight, Waypoints } from "lucide-react"
 import { getAllNodes, getAllNodeSlugs, getNeighborhood, getNodeBySlug, formatDate } from "@/lib/nodes"
 import { nodeId } from "@/lib/graph-types"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
@@ -162,6 +162,23 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
                   </Link>
                 ))}
               </div>
+            )}
+
+            {node.links.length > 0 && (
+              <nav aria-label="Key links" className="mt-4 flex flex-wrap gap-2">
+                {node.links.map(({ label, url }) => (
+                  <a
+                    key={url}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hud-chip border-cyan/40 bg-cyan/10 text-cyan hover:bg-cyan/20"
+                  >
+                    {label}
+                    <ArrowUpRight className="size-3" />
+                  </a>
+                ))}
+              </nav>
             )}
           </div>
         </header>
