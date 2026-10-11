@@ -38,6 +38,7 @@ const links = [
   { label: "LinkedIn", match: "linkedin.com" },
   { label: "Sessionize", match: "sessionize.com" },
   { label: "YouTube", match: "youtube.com" },
+  { label: "dev.to", match: "dev.to" },
 ].map(({ label, match }) => ({ label, href: AUTHOR.sameAs.find((u) => u.includes(match))! }))
 
 const roles = [
