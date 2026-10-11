@@ -70,8 +70,8 @@ const plural = (count: number, word: string) => `${count} ${word}${count === 1 ?
 function Comment({ comment, depth }: { comment: DevtoComment; depth: number }) {
   const user = comment.user
   return (
-    <li className={depth > 0 && depth <= MAX_INDENT_DEPTH ? "ml-3 border-l border-border/60 pl-3 md:ml-5 md:pl-5" : ""}>
-      <article className="py-4">
+    <li>
+      <article className={depth === 0 ? "py-5" : "pt-4"}>
         <header className="flex items-center gap-2.5">
           {user?.profile_image_90 && (
             <img src={user.profile_image_90} alt="" width={28} height={28} loading="lazy" className="size-7 rounded-full ring-1 ring-border" />
@@ -104,7 +104,7 @@ function Comment({ comment, depth }: { comment: DevtoComment; depth: number }) {
         <div className="devto-comment mt-2 text-sm leading-relaxed text-foreground/80" dangerouslySetInnerHTML={{ __html: sanitize(comment.body_html) }} />
       </article>
       {comment.children.length > 0 && (
-        <ul>
+        <ul className={`${depth < MAX_INDENT_DEPTH ? "ml-3.5 border-l border-border/60 pl-4 md:pl-6" : ""} ${depth === 0 ? "mb-5" : ""}`}>
           {comment.children.map((child) => (
             <Comment key={child.id_code} comment={child} depth={depth + 1} />
           ))}
@@ -152,60 +152,71 @@ export function DevtoDiscussion({ articleId, url, mock = false }: { articleId: n
   const threads = discussion ? (showAll ? discussion.comments : discussion.comments.slice(0, INITIAL_THREADS)) : []
   const hiddenThreads = discussion ? discussion.comments.length - threads.length : 0
 
-  return (
-    <section ref={sectionRef} className="mt-4" aria-labelledby="discussion-heading">
-      <div className="hud-panel overflow-hidden">
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 px-4 py-3">
-          <h2 id="discussion-heading" className="hud-label flex items-center gap-2 text-foreground">
-            <MessageSquare className="size-3.5 text-cyan" />
-            Discussion
-            {mock && <span className="rounded border border-amber-400/50 px-1.5 text-amber-300">Mock data</span>}
-          </h2>
-          {discussion && (
-            <div className="flex items-center gap-3">
-              <span className="hud-label flex items-center gap-1.5">
-                <Heart className="size-3" aria-hidden />
-                {plural(discussion.reactions, "reaction")}
-              </span>
-              <span className="hud-label flex items-center gap-1.5">
-                <MessageSquare className="size-3" aria-hidden />
-                {plural(discussion.commentCount, "comment")}
-              </span>
-            </div>
-          )}
-        </div>
+  const discussButton = (
+    <a
+      href={`${url}#comments`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="hud-chip border-cyan/40 bg-cyan/10 text-cyan hover:bg-cyan/20"
+    >
+      Discuss on dev.to
+      <ArrowUpRight className="size-3" />
+    </a>
+  )
 
-        <div className="px-4" aria-live="polite" aria-busy={state.status === "loading"}>
-          {state.status === "loading" && <p className="hud-label py-4">Loading comments…</p>}
-          {state.status === "error" && <p className="py-4 text-sm text-muted-foreground">Comments could not be loaded. Read them on dev.to.</p>}
-          {discussion && discussion.comments.length === 0 && (
-            <p className="py-4 text-sm text-muted-foreground">No comments yet. Start the discussion on dev.to.</p>
-          )}
-          {threads.length > 0 && (
-            <ul className="divide-y divide-border/60">
-              {threads.map((comment) => (
-                <Comment key={comment.id_code} comment={comment} depth={0} />
-              ))}
-            </ul>
-          )}
-          {hiddenThreads > 0 && (
-            <button type="button" onClick={() => setShowAll(true)} className="hud-chip mb-4 hover:border-cyan hover:text-cyan">
+  // An open section rather than another card, so it doesn't read as part of the node navigation above
+  return (
+    <section ref={sectionRef} className="mt-14 border-t border-border/60 pt-10" aria-labelledby="discussion-heading">
+      <div className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="hud-label flex items-center gap-2 text-cyan">
+            <MessageSquare className="size-3.5" aria-hidden />
+            // via dev.to
+            {mock && <span className="rounded border border-amber-400/50 px-1.5 text-amber-300">Mock data</span>}
+          </p>
+          <h2 id="discussion-heading" className="mt-2 text-2xl font-semibold tracking-tight text-foreground">
+            Discussion
+          </h2>
+          <div className="mt-2 flex min-h-4 items-center gap-4">
+            {discussion && (
+              <>
+                <span className="hud-label flex items-center gap-1.5">
+                  <Heart className="size-3" aria-hidden />
+                  {plural(discussion.reactions, "reaction")}
+                </span>
+                <span className="hud-label flex items-center gap-1.5">
+                  <MessageSquare className="size-3" aria-hidden />
+                  {plural(discussion.commentCount, "comment")}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+        {discussButton}
+      </div>
+
+      <div className="mt-6" aria-live="polite" aria-busy={state.status === "loading"}>
+        {state.status === "loading" && <p className="hud-label py-4">Loading comments…</p>}
+        {state.status === "error" && <p className="py-4 text-sm text-muted-foreground">Comments could not be loaded. Read them on dev.to.</p>}
+        {discussion && discussion.comments.length === 0 && (
+          <p className="py-4 text-sm text-muted-foreground">No comments yet. Start the discussion on dev.to.</p>
+        )}
+        {threads.length > 0 && (
+          <ul className="divide-y divide-border/60 border-y border-border/60">
+            {threads.map((comment) => (
+              <Comment key={comment.id_code} comment={comment} depth={0} />
+            ))}
+          </ul>
+        )}
+        {hiddenThreads > 0 && (
+          <div className="mt-5 flex flex-wrap items-center gap-3">
+            <button type="button" onClick={() => setShowAll(true)} className="hud-chip hover:border-cyan hover:text-cyan">
               Show {plural(hiddenThreads, "more thread")}
             </button>
-          )}
-        </div>
-
-        <div className="border-t border-border/60 px-4 py-3">
-          <a
-            href={`${url}#comments`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hud-chip border-cyan/40 bg-cyan/10 text-cyan hover:bg-cyan/20"
-          >
-            Discuss on dev.to
-            <ArrowUpRight className="size-3" />
-          </a>
-        </div>
+            {discussButton}
+          </div>
+        )}
+        {threads.length > 0 && hiddenThreads === 0 && <div className="mt-5">{discussButton}</div>}
       </div>
     </section>
   )
