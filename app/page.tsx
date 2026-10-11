@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowDown, ArrowRight } from "lucide-react"
 import { GraphExplorer } from "@/components/graph/graph-explorer"
+import { FullDisplayOnly } from "@/components/full-display-only"
 import { LatestNodesPanel, LatestNodesStrip } from "@/components/latest-nodes"
 import { formatDate, getGraph, getNodeSummaries } from "@/lib/nodes"
 import { DEFAULT_WINDOW_YEARS, isWithinYears, maxWindowYears } from "@/lib/node-age"
@@ -39,18 +40,21 @@ export default function HomePage() {
 
   return (
     <main className="hud-grid">
-      <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14">
-        <GraphExplorer
-          graphs={graphs}
-          nodes={nodes}
-          now={now.toISOString()}
-          maxYears={maxYears}
-          bottomSlot={
-            <div className="lg:hidden">
-              <LatestNodesStrip nodes={nodes.slice(0, 3)} />
-            </div>
-          }
-        />
+      {/* Simple view drops the map: hidden before paint by CSS, then unmounted after hydration */}
+      <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14 simple:hidden">
+        <FullDisplayOnly>
+          <GraphExplorer
+            graphs={graphs}
+            nodes={nodes}
+            now={now.toISOString()}
+            maxYears={maxYears}
+            bottomSlot={
+              <div className="lg:hidden">
+                <LatestNodesStrip nodes={nodes.slice(0, 3)} />
+              </div>
+            }
+          />
+        </FullDisplayOnly>
 
         <div className="pointer-events-none absolute left-8 top-60 z-10 hidden lg:block">
           <LatestNodesPanel nodes={nodes.slice(0, 3)} />
@@ -66,7 +70,7 @@ export default function HomePage() {
         </a>
       </section>
 
-      <section id="latest" aria-labelledby="home-heading" className="scroll-mt-14 border-t border-border/60 bg-background/85">
+      <section id="latest" aria-labelledby="home-heading" className="scroll-mt-14 border-t border-border/60 bg-background/85 simple:border-t-0 simple:pt-14">
         <div className="mx-auto max-w-6xl px-4 py-12 md:px-8 md:py-16">
           <header className="max-w-3xl">
             <p className="hud-label text-cyan">// knowledge database</p>
