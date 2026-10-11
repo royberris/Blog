@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { ArrowUpRight, Clock, Crosshair, Search, X } from "lucide-react"
 import { NodeGraph } from "@/components/graph/node-graph"
 import { SEARCH_OPEN_EVENT } from "@/components/search-palette"
+import { useDisplayMode } from "@/hooks/use-display-mode"
 import { Slider } from "@/components/ui/slider"
 import { DEFAULT_WINDOW_YEARS, isWithinYears } from "@/lib/node-age"
 import { clusterId, nodeId, type GraphData, type GraphNode, type NodeSummary } from "@/lib/graph-types"
@@ -20,7 +21,12 @@ interface GraphExplorerProps {
 
 const MAX_RESULTS = 5
 
-export function GraphExplorer({ graphs, nodes: allNodes, now, maxYears, bottomSlot }: GraphExplorerProps) {
+// Simple view unmounts the whole map, so the browser doesn't run or render it
+export function GraphExplorer(props: GraphExplorerProps) {
+  return useDisplayMode() === "full" ? <GraphExplorerView {...props} /> : null
+}
+
+function GraphExplorerView({ graphs, nodes: allNodes, now, maxYears, bottomSlot }: GraphExplorerProps) {
   const router = useRouter()
   const inputRef = useRef<HTMLInputElement>(null)
   const [query, setQuery] = useState("")

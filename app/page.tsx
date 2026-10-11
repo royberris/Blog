@@ -2,7 +2,6 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { ArrowDown, ArrowRight } from "lucide-react"
 import { GraphExplorer } from "@/components/graph/graph-explorer"
-import { FullDisplayOnly } from "@/components/full-display-only"
 import { LatestNodesPanel, LatestNodesStrip } from "@/components/latest-nodes"
 import { formatDate, getGraph, getNodeSummaries } from "@/lib/nodes"
 import { DEFAULT_WINDOW_YEARS, isWithinYears, maxWindowYears } from "@/lib/node-age"
@@ -40,21 +39,19 @@ export default function HomePage() {
 
   return (
     <main className="hud-grid">
-      {/* Simple view drops the map: hidden before paint by CSS, then unmounted after hydration */}
+      {/* Simple view drops the map: hidden before paint by CSS, then GraphExplorer unmounts it after hydration */}
       <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14 simple:hidden">
-        <FullDisplayOnly>
-          <GraphExplorer
-            graphs={graphs}
-            nodes={nodes}
-            now={now.toISOString()}
-            maxYears={maxYears}
-            bottomSlot={
-              <div className="lg:hidden">
-                <LatestNodesStrip nodes={nodes.slice(0, 3)} />
-              </div>
-            }
-          />
-        </FullDisplayOnly>
+        <GraphExplorer
+          graphs={graphs}
+          nodes={nodes}
+          now={now.toISOString()}
+          maxYears={maxYears}
+          bottomSlot={
+            <div className="lg:hidden">
+              <LatestNodesStrip nodes={nodes.slice(0, 3)} />
+            </div>
+          }
+        />
 
         <div className="pointer-events-none absolute left-8 top-60 z-10 hidden lg:block">
           <LatestNodesPanel nodes={nodes.slice(0, 3)} />
