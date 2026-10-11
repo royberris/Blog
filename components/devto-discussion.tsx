@@ -12,7 +12,7 @@ const MAX_INDENT_DEPTH = 3
 // Long discussions start collapsed so the page doesn't end in a wall of comments
 const INITIAL_THREADS = 10
 
-interface DevtoComment {
+export interface DevtoComment {
   id_code: string
   created_at: string
   body_html: string
@@ -20,7 +20,7 @@ interface DevtoComment {
   children: DevtoComment[]
 }
 
-interface Discussion {
+export interface Discussion {
   reactions: number
   commentCount: number
   comments: DevtoComment[]
@@ -114,7 +114,7 @@ function Comment({ comment, depth }: { comment: DevtoComment; depth: number }) {
   )
 }
 
-export function DevtoDiscussion({ articleId, url }: { articleId: number; url: string }) {
+export function DevtoDiscussion({ articleId, url, mock = false }: { articleId: number; url: string; mock?: boolean }) {
   const [state, setState] = useState<State>({ status: "idle" })
   const [showAll, setShowAll] = useState(false)
   const sectionRef = useRef<HTMLElement>(null)
@@ -130,7 +130,12 @@ export function DevtoDiscussion({ articleId, url }: { articleId: number; url: st
         if (!entry.isIntersecting) return
         observer.disconnect()
         setState({ status: "loading" })
-        loadDiscussion(articleId)
+        // The NODE_ENV check lets the production build drop the fixture chunk entirely
+        const load =
+          process.env.NODE_ENV === "development" && mock
+            ? import("@/lib/devto-mock").then((m) => m.loadMockDiscussion())
+            : loadDiscussion(articleId)
+        load
           .then((discussion) => !cancelled && setState({ status: "ready", discussion }))
           .catch(() => !cancelled && setState({ status: "error" }))
       },
@@ -141,7 +146,7 @@ export function DevtoDiscussion({ articleId, url }: { articleId: number; url: st
       cancelled = true
       observer.disconnect()
     }
-  }, [articleId])
+  }, [articleId, mock])
 
   const discussion = state.status === "ready" ? state.discussion : null
   const threads = discussion ? (showAll ? discussion.comments : discussion.comments.slice(0, INITIAL_THREADS)) : []
@@ -154,6 +159,7 @@ export function DevtoDiscussion({ articleId, url }: { articleId: number; url: st
           <h2 id="discussion-heading" className="hud-label flex items-center gap-2 text-foreground">
             <MessageSquare className="size-3.5 text-cyan" />
             Discussion
+            {mock && <span className="rounded border border-amber-400/50 px-1.5 text-amber-300">Mock data</span>}
           </h2>
           {discussion && (
             <div className="flex items-center gap-3">

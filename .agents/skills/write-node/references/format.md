@@ -56,7 +56,7 @@ Optional:
 
   After a merge to `main`, the deploy workflow syncs every opted-in node: it creates the article, or updates it when the node changed. The H1 is dropped, site-relative links become absolute, Mermaid blocks become mermaid.ink images, and an "Originally published at berris.dev" line is added. Preview with `pnpm crosspost-devto --dry-run --out <dir>`.
 
-  The sync runs in the deploy build, before `next build`, and writes `data/devto-articles.json` (`{ "<slug>": { "id", "url" } }`, published articles only). The node page uses it to show a Discussion panel with dev.to reaction and comment counts, the comments themselves (fetched client-side from the public dev.to API once the reader scrolls near it) and a "Discuss on dev.to" button. CI can't commit to `main`, so the committed file is only a fallback for builds without `DEVTO_API_KEY`; run the script locally with the key and commit the file to refresh it.
+  The sync runs in the deploy build, before `next build`, and writes `data/devto-articles.json` (`{ "<slug>": { "id", "url" } }`, published articles only). The node page uses it to show a Discussion panel with dev.to reaction and comment counts, the comments themselves (fetched client-side from the public dev.to API once the reader scrolls near it) and a "Discuss on dev.to" button. CI can't commit to `main`, so the committed file is only a fallback for builds without `DEVTO_API_KEY`; run the script locally with the key and commit the file to refresh it. In `pnpm dev`, nodes with `devto` but no entry in that file show a mock discussion from `lib/devto-mock.ts` (labelled "Mock data") instead of calling dev.to; production builds leave the mock out.
 
 ## Body
 

@@ -82,7 +82,7 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
   const newer = all[index - 1]
   const older = all[index + 1]
   const neighborhood = getNeighborhood(slug)
-  const devtoArticle = getDevtoArticle(slug)
+  const devtoArticle = getDevtoArticle(slug, node.devto)
   const pageUrl = absoluteUrl(`/nodes/${slug}/`)
   const showUpdated = Boolean(node.updated) && toIso(node.updated!) !== toIso(node.date)
 
@@ -219,7 +219,7 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
             )}
           </nav>
 
-          {devtoArticle && <DevtoDiscussion articleId={devtoArticle.id} url={devtoArticle.url} />}
+          {devtoArticle && <DevtoDiscussion articleId={devtoArticle.id} url={devtoArticle.url} mock={devtoArticle.mock} />}
         </section>
       </main>
 
