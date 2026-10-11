@@ -43,3 +43,25 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5
+
+  # Runs after the deploy so the canonical berris.dev URL is live before dev.to links to it
+  crosspost-devto:
+    needs: deploy
+    runs-on: ubuntu-latest
+    env:
+      DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v6
+      - name: Set up Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: "24"
+          cache: "pnpm"
+      - name: Install dependencies
+        run: pnpm install
+      - name: Cross-post to dev.to
+        if: env.DEVTO_API_KEY != ''
+        run: pnpm crosspost-devto

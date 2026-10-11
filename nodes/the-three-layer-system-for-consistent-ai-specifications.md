@@ -6,6 +6,8 @@ excerpt: "How we use a three-layer compiler pipeline to generate functional desi
 tags: ["AI", "Software Architecture", "Best Practices"]
 author: "Roy Berris"
 related: ["designing-apis-for-ai-agents"]
+devto:
+  tags: ["ai", "architecture", "softwareengineering", "documentation"]
 ---
 
 # The Three-Layer System for Consistent AI Specifications

@@ -6,6 +6,8 @@ excerpt: "How to manage AI agents on a remote Linux devbox using git worktrees, 
 tags: ["AI Agents", "Remote Development", "Best Practices"]
 author: "Roy Berris"
 related: ["standardizing-api-conventions"]
+devto:
+  tags: ["ai", "productivity", "vscode", "linux"]
 ---
 
 # Managing AI Agents on a Remote Devbox

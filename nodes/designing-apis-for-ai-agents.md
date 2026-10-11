@@ -6,6 +6,8 @@ excerpt: "AI agents now call our APIs, but few of us design for them. How I use 
 tags: ["API Design", "AI Agents", "Software Architecture", "Design Patterns"]
 author: "Roy Berris"
 related: ["standardizing-api-conventions"]
+devto:
+  tags: ["ai", "api", "architecture", "mcp"]
 ---
 
 # Designing APIs for AI Agents: Schemas, Security and MCP
