@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next"
 import { Suspense } from "react"
 import { HudBar } from "@/components/hud-bar"
 import { JsonLd } from "@/components/json-ld"
+import { displayModeScript } from "@/lib/display-mode"
 import { AUTHOR, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site"
 import "./globals.css"
 
@@ -92,7 +93,11 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className="dark">
+    // The pre-paint script sets data-display on <html>, which React doesn't know about
+    <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: displayModeScript }} />
+      </head>
       <body className={`font-sans ${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <JsonLd data={siteJsonLd} />
         <HudBar />

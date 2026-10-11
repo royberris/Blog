@@ -2,6 +2,9 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+/* simple: / full: style for the plain view (see lib/display-mode.ts) */
+@custom-variant simple (&:where([data-display="simple"], [data-display="simple"] *));
+@custom-variant full (&:where(:not([data-display="simple"]) *));
 
 /* The site is dark by design: one futuristic palette for :root and .dark */
 :root,
@@ -48,6 +51,48 @@
   --grid-line: oklch(0.6 0.1 280 / 0.07);
 
   color-scheme: dark;
+}
+
+/* Simple view: the dark site inverted to black on white, plus one primary colour */
+html[data-display="simple"] {
+  --background: #ffffff;
+  --foreground: #000000;
+  --primary: #5b21b6;
+  --primary-foreground: #ffffff;
+  color-scheme: light;
+  --card: var(--background);
+  --card-foreground: var(--foreground);
+  --popover: var(--background);
+  --popover-foreground: var(--foreground);
+  --secondary: var(--background);
+  --secondary-foreground: var(--foreground);
+  --muted: var(--background);
+  --muted-foreground: var(--foreground);
+  --accent: var(--background);
+  --accent-foreground: var(--primary);
+  --destructive: var(--primary);
+  --destructive-foreground: var(--primary-foreground);
+  --border: var(--foreground);
+  --input: var(--foreground);
+  --ring: var(--primary);
+  --chart-1: var(--primary);
+  --chart-2: var(--primary);
+  --chart-3: var(--primary);
+  --chart-4: var(--primary);
+  --chart-5: var(--primary);
+  --sidebar: var(--background);
+  --sidebar-foreground: var(--foreground);
+  --sidebar-primary: var(--primary);
+  --sidebar-primary-foreground: var(--primary-foreground);
+  --sidebar-accent: var(--background);
+  --sidebar-accent-foreground: var(--primary);
+  --sidebar-border: var(--foreground);
+  --sidebar-ring: var(--primary);
+  --neon: var(--primary);
+  --neon-soft: transparent;
+  --cyan: var(--primary);
+  --cyan-soft: transparent;
+  --grid-line: transparent;
 }
 
 @theme inline {
@@ -204,4 +249,61 @@
   .graph-stream {
     animation: none;
   }
+}
+
+/* Simple view: no glow, blur, gradients or motion. Unlayered, so it beats every utility */
+html[data-display="simple"] *,
+html[data-display="simple"] *::before,
+html[data-display="simple"] *::after {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  backdrop-filter: none !important;
+  animation: none !important;
+  transition: none !important;
+}
+html[data-display="simple"] body::before {
+  display: none;
+}
+html[data-display="simple"] .hud-grid {
+  background-image: none;
+}
+html[data-display="simple"] .hud-panel,
+html[data-display="simple"] .hud-chip {
+  border-color: var(--border);
+}
+html[data-display="simple"] .hud-chip[data-active="true"] {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+html[data-display="simple"] ::selection {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+html[data-display="simple"] a:focus-visible,
+html[data-display="simple"] button:focus-visible,
+html[data-display="simple"] input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+/* Diagrams can carry their own classDef colours: flatten them to the same palette */
+html[data-display="simple"] .mermaid-host svg * {
+  filter: none !important;
+}
+html[data-display="simple"] .mermaid-host svg :is(rect, polygon, circle, ellipse, path:not(.flowchart-link)) {
+  fill: var(--background) !important;
+  stroke: var(--foreground) !important;
+}
+html[data-display="simple"] .mermaid-host svg :is(.flowchart-link, line) {
+  stroke: var(--primary) !important;
+}
+html[data-display="simple"] .mermaid-host svg marker :is(path, circle) {
+  fill: var(--primary) !important;
+  stroke: var(--primary) !important;
+}
+html[data-display="simple"] .mermaid-host svg :is(text, tspan) {
+  fill: var(--foreground) !important;
+}
+html[data-display="simple"] .mermaid-host svg :is(.label, .nodeLabel, .edgeLabel, foreignObject, foreignObject *) {
+  color: var(--foreground) !important;
+  background-color: transparent !important;
 }

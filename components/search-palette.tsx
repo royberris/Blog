@@ -11,6 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { useDisplayMode } from "@/hooks/use-display-mode"
 import { clusterSlug } from "@/lib/site"
 import type { NodeSummary } from "@/lib/graph-types"
 
@@ -19,8 +20,10 @@ export const SEARCH_OPEN_EVENT = "berris:search-open"
 export function SearchPalette({ nodes }: { nodes: NodeSummary[] }) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
-  // The map has its own prominent search field, so the HUD trigger is only needed elsewhere
-  const onMap = usePathname() === "/"
+  // The map has its own prominent search field, so the HUD trigger is only needed elsewhere (or when the map is off)
+  const pathname = usePathname()
+  const mapShown = useDisplayMode() === "full"
+  const onMap = pathname === "/" && mapShown
   const clusters = Array.from(new Set(nodes.flatMap((n) => n.tags))).sort()
 
   // A page with its own inline search (the map) can claim the request by calling preventDefault

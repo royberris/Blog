@@ -199,7 +199,7 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
               </h2>
               <span className="hud-label">{neighborhood.nodes.length - 1} links</span>
             </div>
-            <div className="hud-grid h-[320px] md:h-[380px]">
+            <div className="hud-grid h-[320px] md:h-[380px] simple:h-auto!">
               <ConnectedGraph data={neighborhood} focusId={nodeId(slug)} />
             </div>
           </div>
