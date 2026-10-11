@@ -115,6 +115,12 @@ function loadNodes() {
 
 const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
+// dev.to can ask for a 5 minute wait after a few new articles. Waiting that out would hit the
+// CI step timeout, so longer waits stop the sync; the remaining nodes go out on the next run.
+const MAX_RATE_LIMIT_WAIT_SECONDS = 60
+
+class RateLimitError extends Error {}
+
 async function api(method, endpoint, body, attempt = 1) {
   const response = await fetch(`${apiBase}${endpoint}`, {
     method,
@@ -126,8 +132,11 @@ async function api(method, endpoint, body, attempt = 1) {
     body: body ? JSON.stringify(body) : undefined,
   })
 
-  if (response.status === 429 && attempt <= 5) {
+  if (response.status === 429) {
     const wait = Number(response.headers.get("retry-after")) || 30
+    if (wait > MAX_RATE_LIMIT_WAIT_SECONDS || attempt > 3) {
+      throw new RateLimitError(`${method} ${endpoint} rate limited by dev.to (retry after ${wait}s)`)
+    }
     console.log(`  rate limited, retrying in ${wait}s`)
     await sleep(wait * 1000)
     return api(method, endpoint, body, attempt + 1)
@@ -204,19 +213,30 @@ async function main() {
     Object.keys(articleMap).forEach((slug) => optedIn.has(slug) || delete articleMap[slug])
   }
 
+  // Written after every change, so a killed step (CI timeout) still keeps what was synced
+  const save = () => !dryRun && writeArticleMap(articleMap)
+  save()
+
+  const pending = nodes.map(({ slug }) => slug)
   try {
     for (const { slug, article } of nodes) {
       const match = existing.get(normalizeUrl(article.canonical_url))
+      // An existing article is already live, so record it before the update can fail
+      if (match) {
+        recordArticle(articleMap, slug, match)
+        save()
+      }
 
       if (match && isUnchanged(match, article)) {
         counts.unchanged++
-        recordArticle(articleMap, slug, match)
+        pending.shift()
         console.log(`= ${slug} (unchanged)`)
         continue
       }
 
       const action = match ? "update" : "create"
       if (dryRun) {
+        pending.shift()
         console.log(`[dry-run] would ${action} ${slug}`)
         continue
       }
@@ -226,17 +246,32 @@ async function main() {
       const result = match ? await api("PUT", `/articles/${match.id}`, payload) : await api("POST", "/articles", payload)
       counts[match ? "updated" : "created"]++
       recordArticle(articleMap, slug, result)
+      save()
+      pending.shift()
       console.log(`${match ? "~" : "+"} ${slug} -> ${result.url}`)
+      warnOnTagDrift(slug, article.tags, result)
 
       // Stay well under dev.to's write rate limit
       await sleep(5000)
     }
-  } finally {
-    // Also on failure, so articles created before the error keep their entry
-    if (!dryRun) writeArticleMap(articleMap)
+  } catch (error) {
+    if (!(error instanceof RateLimitError)) throw error
+    // Rate limiting is expected with several new nodes: stop cleanly, the next run continues
+    console.log(`::warning::${error.message}; not synced yet: ${pending.join(", ")}`)
   }
 
   console.log(`dev.to sync done: ${counts.created} created, ${counts.updated} updated, ${counts.unchanged} unchanged`)
+}
+
+// The front matter is the source of truth for tags, but dev.to may store different ones.
+// Warn so a node that gets re-updated on every deploy is easy to spot.
+function warnOnTagDrift(slug, sentTags, result) {
+  const stored = Array.isArray(result.tag_list) ? result.tag_list : typeof result.tags === "string" ? result.tags.split(", ") : null
+  if (!stored) return
+  const sorted = (tags) => [...tags].sort().join(",")
+  if (sorted(stored) !== sorted(sentTags)) {
+    console.log(`::warning::${slug}: sent tags ${sentTags.join(",")} but dev.to stored ${stored.join(",")}`)
+  }
 }
 
 main().catch((error) => {
