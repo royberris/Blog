@@ -31,6 +31,17 @@ jobs:
           cache: "pnpm"
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+      # Before the build, so data/devto-articles.json (dev.to ids for reactions and comments)
+      # ships with this deploy; main only takes PRs, so CI can't commit the file back.
+      # A dev.to outage must not block the deploy: the committed file is the fallback.
+      - name: Cross-post to dev.to
+        continue-on-error: true
+        timeout-minutes: 5
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+        run: |
+          if [ -z "$DEVTO_API_KEY" ]; then echo "DEVTO_API_KEY not set, skipping"; exit 0; fi
+          pnpm crosspost-devto
       - name: Build
         run: pnpm build
       - name: Upload artifact

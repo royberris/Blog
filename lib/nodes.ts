@@ -15,6 +15,7 @@ export interface NodePost extends NodeSummary {
   content: string
   related: string[]
   links: NodeLink[] // Key links highlighted in the page header
+  devto: boolean // Cross-posted to dev.to (`devto` front matter)
   invalidTags?: string[] // For tracking invalid tags during development
 }
 
@@ -82,6 +83,7 @@ function getParsedNodes(): NodePost[] {
         author: data.author ?? null,
         related: Array.isArray(data.related) ? data.related : [],
         links: parseLinks(data.links, fileName),
+        devto: Boolean(data.devto),
         readingTime: Math.max(1, Math.round(words / WORDS_PER_MINUTE)),
       }
 

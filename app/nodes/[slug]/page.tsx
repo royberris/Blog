@@ -9,6 +9,8 @@ import { AuthorSection } from "@/components/author-section"
 import { ReadingProgress } from "@/components/reading-progress"
 import { ConnectedGraph } from "@/components/graph/connected-graph"
 import { JsonLd } from "@/components/json-ld"
+import { DevtoDiscussion } from "@/components/devto-discussion"
+import { getDevtoArticle } from "@/lib/devto"
 import { AUTHOR, SITE_NAME, SITE_URL, absoluteUrl, clusterSlug } from "@/lib/site"
 
 interface NodeDetailPageProps {
@@ -80,6 +82,7 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
   const newer = all[index - 1]
   const older = all[index + 1]
   const neighborhood = getNeighborhood(slug)
+  const devtoArticle = getDevtoArticle(slug, node.devto)
   const pageUrl = absoluteUrl(`/nodes/${slug}/`)
   const showUpdated = Boolean(node.updated) && toIso(node.updated!) !== toIso(node.date)
 
@@ -215,6 +218,8 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
               </Link>
             )}
           </nav>
+
+          {devtoArticle && <DevtoDiscussion articleId={devtoArticle.id} url={devtoArticle.url} mock={devtoArticle.mock} />}
         </section>
       </main>
 

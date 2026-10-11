@@ -149,6 +149,35 @@
     box-shadow: 0 0 16px -4px var(--cyan);
   }
 
+  /* Sanitized dev.to comment HTML; matches the node body at a smaller size */
+  .devto-comment > * + * {
+    @apply mt-3;
+  }
+  .devto-comment a {
+    @apply text-cyan underline decoration-cyan/40 underline-offset-4 hover:decoration-cyan;
+  }
+  .devto-comment code {
+    @apply rounded bg-neon/15 px-1 py-0.5 font-mono text-[0.85em] text-cyan;
+  }
+  .devto-comment pre {
+    @apply overflow-x-auto rounded-lg bg-muted p-3;
+  }
+  .devto-comment pre code {
+    @apply bg-transparent p-0 text-foreground;
+  }
+  .devto-comment ul {
+    @apply list-disc pl-5;
+  }
+  .devto-comment ol {
+    @apply list-decimal pl-5;
+  }
+  .devto-comment blockquote {
+    @apply border-l-2 border-border pl-3 italic;
+  }
+  .devto-comment img {
+    @apply h-auto max-h-80 w-auto max-w-full rounded object-contain;
+  }
+
   .neon-text {
     text-shadow: 0 0 18px var(--neon-soft);
   }

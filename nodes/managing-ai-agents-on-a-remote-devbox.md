@@ -11,6 +11,8 @@ links:
     url: "https://marketplace.visualstudio.com/items?itemName=RoyBerris.devbox-agents"
   - label: "GitHub Repository"
     url: "https://github.com/royberris/devbox-vscode-extension"
+devto:
+  tags: ["ai", "productivity", "vscode", "linux"]
 ---
 
 # Managing AI Agents on a Remote Devbox
