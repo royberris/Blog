@@ -289,8 +289,9 @@ test.describe("SEO is unaffected", () => {
       expect(html).not.toMatch(/<html[^>]*data-display=/) // the mode is set client-side only
       expect(html).toMatch(/<title>[^<]+<\/title>/)
       expect(html).toMatch(/<meta name="description" content="[^"]+"/)
-      expect(html).toContain(`<link rel="canonical" href="https://`)
-      expect(html).toMatch(new RegExp(`<link rel="canonical" href="[^"]+${canonical.replace(/\//g, "\\/")}"`))
+      const href = html.match(/<link rel="canonical" href="([^"]+)"/)?.[1]
+      expect(href).toMatch(/^https:\/\//)
+      expect(new URL(href!).pathname).toBe(canonical)
       expect(html).not.toMatch(/<meta name="robots" content="[^"]*noindex/)
       expect(html).toContain('application/ld+json')
       expect(html.match(/<h1[\s>]/g)).toHaveLength(1)
