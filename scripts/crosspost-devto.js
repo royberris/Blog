@@ -5,6 +5,9 @@
 // in its front matter. The sync is idempotent: existing dev.to articles are matched on
 // canonical_url, and only updated when the generated article differs.
 //
+// After a real sync, data/devto-articles.json maps each published node to its dev.to
+// article ({ slug: { id, url } }); the node page uses it to show reactions and comments.
+//
 // Usage:
 //   DEVTO_API_KEY=... node scripts/crosspost-devto.js            sync all opted-in nodes
 //   node scripts/crosspost-devto.js --dry-run [--out <dir>]      show what would happen
@@ -15,6 +18,7 @@ const matter = require("gray-matter")
 
 const root = path.join(__dirname, "..")
 const nodesDirectory = path.join(root, "nodes")
+const articlesFile = path.join(root, "data", "devto-articles.json")
 const siteUrl = (process.env.NEXT_PUBLIC_BASE_URL || "https://berris.dev").replace(/\/$/, "")
 const apiBase = "https://dev.to/api"
 const apiKey = process.env.DEVTO_API_KEY
@@ -154,6 +158,22 @@ function isUnchanged(existing, article) {
   )
 }
 
+function readArticleMap() {
+  return fs.existsSync(articlesFile) ? JSON.parse(fs.readFileSync(articlesFile, "utf8")) : {}
+}
+
+// Sorted keys keep the diff small when the file is committed
+function writeArticleMap(map) {
+  const sorted = Object.fromEntries(Object.keys(map).sort().map((slug) => [slug, map[slug]]))
+  fs.writeFileSync(articlesFile, `${JSON.stringify(sorted, null, 2)}\n`)
+}
+
+// Only published articles get an entry: drafts have no public page or comments
+function recordArticle(map, slug, article) {
+  if (article?.published && article.url) map[slug] = { id: article.id, url: article.url }
+  else delete map[slug]
+}
+
 async function main() {
   const nodes = loadNodes()
   if (nodes.length === 0) {
@@ -177,29 +197,43 @@ async function main() {
   const existing = await fetchExistingArticles()
   const counts = { created: 0, updated: 0, unchanged: 0 }
 
-  for (const { slug, article } of nodes) {
-    const match = existing.get(normalizeUrl(article.canonical_url))
+  // A full sync drops nodes that opted out; --only leaves the other entries alone
+  const articleMap = readArticleMap()
+  if (!only) {
+    const optedIn = new Set(nodes.map(({ slug }) => slug))
+    Object.keys(articleMap).forEach((slug) => optedIn.has(slug) || delete articleMap[slug])
+  }
 
-    if (match && isUnchanged(match, article)) {
-      counts.unchanged++
-      console.log(`= ${slug} (unchanged)`)
-      continue
+  try {
+    for (const { slug, article } of nodes) {
+      const match = existing.get(normalizeUrl(article.canonical_url))
+
+      if (match && isUnchanged(match, article)) {
+        counts.unchanged++
+        recordArticle(articleMap, slug, match)
+        console.log(`= ${slug} (unchanged)`)
+        continue
+      }
+
+      const action = match ? "update" : "create"
+      if (dryRun) {
+        console.log(`[dry-run] would ${action} ${slug}`)
+        continue
+      }
+
+      // The v1 API takes tags as a comma-separated string
+      const payload = { article: { ...article, tags: article.tags.join(",") } }
+      const result = match ? await api("PUT", `/articles/${match.id}`, payload) : await api("POST", "/articles", payload)
+      counts[match ? "updated" : "created"]++
+      recordArticle(articleMap, slug, result)
+      console.log(`${match ? "~" : "+"} ${slug} -> ${result.url}`)
+
+      // Stay well under dev.to's write rate limit
+      await sleep(5000)
     }
-
-    const action = match ? "update" : "create"
-    if (dryRun) {
-      console.log(`[dry-run] would ${action} ${slug}`)
-      continue
-    }
-
-    // The v1 API takes tags as a comma-separated string
-    const payload = { article: { ...article, tags: article.tags.join(",") } }
-    const result = match ? await api("PUT", `/articles/${match.id}`, payload) : await api("POST", "/articles", payload)
-    counts[match ? "updated" : "created"]++
-    console.log(`${match ? "~" : "+"} ${slug} -> ${result.url}`)
-
-    // Stay well under dev.to's write rate limit
-    await sleep(5000)
+  } finally {
+    // Also on failure, so articles created before the error keep their entry
+    if (!dryRun) writeArticleMap(articleMap)
   }
 
   console.log(`dev.to sync done: ${counts.created} created, ${counts.updated} updated, ${counts.unchanged} unchanged`)
