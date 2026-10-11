@@ -9,6 +9,8 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // Don't let `next dev` write an AGENTS.md into the repo when an AI agent runs it
+  agentRules: false,
 }
 
 export default nextConfig
