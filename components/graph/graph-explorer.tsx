@@ -257,7 +257,8 @@ function GraphExplorerView({ graphs, nodes: allNodes, now, maxYears, bottomSlot 
                 step={1}
                 value={[years]}
                 onValueChange={([value]) => setYears(value)}
-                aria-label={`Time range: ${rangeLabel}`}
+                aria-label="Time range"
+                aria-valuetext={rangeLabel}
                 className="w-16 sm:w-20 [&_[data-slot=slider-track]]:h-0.5 [&_[data-slot=slider-range]]:bg-muted-foreground group-hover:[&_[data-slot=slider-range]]:bg-cyan group-focus-within:[&_[data-slot=slider-range]]:bg-cyan [&_[data-slot=slider-thumb]]:size-2.5 [&_[data-slot=slider-thumb]]:border-muted-foreground group-hover:[&_[data-slot=slider-thumb]]:border-cyan group-focus-within:[&_[data-slot=slider-thumb]]:border-cyan"
               />
             </div>
