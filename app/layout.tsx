@@ -3,11 +3,12 @@ import type { Metadata, Viewport } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
 import { Analytics } from "@vercel/analytics/next"
+import Script from "next/script"
 import { Suspense } from "react"
 import { HudBar } from "@/components/hud-bar"
 import { JsonLd } from "@/components/json-ld"
 import { displayModeScript } from "@/lib/display-mode"
-import { AUTHOR, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site"
+import { AUTHOR, GA_MEASUREMENT_ID, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site"
 import "./globals.css"
 
 export const metadata: Metadata = {
@@ -103,6 +104,18 @@ export default function RootLayout({
         <HudBar />
         <Suspense fallback={null}>{children}</Suspense>
         <Analytics />
+        <Script
+          strategy="afterInteractive"
+          src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${GA_MEASUREMENT_ID}');
+          `}
+        </Script>
       </body>
     </html>
   )
