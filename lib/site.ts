@@ -4,6 +4,7 @@ export const SITE_URL = (process.env.NEXT_PUBLIC_BASE_URL || "https://berris.dev
 export const SITE_NAME = "Berris.dev"
 export const SITE_DESCRIPTION =
   "Berris.dev is Roy Berris's knowledge base on software architecture, API design, AI agents and .NET, written from hands-on experience as a software architect."
+export const GA_MEASUREMENT_ID = "G-Q29QQ4XRHX"
 
 export const AUTHOR = {
   name: "Roy Berris",
