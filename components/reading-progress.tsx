@@ -22,7 +22,7 @@ export function ReadingProgress() {
   return (
     <div className="fixed inset-x-0 top-14 z-40 h-0.5 bg-transparent" aria-hidden>
       <div
-        className="h-full origin-left bg-gradient-to-r from-neon to-cyan shadow-[0_0_10px_var(--cyan)]"
+        className="h-full origin-left bg-gradient-to-r from-neon to-cyan shadow-[0_0_10px_var(--cyan)] simple:bg-none simple:bg-primary"
         style={{ transform: `scaleX(${progress})` }}
       />
     </div>

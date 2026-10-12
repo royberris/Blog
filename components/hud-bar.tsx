@@ -2,12 +2,13 @@ import Link from "next/link"
 import { getNodeSummaries } from "@/lib/nodes"
 import { SearchPalette } from "@/components/search-palette"
 import { HudNav } from "@/components/hud-nav"
+import { DisplayToggle } from "@/components/display-toggle"
 
 export function HudBar() {
   const nodes = getNodeSummaries()
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 border-b border-border/60 bg-background/95 md:bg-background/70 md:backdrop-blur-xl">
+    <header className="fixed inset-x-0 top-0 z-40 border-b border-border/60 bg-background/95 md:bg-background/70 md:backdrop-blur-xl simple:bg-background!">
       <div className="flex h-14 items-center justify-between gap-3 px-4 md:px-8">
         <Link href="/" className="group flex items-center gap-2.5" aria-label="Berris.dev — node map">
           <span className="relative flex size-7 items-center justify-center">
@@ -23,6 +24,7 @@ export function HudBar() {
         <div className="flex items-center gap-2">
           <HudNav />
           <SearchPalette nodes={nodes} />
+          <DisplayToggle />
         </div>
       </div>
     </header>

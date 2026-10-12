@@ -39,7 +39,8 @@ export default function HomePage() {
 
   return (
     <main className="hud-grid">
-      <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14">
+      {/* Simple view drops the map: hidden before paint by CSS, then GraphExplorer unmounts it after hydration */}
+      <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14 simple:hidden">
         <GraphExplorer
           graphs={graphs}
           nodes={nodes}
@@ -66,7 +67,7 @@ export default function HomePage() {
         </a>
       </section>
 
-      <section id="latest" aria-labelledby="home-heading" className="scroll-mt-14 border-t border-border/60 bg-background/85">
+      <section id="latest" aria-labelledby="home-heading" className="scroll-mt-14 border-t border-border/60 bg-background/85 simple:border-t-0 simple:pt-14">
         <div className="mx-auto max-w-6xl px-4 py-12 md:px-8 md:py-16">
           <header className="max-w-3xl">
             <p className="hud-label text-cyan">// knowledge database</p>
