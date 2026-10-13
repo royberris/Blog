@@ -141,3 +141,8 @@ vite.config.ts.timestamp-*
 .vite/
 # Playwright MCP output (screenshots, console logs)
 .playwright-mcp/
+# Playwright test output
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, ArrowRight, Waypoints } from "lucide-react"
+import { ArrowLeft, ArrowRight, ArrowUpRight, Waypoints } from "lucide-react"
 import { getAllNodes, getAllNodeSlugs, getNeighborhood, getNodeBySlug, formatDate } from "@/lib/nodes"
 import { nodeId } from "@/lib/graph-types"
 import { MarkdownRenderer } from "@/components/markdown-renderer"
@@ -9,6 +9,8 @@ import { AuthorSection } from "@/components/author-section"
 import { ReadingProgress } from "@/components/reading-progress"
 import { ConnectedGraph } from "@/components/graph/connected-graph"
 import { JsonLd } from "@/components/json-ld"
+import { DevtoDiscussion } from "@/components/devto-discussion"
+import { getDevtoArticle } from "@/lib/devto"
 import { AUTHOR, SITE_NAME, SITE_URL, absoluteUrl, clusterSlug } from "@/lib/site"
 
 interface NodeDetailPageProps {
@@ -80,6 +82,7 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
   const newer = all[index - 1]
   const older = all[index + 1]
   const neighborhood = getNeighborhood(slug)
+  const devtoArticle = getDevtoArticle(slug, node.devto)
   const pageUrl = absoluteUrl(`/nodes/${slug}/`)
   const showUpdated = Boolean(node.updated) && toIso(node.updated!) !== toIso(node.date)
 
@@ -163,6 +166,23 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
                 ))}
               </div>
             )}
+
+            {node.links.length > 0 && (
+              <nav aria-label="Key links" className="mt-4 flex flex-wrap gap-2">
+                {node.links.map(({ label, url }) => (
+                  <a
+                    key={url}
+                    href={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hud-chip border-cyan/40 bg-cyan/10 text-cyan hover:bg-cyan/20"
+                  >
+                    {label}
+                    <ArrowUpRight className="size-3" />
+                  </a>
+                ))}
+              </nav>
+            )}
           </div>
         </header>
 
@@ -179,7 +199,7 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
               </h2>
               <span className="hud-label">{neighborhood.nodes.length - 1} links</span>
             </div>
-            <div className="hud-grid h-[320px] md:h-[380px]">
+            <div className="hud-grid h-[320px] md:h-[380px] simple:h-auto!">
               <ConnectedGraph data={neighborhood} focusId={nodeId(slug)} />
             </div>
           </div>
@@ -198,6 +218,8 @@ export default async function NodeDetailPage({ params }: NodeDetailPageProps) {
               </Link>
             )}
           </nav>
+
+          {devtoArticle && <DevtoDiscussion articleId={devtoArticle.id} url={devtoArticle.url} mock={devtoArticle.mock} />}
         </section>
       </main>
 

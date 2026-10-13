@@ -11,6 +11,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command"
+import { useDisplayMode } from "@/hooks/use-display-mode"
 import { clusterSlug } from "@/lib/site"
 import type { NodeSummary } from "@/lib/graph-types"
 
@@ -19,8 +20,10 @@ export const SEARCH_OPEN_EVENT = "berris:search-open"
 export function SearchPalette({ nodes }: { nodes: NodeSummary[] }) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
-  // The map has its own prominent search field, so the HUD trigger is only needed elsewhere
-  const onMap = usePathname() === "/"
+  // The map has its own prominent search field, so the HUD trigger is only needed elsewhere (or when the map is off)
+  const pathname = usePathname()
+  const mapShown = useDisplayMode() === "full"
+  const onMap = pathname === "/" && mapShown
   const clusters = Array.from(new Set(nodes.flatMap((n) => n.tags))).sort()
 
   // A page with its own inline search (the map) can claim the request by calling preventDefault
@@ -82,6 +85,16 @@ export function SearchPalette({ nodes }: { nodes: NodeSummary[] }) {
                 <span className="font-medium">{n.title}</span>
               </CommandItem>
             ))}
+          </CommandGroup>
+          <CommandGroup heading="Projects & Tools">
+            <CommandItem
+              value="Devbox Agents devbox-vscode-extension VS Code Extension Claude Code Codex Antigravity tmux worktree"
+              onSelect={() => go(`/projects/devbox-vscode-extension/`)}
+              className="flex flex-col items-start gap-1"
+            >
+              <span className="hud-label text-cyan">VS Code Extension · v1.0.0</span>
+              <span className="font-medium">Devbox Agents (devbox-vscode-extension)</span>
+            </CommandItem>
           </CommandGroup>
           <CommandGroup heading="Clusters">
             {clusters.map((tag) => (
