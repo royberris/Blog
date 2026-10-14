@@ -17,17 +17,19 @@ When I first introduced [Architecture Decision Records (ADRs)](https://adr.githu
 
 Then reality caught up with us. Six months later, we merged ADR #34.
 
-That was the week I noticed a pull request that completely broke a core boundary we had agreed on two months earlier: domain entities were directly calling an external HTTP client. The author was a skilled senior engineer. The reviewer was another senior engineer who had helped draft that very ADR. Neither of them remembered the rule during the review.
+Around that time, my team was leaning heavily into AI for daily development. Pull requests were getting bigger and moving faster, and our review habits shifted. Engineers did only a cursory pass during code reviews, feeling that line-by-line manual inspections were becoming less relevant. We figured we could trust our AI reviewer to catch mistakes and enforce our standards.
 
-Writing an architectural decision down does not mean anyone remembers it. The moment an ADR gets merged, it starts to decay into a passive historical record unless something mechanical forces it to stay alive.
+That trust backfired. A pull request slipped straight into our main branch with a major boundary violation: domain entities were directly calling an external HTTP client. The human reviewer gave it a quick glance and hit approve, assuming the AI bot had checked everything. But the AI reviewer had missed it completely.
+
+Writing an architectural decision down does not mean anyone enforces it. The moment an ADR gets merged, it decays into a passive historical record unless something mechanical forces it to stay alive.
 
 ## Why Do Architecture Decision Records Rot After Merge?
 
-The real problem is cognitive load. When your team has three ADRs, everyone keeps them in working memory. When you have twenty or thirty-five, no developer can hold all those decisions in their head while reviewing a pull request at four in the afternoon.
+The failure happened because both humans and AI models struggle when decisions accumulate. When your team has three ADRs, everyone remembers them. When you hit thirty or more, no developer holds that entire list in their head, especially when they assume an automated assistant has their back.
 
-This problem gets worse with autonomous AI coding agents. In our current workflows, AI agents write and refactor substantial parts of our codebases. If you dump thirty-five full Markdown ADR documents into an agent's prompt, you eat up its context window before it even inspects the code. The agent loses track of the rules, hallucinates architectural patterns, and introduces quiet structural drift.
+At the same time, AI reviewers are not magic. When you stuff dozens of past architectural records into a prompt alongside a large code diff, the context window gets crowded. The model focuses on obvious syntax bugs, style issues, or general logic, but it easily overlooks a subtle architectural boundary. AI misses things too when there is simply too much to track.
 
-When architectural governance depends entirely on human memory and voluntary documentation reading, failure is guaranteed. You get code reviews where people argue about formatting while structural violations slip straight into production.
+When architectural governance depends on voluntary reading and polite prompt instructions, drift is inevitable. You end up with false confidence, skipped reviews, and architectural violations merged directly into production.
 
 ## Moving from Passive Documentation to Active Enforcement
 
