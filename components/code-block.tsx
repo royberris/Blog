@@ -16,7 +16,14 @@ SyntaxHighlighter.registerLanguage('json', json)
 SyntaxHighlighter.registerLanguage('typescript', typescript)
 SyntaxHighlighter.registerLanguage('ts', typescript)
 SyntaxHighlighter.registerLanguage('yaml', yaml)
-import { useState, useEffect } from 'react'
+import { useState, useEffect, type CSSProperties } from 'react'
+import { useDisplayMode } from '@/hooks/use-display-mode'
+
+// Simple view: no syntax colours, just the page's foreground on its background
+const plain: Record<string, CSSProperties> = {
+  'pre[class*="language-"]': { color: 'var(--foreground)', background: 'var(--background)', border: '1px solid var(--border)', padding: '1em', overflow: 'auto', fontFamily: 'var(--font-mono)' },
+  'code[class*="language-"]': { color: 'var(--foreground)', background: 'none', fontFamily: 'var(--font-mono)' },
+}
 
 interface CodeBlockProps {
   children: string
@@ -27,6 +34,7 @@ interface CodeBlockProps {
 export function CodeBlock({ children, language, className }: CodeBlockProps) {
   const [copied, setCopied] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
+  const simple = useDisplayMode() === 'simple'
   
   useEffect(() => {
     setIsMounted(true)
@@ -53,12 +61,12 @@ export function CodeBlock({ children, language, className }: CodeBlockProps) {
   if (!isMounted) {
     return (
       <div className="relative group my-6">
-        <div className="flex items-center justify-between bg-gray-800 text-gray-300 px-4 py-2 text-sm rounded-t-lg">
+        <div className="flex items-center justify-between bg-gray-800 text-gray-300 px-4 py-2 text-sm rounded-t-lg simple:bg-background simple:text-foreground simple:border simple:border-b-0">
           <span className="font-mono text-xs uppercase tracking-wide">
             {lang === 'text' ? 'Code' : lang}
           </span>
         </div>
-        <pre className="bg-gray-900 text-gray-100 p-4 rounded-b-lg overflow-x-auto">
+        <pre className="bg-gray-900 text-gray-100 p-4 rounded-b-lg overflow-x-auto simple:bg-background simple:text-foreground simple:border">
           <code>{code}</code>
         </pre>
       </div>
@@ -67,13 +75,13 @@ export function CodeBlock({ children, language, className }: CodeBlockProps) {
 
   return (
     <div className="relative group my-6">
-      <div className="flex items-center justify-between bg-gray-800 text-gray-300 px-4 py-2 text-sm rounded-t-lg">
+      <div className="flex items-center justify-between bg-gray-800 text-gray-300 px-4 py-2 text-sm rounded-t-lg simple:bg-background simple:text-foreground simple:border simple:border-b-0">
         <span className="font-mono text-xs uppercase tracking-wide">
           {lang === 'text' ? 'Code' : lang}
         </span>
         <button
           onClick={copyToClipboard}
-          className="flex items-center gap-1 px-2 py-1 rounded text-xs hover:bg-gray-700 transition-colors"
+          className="flex items-center gap-1 px-2 py-1 rounded text-xs hover:bg-gray-700 transition-colors simple:hover:bg-transparent simple:hover:underline"
           title="Copy to clipboard"
         >
           {copied ? (
@@ -96,7 +104,7 @@ export function CodeBlock({ children, language, className }: CodeBlockProps) {
       </div>
       <SyntaxHighlighter
         language={lang}
-        style={oneDark}
+        style={simple ? plain : oneDark}
         customStyle={{
           margin: 0,
           borderTopLeftRadius: 0,

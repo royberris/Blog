@@ -36,6 +36,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
             return (
               <a
                 href={href}
+                className="text-cyan underline decoration-cyan/40 underline-offset-4 transition-colors hover:decoration-cyan"
                 {...(external && { target: "_blank", rel: "noopener noreferrer" })}
               >
                 {children}

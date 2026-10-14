@@ -1,6 +1,43 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useDisplayMode } from "@/hooks/use-display-mode"
+import { SIMPLE_PALETTE } from "@/lib/display-mode"
+
+// The futuristic look; simple view swaps in black, white and the primary colour
+const fullTheme = {
+  darkMode: true,
+  primaryColor: "#2a1f55",
+  primaryTextColor: "#ece9ff",
+  primaryBorderColor: "#8b5cf6",
+  lineColor: "#67e8f9",
+  secondaryColor: "#1b1638",
+  tertiaryColor: "#15122b",
+  background: "#110e24",
+  mainBkg: "#2a1f55",
+  secondBkg: "#1b1638",
+  textColor: "#ece9ff",
+}
+
+// Per-node colours in the source render as inline !important styles that no stylesheet can override
+const stripColours = (chart: string) => chart.replace(/^\s*(style|classDef|linkStyle)\s.*$/gm, "")
+
+function simpleTheme() {
+  const { background, foreground, primary } = SIMPLE_PALETTE
+  return {
+    darkMode: false,
+    primaryColor: background,
+    primaryTextColor: foreground,
+    primaryBorderColor: foreground,
+    lineColor: primary,
+    secondaryColor: background,
+    tertiaryColor: background,
+    background,
+    mainBkg: background,
+    secondBkg: background,
+    textColor: foreground,
+  }
+}
 
 interface MermaidDiagramProps {
   chart: string
@@ -8,6 +45,7 @@ interface MermaidDiagramProps {
 
 export function MermaidDiagram({ chart }: MermaidDiagramProps) {
   const ref = useRef<HTMLDivElement>(null)
+  const simple = useDisplayMode() === "simple"
 
   useEffect(() => {
     if (!ref.current) return
@@ -20,19 +58,7 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         mermaid.initialize({
           startOnLoad: false,
           theme: "base",
-          themeVariables: {
-            darkMode: true,
-            primaryColor: "#2a1f55",
-            primaryTextColor: "#ece9ff",
-            primaryBorderColor: "#8b5cf6",
-            lineColor: "#67e8f9",
-            secondaryColor: "#1b1638",
-            tertiaryColor: "#15122b",
-            background: "#110e24",
-            mainBkg: "#2a1f55",
-            secondBkg: "#1b1638",
-            textColor: "#ece9ff",
-          },
+          themeVariables: simple ? simpleTheme() : fullTheme,
           // Enable pan and zoom controls
           gantt: {
             useMaxWidth: false,
@@ -53,8 +79,8 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
         const id = `mermaid-${Math.random().toString(36).substr(2, 9)}`
         
         // Render the diagram
-        mermaid.render(id, chart).then((result) => {
-          if (ref.current) {
+        mermaid.render(id, simple ? stripColours(chart) : chart).then((result) => {
+          if (!cancelled && ref.current) {
             ref.current.innerHTML = result.svg
             
             // Add pan and zoom functionality
@@ -175,14 +201,14 @@ export function MermaidDiagram({ chart }: MermaidDiagramProps) {
     return () => {
       cancelled = true
     }
-  }, [chart])
+  }, [chart, simple])
 
   return (
     <div className="my-8 md:-mx-8 lg:-mx-16">
       <div className="hud-panel overflow-hidden p-4 md:p-6">
         <div 
           ref={ref} 
-          className="w-full min-h-[280px] md:min-h-[400px] flex justify-center items-center relative"
+          className="mermaid-host w-full min-h-[280px] md:min-h-[400px] flex justify-center items-center relative"
         />
         <div className="hud-label mt-2 border-t border-border/60 pt-2 text-center">
           <span className="inline-flex items-center gap-2">

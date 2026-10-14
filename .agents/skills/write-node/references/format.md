@@ -19,6 +19,9 @@ excerpt: "140 to 160 characters on what the reader gets out of this node, writte
 tags: ["Tag1", "Tag2", "Tag3"]
 author: "Roy Berris"
 related: ["other-node-slug"]
+links:
+  - label: "GitHub Repository"
+    url: "https://github.com/..."
 ---
 ```
 
@@ -33,7 +36,27 @@ Required:
 Optional:
 
 - **related**: Slugs (file name without `.md`) of nodes this one really builds on. Each one draws a direct line on the map. Don't add links just to connect things.
+- **links**: Key external links highlighted as buttons under the clusters in the page header, for nodes about something readers will want to open (a GitHub repo, a marketplace listing, a package). A list of `{ label, url }`; `url` must be an external `https://` link, never a page on this site. Keep it to 1 to 3 links and still link them inline in the body.
 - **updated**: `YYYY-MM-DD`, quoted. Set it whenever you revise a published node in a meaningful way (new sections, corrected facts, a TL;DR or FAQ). Leave `date` as the original publication date. Typo fixes don't count.
+- **devto**: Cross-post the node to [dev.to](https://dev.to) with its canonical URL pointing at berris.dev. Only add it when the author asks. Prefer the object form with explicit dev.to tags:
+
+  ```yaml
+  devto:
+    tags: ["ai", "architecture", "softwareengineering", "leadership"]
+    published: false        # optional: create or keep it as a dev.to draft
+    series: "Series name"   # optional
+  ```
+
+  `devto: true` also works; the tags are then derived from the clusters through a fixed mapping in `scripts/crosspost-devto.js` (for example "Software Architecture" becomes `architecture`, "AI Agents" becomes `ai`).
+
+  **dev.to tags:**
+  - 1 to 4 unique tags, lowercase letters and digits only (no spaces, hyphens or `#`). `npm run validate-tags` rejects anything else.
+  - Pick established dev.to tags that readers follow, not literal copies of the clusters: `aiagents` or `softwarearchitecture` reach almost nobody, `ai` and `architecture` do. Check `https://dev.to/t/<tag>` when unsure.
+  - Lead with the broadest relevant tag (usually `ai`, `api`, `architecture`, `dotnet` or `csharp`), then narrow down with tools or topics from the post (`vscode`, `linux`, `mcp`, `security`, `documentation`, `leadership`, `productivity`, `softwareengineering`).
+
+  After a merge to `main`, the deploy workflow syncs every opted-in node: it creates the article, or updates it when the node changed. The H1 is dropped, site-relative links become absolute, Mermaid blocks become mermaid.ink images, and an "Originally published at berris.dev" line is added. Preview with `pnpm crosspost-devto --dry-run --out <dir>`. dev.to rate-limits new articles (it can ask for a 5 minute wait after two), so when several nodes opt in at once, the sync stops with a warning and the rest go out on the next deploy. The front matter tags win on every sync; if dev.to stores different tags than it was sent, the log shows a warning.
+
+  The sync runs in the deploy build, before `next build`, and writes `data/devto-articles.json` (`{ "<slug>": { "id", "url" } }`, published articles only). The node page uses it to show a Discussion panel with dev.to reaction and comment counts, the comments themselves (fetched client-side from the public dev.to API once the reader scrolls near it) and a "Discuss on dev.to" button. CI can't commit to `main`, so the committed file is only a fallback for builds without `DEVTO_API_KEY`; run the script locally with the key and commit the file to refresh it. In `pnpm dev`, nodes with `devto` but no entry in that file show a mock discussion from `lib/devto-mock.ts` (labelled "Mock data") instead of calling dev.to; production builds leave the mock out.
 
 ## Body
 

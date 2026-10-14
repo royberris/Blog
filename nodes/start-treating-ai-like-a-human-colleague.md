@@ -6,6 +6,8 @@ excerpt: "Why treating AI like an engineering colleague means handing over desir
 tags: ["AI", "AI Agents", "Software Architecture", "Engineering Leadership"]
 author: "Roy Berris"
 related: ["ai-assisted-blogging", "designing-apis-for-ai-agents"]
+devto:
+  tags: ["ai", "softwareengineering", "architecture", "leadership"]
 ---
 
 # Start Treating AI Like a Human Colleague

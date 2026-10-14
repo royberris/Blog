@@ -39,7 +39,8 @@ export default function HomePage() {
 
   return (
     <main className="hud-grid">
-      <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14">
+      {/* Simple view drops the map: hidden before paint by CSS, then GraphExplorer unmounts it after hydration */}
+      <section aria-label="Node map" className="relative h-[100dvh] overflow-hidden pt-14 simple:hidden">
         <GraphExplorer
           graphs={graphs}
           nodes={nodes}
@@ -66,7 +67,7 @@ export default function HomePage() {
         </a>
       </section>
 
-      <section id="latest" aria-labelledby="home-heading" className="scroll-mt-14 border-t border-border/60 bg-background/85">
+      <section id="latest" aria-labelledby="home-heading" className="scroll-mt-14 border-t border-border/60 bg-background/85 simple:border-t-0 simple:pt-14">
         <div className="mx-auto max-w-6xl px-4 py-12 md:px-8 md:py-16">
           <header className="max-w-3xl">
             <p className="hud-label text-cyan">// knowledge database</p>
@@ -101,10 +102,16 @@ export default function HomePage() {
             ))}
           </ol>
 
-          <Link href="/nodes/" className="hud-chip mt-6 hover:border-cyan hover:text-cyan">
-            {nodes.length > recent.length ? `All ${nodes.length} nodes, including older ones, in the index` : `All ${nodes.length} nodes in the index`}
-            <ArrowRight className="size-3" />
-          </Link>
+          <div className="mt-6 flex flex-wrap gap-3">
+            <Link href="/nodes/" className="hud-chip hover:border-cyan hover:text-cyan">
+              {nodes.length > recent.length ? `All ${nodes.length} nodes, including older ones, in the index` : `All ${nodes.length} nodes in the index`}
+              <ArrowRight className="size-3" />
+            </Link>
+            <Link href="/projects/" className="hud-chip hover:border-cyan hover:text-cyan">
+              Projects & Packages
+              <ArrowRight className="size-3" />
+            </Link>
+          </div>
         </div>
       </section>
     </main>

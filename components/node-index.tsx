@@ -45,7 +45,7 @@ export function NodeIndex({ nodes }: { nodes: NodeSummary[] }) {
 
   return (
     <>
-      <div className="sticky top-14 z-20 -mx-4 space-y-3 border-b border-border/60 bg-background/95 px-4 py-3 md:-mx-8 md:bg-background/80 md:backdrop-blur-xl md:px-8">
+      <div className="sticky top-14 z-20 -mx-4 space-y-3 border-b border-border/60 bg-background/95 px-4 py-3 md:-mx-8 md:bg-background/80 md:backdrop-blur-xl md:px-8 simple:bg-background!">
         <label className="flex h-12 items-center gap-3 rounded-xl border border-cyan/40 bg-card/80 px-4 shadow-[0_0_30px_-14px_var(--cyan)] focus-within:border-cyan focus-within:shadow-[0_0_0_1px_var(--cyan),0_0_30px_-8px_var(--cyan)]">
           <Search className="size-4 shrink-0 text-cyan" />
           <input

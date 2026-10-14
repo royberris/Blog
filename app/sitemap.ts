@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next"
 import { getNodeSummaries } from "@/lib/nodes"
+import { getAllProjects } from "@/lib/projects"
 import { absoluteUrl, clusterSlug } from "@/lib/site"
 
 export const dynamic = "force-static"
@@ -22,12 +23,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: absoluteUrl("/"), lastModified: latest, changeFrequency: "weekly", priority: 1 },
     { url: absoluteUrl("/nodes/"), lastModified: latest, changeFrequency: "weekly", priority: 0.9 },
+    { url: absoluteUrl("/projects/"), changeFrequency: "weekly", priority: 0.8 },
     { url: absoluteUrl("/about/"), changeFrequency: "monthly", priority: 0.6 },
     ...nodes.map((node) => ({
       url: absoluteUrl(`/nodes/${node.slug}/`),
       lastModified: lastModified(node),
       changeFrequency: "monthly" as const,
       priority: 0.8,
+    })),
+    ...getAllProjects().map((project) => ({
+      url: absoluteUrl(`/projects/${project.slug}/`),
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
     })),
     ...Array.from(clusters, ([slug, date]) => ({
       url: absoluteUrl(`/clusters/${slug}/`),
