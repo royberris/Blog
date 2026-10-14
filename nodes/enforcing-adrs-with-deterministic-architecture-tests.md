@@ -5,6 +5,8 @@ excerpt: "How to enforce Architecture Decision Records with automated architectu
 tags: ["ADR", "Software Architecture", "Testing"]
 author: "Roy Berris"
 related: ["standardizing-api-conventions", "start-using-roslyn-code-analyzers"]
+devto:
+  tags: ["architecture", "testing", "ai", "softwareengineering"]
 ---
 
 # Enforcing ADRs with Deterministic Architecture Tests
