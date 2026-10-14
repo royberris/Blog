@@ -71,6 +71,10 @@
     "fullName": "Technical Writing",
     "description": "Specialized form of communication that conveys complex technical information clearly and effectively to specific audiences."
   },
+  "Testing": {
+    "fullName": "Software Testing",
+    "description": "Techniques and automated testing strategies for verifying software correctness, boundaries, and architectural integrity."
+  },
   "Umbraco": {
     "fullName": "Umbraco CMS",
     "description": "The open-source .NET content management system, covering implementation, editor experience, hosting and the Umbraco community."
