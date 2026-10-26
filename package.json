@@ -9,6 +9,7 @@
     "validate-tags": "node scripts/validate-tags.js",
     "export-markdown": "node scripts/export-markdown.js",
     "crosspost-devto": "node scripts/crosspost-devto.js",
+    "test": "playwright test",
     "test:e2e": "playwright test"
   },
   "dependencies": {
